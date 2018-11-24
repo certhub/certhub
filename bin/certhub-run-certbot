@@ -1,0 +1,56 @@
+#!/bin/sh
+
+set -e
+set -u
+
+# Required binaries
+BASENAME=/usr/bin/basename
+CERTBOT=/usr/bin/certbot
+ECHO=/bin/echo
+OPENSSL=/usr/bin/openssl
+XARGS=/usr/bin/xargs
+
+# Print usage message and exit.
+usage() {
+    ${ECHO} "${0}: /path/to/certhub/instance.example.com [certbot certonly args...]"
+    return 1
+}
+
+certhub_run_certbot() {
+    INSTANCE_DIR="${1}"
+    INSTANCE_NAME_DEFAULT=$(${BASENAME} "${INSTANCE_DIR}")
+    CSR_PATH="${INSTANCE_DIR}/${CERTHUB_CSR_NAME:-csr.pem}"
+    CERT_PATH="${INSTANCE_DIR}/${CERTHUB_CERT_NAME:-cert.pem}"
+    CHAIN_PATH="${INSTANCE_DIR}/${CERTHUB_CHAIN_NAME:-chain.pem}"
+    FC_PATH="${INSTANCE_DIR}/${CERTHUB_FULLCHAIN_NAME:-fullchain.pem}"
+    REQ_LOGOPTS="${CERTHUB_REQ_LOGOPTS:--noout -text -reqopt no_pubkey,no_sigdump}"
+    CERT_LOGOPTS="${CERTHUB_CERT_LOGOPTS:--noout -text -certopt no_pubkey,no_sigdump,no_extensions -sha256 -fingerprint}"
+    shift
+
+    ${ECHO} "[Certhub/Certbot] Certificate renewal ${CERTHUB_INSTANCE_NAME:-${INSTANCE_NAME_DEFAULT}}"
+    ${ECHO}
+
+    if [ -n "${REQ_LOGOPTS}" ]; then
+        ${ECHO} "${REQ_LOGOPTS}" | ${XARGS} ${OPENSSL} req -in "${CSR_PATH}"
+        ${ECHO}
+    fi
+
+    ${ECHO} "Certbot:"
+    ${CERTBOT} certonly "${@}" \
+        --csr "${CSR_PATH}" \
+        --cert-path "${CERT_PATH}" \
+        --chain-path "${CHAIN_PATH}" \
+        --fullchain-path "${FC_PATH}" \
+        2>&1
+
+    if [ -n "${CERT_LOGOPTS}" ]; then
+        ${ECHO} "${CERT_LOGOPTS}" | ${XARGS} ${OPENSSL} x509 -in "${CERT_PATH}"
+        ${ECHO}
+    fi
+}
+
+if [ "${#}" -gt 1 ] && [ "${1:-}" != "-h" ] && [ "${1:-}" != "--help" ]; then
+    certhub_run_certbot "${@}"
+else
+    usage
+fi
