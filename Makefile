@@ -26,36 +26,36 @@ bin:
 	# empty for now
 
 lint: bin
-	shellcheck bin/certhub-import-csr
+	shellcheck bin/certhub-csr-import
 	shellcheck bin/certhub-certbot-run
 
 test: bin
 	PATH="$(shell pwd)/bin:${PATH}" $(python) -m test
 
 doc: \
-	doc/certhub-import-csr.1 \
+	doc/certhub-csr-import.1 \
 	doc/certhub-certbot-run.1
 
 clean:
-	-rm doc/certhub-import-csr.1
+	-rm doc/certhub-csr-import.1
 	-rm doc/certhub-certbot-run.1
 	-rm -rf dist
 	-rm -rf build
 
 install-doc: doc
-	install -m 0644 -D doc/certhub-import-csr.1 $(DESTDIR)$(mandir)/man1/certhub-import-csr.1
+	install -m 0644 -D doc/certhub-csr-import.1 $(DESTDIR)$(mandir)/man1/certhub-csr-import.1
 	install -m 0644 -D doc/certhub-certbot-run.1 $(DESTDIR)$(mandir)/man1/certhub-certbot-run.1
 
 install-bin: bin
-	install -m 0755 -D bin/certhub-import-csr $(DESTDIR)$(bindir)/certhub-import-csr
+	install -m 0755 -D bin/certhub-csr-import $(DESTDIR)$(bindir)/certhub-csr-import
 	install -m 0755 -D bin/certhub-certbot-run $(DESTDIR)$(bindir)/certhub-certbot-run
 
 install: install-bin install-doc
 
 uninstall:
-	-rm -f $(DESTDIR)$(bindir)/certhub-import-csr
+	-rm -f $(DESTDIR)$(bindir)/certhub-csr-import
 	-rm -f $(DESTDIR)$(bindir)/certhub-certbot-run
-	-rm -f $(DESTDIR)$(mandir)/man1/certhub-import-csr.1
+	-rm -f $(DESTDIR)$(mandir)/man1/certhub-csr-import.1
 	-rm -f $(DESTDIR)$(mandir)/man1/certhub-certbot-run.1
 
 dist-bin:
