@@ -16,7 +16,7 @@ usage() {
     return 1
 }
 
-certhub_run_certbot() {
+certhub_certbot_run() {
     INSTANCE_DIR="${1}"
     INSTANCE_NAME_DEFAULT=$(${BASENAME} "${INSTANCE_DIR}")
     CSR_PATH="${INSTANCE_DIR}/${CERTHUB_CSR_NAME:-csr.pem}"
@@ -50,7 +50,7 @@ certhub_run_certbot() {
 }
 
 if [ "${#}" -gt 1 ] && [ "${1:-}" != "-h" ] && [ "${1:-}" != "--help" ]; then
-    certhub_run_certbot "${@}"
+    certhub_certbot_run "${@}"
 else
     usage
 fi
