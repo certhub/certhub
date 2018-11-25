@@ -1,0 +1,38 @@
+[Unit]
+Description=Certificate renewal via certhub/certbot
+Documentation=man:certhub-run-certbot(1)
+Documentation=man:certbot(1)
+
+[Service]
+Type=oneshot
+User=certhub
+Group=certhub
+
+# Git repository where certificates are stored. Note that certhub user needs
+# write access to this repo.
+Environment=CERTHUB_REPO=/home/certhub/certs.git
+
+# Additional git environment variables.
+Environment=GIT_AUTHOR_EMAIL=certhub@%H
+Environment=GIT_AUTHOR_NAME=Certhub
+Environment=GIT_COMMITTER_EMAIL=certhub@%H
+Environment=GIT_COMMITTER_NAME=Certhub
+
+# Additional Arguments for certbot certonly run (see man:certbot(1))
+Environment=CERTBOT_ARGS=--non-interactive
+Environment=CERTBOT_CONFIG=/home/certhub/config/%i.certbot.ini
+
+# Arguments passed to nsupdate called from auth/cleanup hooks. Specify the path
+# to the DDNS key used to update a DNS zone.
+Environment="CERTHUB_NSUPDATE_ARGS=-k /home/certhub/config/%i.nsupdate.key"
+
+ExecStart=/usr/bin/env git gau-exec $CERTHUB_REPO \
+    /usr/bin/env git gau-ac \
+    /usr/bin/env git gau-xargs -I{} \
+    /usr/bin/env certhub-certbot-run "{}/%i" $CERTBOT_ARGS --config $CERTBOT_CONFIG
+
+SyslogIdentifier=certhub-certbot-run
+StandardOutput=syslog
+StandardError=syslog
+
+PrivateTmp=true

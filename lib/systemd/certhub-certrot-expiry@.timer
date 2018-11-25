@@ -1,0 +1,10 @@
+[Unit]
+Description=Check for certificates which are about to expire twice daily
+
+[Timer]
+OnCalendar=*-*-* 00,12:00:00
+RandomizedDelaySec=3600
+Persistent=true
+
+[Install]
+WantedBy=timers.target

@@ -7,6 +7,15 @@ endif
 ifeq ($(bindir),)
     bindir := $(exec_prefix)/bin
 endif
+ifeq ($(libdir),)
+    libdir := $(exec_prefix)/lib
+endif
+ifeq ($(systemddir),)
+    systemddir := $(libdir)/systemd
+endif
+ifeq ($(systemdsystemdir),)
+    systemdsystemdir := $(systemddir)/system
+endif
 ifeq ($(datarootdir),)
     datarootdir := $(prefix)/share
 endif
@@ -28,6 +37,7 @@ bin:
 lint: bin
 	shellcheck bin/certhub-csr-import
 	shellcheck bin/certhub-certbot-run
+	shellcheck lib/certbot-hooks/nsupdate-auth
 
 test: bin
 	PATH="$(shell pwd)/bin:${PATH}" $(python) -m test
@@ -37,8 +47,8 @@ doc: \
 	doc/certhub-certbot-run.1
 
 clean:
-	-rm doc/certhub-csr-import.1
-	-rm doc/certhub-certbot-run.1
+	-rm -f doc/certhub-csr-import.1
+	-rm -f doc/certhub-certbot-run.1
 	-rm -rf dist
 	-rm -rf build
 
@@ -49,6 +59,12 @@ install-doc: doc
 install-bin: bin
 	install -m 0755 -D bin/certhub-csr-import $(DESTDIR)$(bindir)/certhub-csr-import
 	install -m 0755 -D bin/certhub-certbot-run $(DESTDIR)$(bindir)/certhub-certbot-run
+	install -m 0755 -D lib/certbot-hooks/nsupdate-auth $(DESTDIR)$(libdir)/certhub/certbot-hooks/nsupdate-auth
+	ln -s nsupdate-auth $(DESTDIR)$(libdir)/certhub/certbot-hooks/nsupdate-cleanup
+	install -m 0644 -D lib/systemd/certhub-certrot-expiry@.service $(DESTDIR)$(systemdsystemdir)/certhub-certrot-expiry@.service
+	install -m 0644 -D lib/systemd/certhub-certrot-expiry@.timer $(DESTDIR)$(systemdsystemdir)/certhub-certrot-expiry@.timer
+	install -m 0644 -D lib/systemd/certhub-certbot-run@.path $(DESTDIR)$(systemdsystemdir)/certhub-certbot-run@.path
+	install -m 0644 -D lib/systemd/certhub-certbot-run@.service $(DESTDIR)$(systemdsystemdir)/certhub-certbot-run@.service
 
 install: install-bin install-doc
 
@@ -57,6 +73,12 @@ uninstall:
 	-rm -f $(DESTDIR)$(bindir)/certhub-certbot-run
 	-rm -f $(DESTDIR)$(mandir)/man1/certhub-csr-import.1
 	-rm -f $(DESTDIR)$(mandir)/man1/certhub-certbot-run.1
+	-rm -f $(DESTDIR)$(libdir)/certhub/certbot-hooks/nsupdate-auth
+	-rm -f $(DESTDIR)$(libdir)/certhub/certbot-hooks/nsupdate-cleanup
+	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-certrot-expiry@.service
+	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-certrot-expiry@.timer
+	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-certbot-run@.path
+	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-certbot-run@.service
 
 dist-bin:
 	-rm -rf build
