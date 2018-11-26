@@ -1,0 +1,9 @@
+[Unit]
+Description=Trigger certificate renewal via certhub/certbot when expiry status changed
+Documentation=man:certbot(1)
+
+[Path]
+PathExists=/home/certhub/status/%i.expiry.status
+
+[Install]
+WantedBy=paths.target

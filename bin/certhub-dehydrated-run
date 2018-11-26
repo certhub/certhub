@@ -1,0 +1,43 @@
+#!/bin/sh
+
+set -e
+set -u
+
+# Required binaries
+ECHO=/bin/echo
+MKTEMP=/bin/mktemp
+MV=/bin/mv
+RM=/bin/rm
+XARGS=/usr/bin/xargs
+
+# Print usage message and exit.
+usage() {
+    ${ECHO} "${0}: /path/to/certhub/instance.example.com dehydrated [dehydrated args...]"
+    return 1
+}
+
+certhub_dehydrated_run() {
+    WORKDIR="${1}"
+    INSTANCE_DIR="${2}"
+    CSR_PATH="${INSTANCE_DIR}/${CERTHUB_CSR_NAME:-csr.pem}"
+    FC_PATH="${INSTANCE_DIR}/${CERTHUB_FULLCHAIN_NAME:-fullchain.pem}"
+    shift 2
+
+    ${ECHO} --full-chain \
+        --signcsr "${CSR_PATH}" | ${XARGS} "${@}" > "${WORKDIR}/fullchain.pem"
+
+    ${MV} "${WORKDIR}/fullchain.pem" "${FC_PATH}"
+}
+
+# Setup temp dir.
+WORKDIR="$(${MKTEMP} -d)"
+cleanup() {
+    ${RM} -rf "${WORKDIR}"
+}
+trap cleanup EXIT
+
+if [ "${#}" -gt 1 ] && [ "${1:-}" != "-h" ] && [ "${1:-}" != "--help" ]; then
+    certhub_dehydrated_run "${WORKDIR}" "${@}"
+else
+    usage
+fi

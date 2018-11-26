@@ -1,0 +1,50 @@
+#!/bin/sh
+#
+# Deploy DNS challenge using nsupdate
+
+set -e
+set -u
+
+# Required binaries
+ECHO=/bin/echo
+MKTEMP=/bin/mktemp
+NSUPDATE=/usr/bin/nsupdate
+RM=/bin/rm
+XARGS=/usr/bin/xargs
+
+_nsupdate() {
+    ACTION="${1}"
+
+    SERVER=${CERTHUB_NSUPDATE_SERVER:-}
+    if [ -n "${SERVER}" ]; then
+        ${ECHO} "server ${SERVER}" >> "${NSUPDATE_SCRIPT}"
+    fi
+
+    TTL=${CERTHUB_NSUPDATE_TTL:-600}
+    ${ECHO} "ttl ${TTL}" >> "${NSUPDATE_SCRIPT}"
+
+    DOMAIN=${CERTHUB_NSUPDATE_DOMAIN:-_acme-challenge.${2}}
+
+    ${ECHO} "update ${ACTION} ${DOMAIN} IN TXT \"${4}\"" >> "${NSUPDATE_SCRIPT}"
+    ${ECHO} "send" >> "${NSUPDATE_SCRIPT}"
+
+    ${ECHO} "${CERTHUB_NSUPDATE_ARGS}" "${NSUPDATE_SCRIPT}" | ${XARGS} "${NSUPDATE}"
+}
+
+NSUPDATE_SCRIPT=$(${MKTEMP})
+cleanup() {
+    ${RM} -f "${NSUPDATE_SCRIPT}"
+}
+
+case ${1} in
+    deploy_challenge)
+        shift
+        _nsupdate add "${@}"
+        ;;
+
+    cleanup_challenge)
+        shift
+        _nsupdate delete "${@}"
+        ;;
+
+esac
