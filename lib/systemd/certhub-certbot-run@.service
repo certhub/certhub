@@ -12,6 +12,8 @@ Group=certhub
 # write access to this repo.
 Environment=CERTHUB_REPO=/home/certhub/certs.git
 
+Environment="CERTHUB_MESSAGE_SUBJECT=[Certhub] Certbot renew %i"
+
 # Additional git environment variables.
 Environment=GIT_AUTHOR_EMAIL=certhub@%H
 Environment=GIT_AUTHOR_NAME=Certhub
@@ -29,7 +31,9 @@ Environment="CERTHUB_NSUPDATE_ARGS=-k /home/certhub/config/%i.nsupdate.key"
 ExecStart=/usr/bin/env git gau-exec $CERTHUB_REPO \
     /usr/bin/env git gau-ac \
     /usr/bin/env git gau-xargs -I{} \
-    /usr/bin/env certhub-certbot-run "{}/%i" $CERTBOT_ARGS --config $CERTBOT_CONFIG
+    /usr/bin/env certhub-message-format "{}/%i"
+    /usr/bin/env certhub-certbot-run "{}/%i"
+    /usr/bin/env certbot $CERTBOT_ARGS --config $CERTBOT_CONFIG
 
 SyslogIdentifier=certhub-certbot-run
 StandardOutput=syslog

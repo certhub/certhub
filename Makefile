@@ -35,30 +35,35 @@ bin:
 	# empty for now
 
 lint: bin
-	shellcheck bin/certhub-csr-import
 	shellcheck bin/certhub-certbot-run
+	shellcheck bin/certhub-csr-import
+	shellcheck bin/certhub-message-format
 	shellcheck lib/certbot-hooks/nsupdate-auth
 
 test: bin
 	PATH="$(shell pwd)/bin:${PATH}" $(python) -m test
 
 doc: \
+	doc/certhub-certbot-run.1 \
 	doc/certhub-csr-import.1 \
-	doc/certhub-certbot-run.1
+	doc/certhub-message-format.1
 
 clean:
-	-rm -f doc/certhub-csr-import.1
 	-rm -f doc/certhub-certbot-run.1
+	-rm -f doc/certhub-csr-import.1
+	-rm -f doc/certhub-message-format.1
 	-rm -rf dist
 	-rm -rf build
 
 install-doc: doc
-	install -m 0644 -D doc/certhub-csr-import.1 $(DESTDIR)$(mandir)/man1/certhub-csr-import.1
 	install -m 0644 -D doc/certhub-certbot-run.1 $(DESTDIR)$(mandir)/man1/certhub-certbot-run.1
+	install -m 0644 -D doc/certhub-csr-import.1 $(DESTDIR)$(mandir)/man1/certhub-csr-import.1
+	install -m 0644 -D doc/certhub-message-format.1 $(DESTDIR)$(mandir)/man1/certhub-message-format.1
 
 install-bin: bin
-	install -m 0755 -D bin/certhub-csr-import $(DESTDIR)$(bindir)/certhub-csr-import
 	install -m 0755 -D bin/certhub-certbot-run $(DESTDIR)$(bindir)/certhub-certbot-run
+	install -m 0755 -D bin/certhub-csr-import $(DESTDIR)$(bindir)/certhub-csr-import
+	install -m 0755 -D bin/certhub-message-format $(DESTDIR)$(bindir)/certhub-message-format
 	install -m 0755 -D lib/certbot-hooks/nsupdate-auth $(DESTDIR)$(libdir)/certhub/certbot-hooks/nsupdate-auth
 	ln -s nsupdate-auth $(DESTDIR)$(libdir)/certhub/certbot-hooks/nsupdate-cleanup
 	install -m 0644 -D lib/systemd/certhub-certrot-expiry@.service $(DESTDIR)$(systemdsystemdir)/certhub-certrot-expiry@.service
@@ -69,10 +74,12 @@ install-bin: bin
 install: install-bin install-doc
 
 uninstall:
-	-rm -f $(DESTDIR)$(bindir)/certhub-csr-import
 	-rm -f $(DESTDIR)$(bindir)/certhub-certbot-run
-	-rm -f $(DESTDIR)$(mandir)/man1/certhub-csr-import.1
+	-rm -f $(DESTDIR)$(bindir)/certhub-csr-import
+	-rm -f $(DESTDIR)$(bindir)/certhub-message-format
 	-rm -f $(DESTDIR)$(mandir)/man1/certhub-certbot-run.1
+	-rm -f $(DESTDIR)$(mandir)/man1/certhub-csr-import.1
+	-rm -f $(DESTDIR)$(mandir)/man1/certhub-message-format.1
 	-rm -f $(DESTDIR)$(libdir)/certhub/certbot-hooks/nsupdate-auth
 	-rm -f $(DESTDIR)$(libdir)/certhub/certbot-hooks/nsupdate-cleanup
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-certrot-expiry@.service
