@@ -4,12 +4,9 @@ set -e
 set -u
 
 # Required binaries
-BASENAME=/usr/bin/basename
 ECHO=/bin/echo
 MKDIR=/bin/mkdir
 MV=/bin/mv
-OPENSSL=/usr/bin/openssl
-XARGS=/usr/bin/xargs
 
 # Print usage message and exit.
 usage() {
@@ -19,13 +16,8 @@ usage() {
 
 certhub_csr_import() {
     INSTANCE_DIR="${1}"
-    INSTANCE_NAME_DEFAULT=$(${BASENAME} "${INSTANCE_DIR}")
     CSR_PATH="${INSTANCE_DIR}/${CERTHUB_CSR_NAME:-csr.pem}"
     CNF_PATH="${INSTANCE_DIR}/${CERTHUB_CNF_NAME:-ssl.cnf}"
-    REQ_LOGOPTS="${CERTHUB_REQ_LOGOPTS:--noout -text -reqopt no_pubkey,no_sigdump}"
-
-    ${ECHO} "[Certhub] CSR import ${CERTHUB_INSTANCE_NAME:-${INSTANCE_NAME_DEFAULT}}"
-    ${ECHO}
 
     if [ ! -e "${INSTANCE_DIR}" ]; then
         ${MKDIR} "${INSTANCE_DIR}"
@@ -35,11 +27,6 @@ certhub_csr_import() {
 
     if [ -n "${3}" ]; then
         ${MV} "${3}" "${CNF_PATH}"
-    fi
-
-    if [ -n "${REQ_LOGOPTS}" ]; then
-        ${ECHO} "${REQ_LOGOPTS}" | ${XARGS} ${OPENSSL} req -in "${CSR_PATH}"
-        ${ECHO}
     fi
 }
 
