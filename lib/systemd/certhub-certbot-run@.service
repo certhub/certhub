@@ -32,8 +32,8 @@ ExecStart=/usr/bin/env \
     git gau-exec $CERTHUB_REPO \
     git gau-ac \
     git gau-xargs -I{} \
-    certhub-message-format "{}/%i"
-    certhub-certbot-run "{}/%i"
+    certhub-message-format "{}/%i" \
+    certhub-certbot-run "{}/%i" \
     certbot $CERTBOT_ARGS --config $CERTBOT_CONFIG
 
 SyslogIdentifier=certhub-certbot-run
