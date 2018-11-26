@@ -1,0 +1,23 @@
+[Unit]
+Description=Push certhub repo to another host
+Documentation=man:git-push(1)
+
+[Service]
+Type=oneshot
+User=certhub
+Group=certhub
+
+# Git repository where certificates are stored.
+Environment=CERTHUB_REPO=/home/certhub/certs.git
+
+# Remote
+Environment=CERTHUB_REMOTE=%i:/home/certhub/certs.git
+
+ExecStart=/usr/bin/env \
+    git -C ${CERTHUB_REPO} push --mirror ${CERTHUB_REMOTE}
+
+SyslogIdentifier=certhub-mirror-push
+StandardOutput=syslog
+StandardError=syslog
+
+PrivateTmp=true

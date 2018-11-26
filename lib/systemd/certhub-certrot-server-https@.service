@@ -1,0 +1,33 @@
+[Unit]
+Description=Check HTTPS servers against a list of certificate fingerprints
+Documentation=man:certrot-server(1)
+
+[Service]
+Type=oneshot
+User=certhub
+Group=certhub
+
+# Parameters for certrot-server
+Environment=CERTROT_SERVER_HTTPS_STATUSFILE=/home/certhub/status/%i.https.{NAME}@{HOST}.status
+Environment=CERTROT_SERVER_HTTPS_FPFILE=/home/certhub/status/%i.fingerprints
+Environment=CERTROT_SERVER_HTTPS_HOSTS=/home/certhub/config/%i.https.hosts.txt
+Environment=CERTROT_SERVER_HTTPS_NAMES=/home/certhub/config/%i.https.names.txt
+
+# Parameters for openss s_client
+Environment=OPENSSL_CLIENT_ARGS=
+
+ExecStart=/usr/bin/env \
+    xargs -a ${CERTROT_SERVER_HTTPS_HOSTS} -I{HOST} \
+    xargs -a ${CERTROT_SERVER_HTTPS_NAMES} -I{NAME} \
+    certrot-server \
+    ${CERTROT_SERVER_HTTPS_STATUSFILE} \
+    ${CERTROT_SERVER_HTTPS_FPFILE} \
+    -connect {HOST} \
+    -servername {NAME} \
+    $OPENSSL_CLIENT_ARGS
+
+SyslogIdentifier=certhub-certrot-server-https
+StandardOutput=syslog
+StandardError=syslog
+
+PrivateTmp=true

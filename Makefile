@@ -77,8 +77,11 @@ install-bin: bin
 	install -m 0644 -D lib/systemd/certhub-certbot-run@.service $(DESTDIR)$(systemdsystemdir)/certhub-certbot-run@.service
 	install -m 0644 -D lib/systemd/certhub-certrot-expiry@.service $(DESTDIR)$(systemdsystemdir)/certhub-certrot-expiry@.service
 	install -m 0644 -D lib/systemd/certhub-certrot-expiry@.timer $(DESTDIR)$(systemdsystemdir)/certhub-certrot-expiry@.timer
+	install -m 0644 -D lib/systemd/certhub-certrot-server-https@.service $(DESTDIR)$(systemdsystemdir)/certhub-certrot-server-https@.service
 	install -m 0644 -D lib/systemd/certhub-dehydrated-run@.path $(DESTDIR)$(systemdsystemdir)/certhub-dehydrated-run@.path
 	install -m 0644 -D lib/systemd/certhub-dehydrated-run@.service $(DESTDIR)$(systemdsystemdir)/certhub-dehydrated-run@.service
+	install -m 0644 -D lib/systemd/certhub-mirror-push@.path $(DESTDIR)$(systemdsystemdir)/certhub-mirror-push@.path
+	install -m 0644 -D lib/systemd/certhub-mirror-push@.service $(DESTDIR)$(systemdsystemdir)/certhub-mirror-push@.service
 
 install: install-bin install-doc
 
@@ -98,8 +101,11 @@ uninstall:
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-certbot-run@.service
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-certrot-expiry@.service
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-certrot-expiry@.timer
+	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-certrot-server-https@.service
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-dehydrated-run@.path
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-dehydrated-run@.service
+	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-mirror-push@.path
+	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-mirror-push@.service
 
 dist-bin:
 	-rm -rf build
