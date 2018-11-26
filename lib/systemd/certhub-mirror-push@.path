@@ -3,7 +3,7 @@ Description=Push certhub repo to another host when HEAD changed
 Documentation=man:git-push(1)
 
 [Path]
-PathChanged=/home/certhub/certs.git/HEAD
+PathChanged=/home/certhub/certs.git/refs/heads/master
 
 [Install]
 WantedBy=paths.target
