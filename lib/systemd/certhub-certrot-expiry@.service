@@ -19,7 +19,7 @@ ExecStart=/usr/bin/env git gau-exec $CERTHUB_REPO \
     /usr/bin/env git gau-xargs -I{} \
     /usr/bin/env certrot-expiry \
     $CERTROT_EXPIRY_STATUSFILE \
-    {}/%i/cert.pem \
+    {}/%i/fullchain.pem \
     $CERTROT_EXPIRY_TTL
 
 SyslogIdentifier=certhub-certrot-expiry
