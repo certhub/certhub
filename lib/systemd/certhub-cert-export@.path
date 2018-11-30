@@ -1,0 +1,8 @@
+[Unit]
+Description=Trigger certificate export when repo changed
+
+[Path]
+PathChanged=/home/certhub/certs.git/refs/heads/master
+
+[Install]
+WantedBy=paths.target
