@@ -1,4 +1,6 @@
 #!/bin/sh
+#
+# certhub-message-format - Run a command and format its output.
 
 set -e
 set -u

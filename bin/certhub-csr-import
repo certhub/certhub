@@ -1,4 +1,6 @@
 #!/bin/sh
+#
+# certhub-csr-import - Move the given CSR file to the certificate instance directory.
 
 set -e
 set -u
