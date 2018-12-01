@@ -8,7 +8,7 @@ Group=certhub
 
 # Git repository where certificates are stored.
 Environment=CERTHUB_REPO=/home/certhub/certs.git
-Environment=CERTHUB_EXPORT_DEST=/etc/ssl/certhub/
+Environment=CERTHUB_EXPORT_DEST=/etc/ssl/certhub/%i/
 Environment=CERTHUB_RSYNC_ARGS=-a -v --delete
 
 ExecStart=/usr/bin/env \
