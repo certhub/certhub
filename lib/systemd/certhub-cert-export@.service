@@ -15,7 +15,7 @@ Environment=CERTHUB_CP_ARGS=
 ExecStart=/usr/bin/env \
     git gau-exec $CERTHUB_REPO \
     git gau-xargs -I{} \
-    cp $CERTHUB_CP_ARGS {}/%i/${CERTHUB_FULLCHAIN_NAME} ${CERTHUB_CERTDIR}
+    cp $CERTHUB_CP_ARGS {}/%i/${CERTHUB_FULLCHAIN_NAME} ${CERTHUB_EXPORT_DIR}
 
 SyslogIdentifier=certhub-cert-export
 StandardOutput=syslog
