@@ -72,6 +72,7 @@ install-bin: bin
 	install -m 0644 -D lib/systemd/certhub-cert-export@.service $(DESTDIR)$(systemdsystemdir)/certhub-cert-export@.service
 	install -m 0644 -D lib/systemd/certhub-certbot-run@.path $(DESTDIR)$(systemdsystemdir)/certhub-certbot-run@.path
 	install -m 0644 -D lib/systemd/certhub-certbot-run@.service $(DESTDIR)$(systemdsystemdir)/certhub-certbot-run@.service
+	install -m 0644 -D lib/systemd/certhub-certrot-expiry@.path $(DESTDIR)$(systemdsystemdir)/certhub-certrot-expiry@.path
 	install -m 0644 -D lib/systemd/certhub-certrot-expiry@.service $(DESTDIR)$(systemdsystemdir)/certhub-certrot-expiry@.service
 	install -m 0644 -D lib/systemd/certhub-certrot-expiry@.timer $(DESTDIR)$(systemdsystemdir)/certhub-certrot-expiry@.timer
 	install -m 0644 -D lib/systemd/certhub-certrot-server-https@.service $(DESTDIR)$(systemdsystemdir)/certhub-certrot-server-https@.service
@@ -96,6 +97,7 @@ uninstall:
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-cert-export@.service
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-certbot-run@.path
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-certbot-run@.service
+	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-certrot-expiry@.path
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-certrot-expiry@.service
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-certrot-expiry@.timer
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-certrot-server-https@.service

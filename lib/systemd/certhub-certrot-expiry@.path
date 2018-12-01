@@ -1,0 +1,8 @@
+[Unit]
+Description=Trigger check for certificates which are about to expire when repo changed
+
+[Path]
+PathChanged=/home/certhub/certs.git/refs/heads/master
+
+[Install]
+WantedBy=paths.target
