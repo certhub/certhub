@@ -1,4 +1,6 @@
 #!/bin/sh
+#
+# certhub-dehydrated-run - Runs certbot dehydrated command once
 
 set -e
 set -u

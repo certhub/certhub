@@ -1,4 +1,6 @@
 #!/bin/sh
+#
+# certhub-certbot-run - Runs certbot certonly command once
 
 set -e
 set -u

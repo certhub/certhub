@@ -45,7 +45,7 @@ CERTHUB\_CSR\_NAME
 
 CERTHUB\_FULLCHAIN\_NAME
 :   Specify the filename used for the certificate inside the repository.
-    Defaults to *fillchain.pem*.
+    Defaults to *fullchain.pem*.
 
 CERTHUB\_REQ\_LOGOPTS
 :   Output options as understood by *openssl req*. Defaults to: --noout -text
