@@ -12,8 +12,8 @@ Environment=CERTHUB_REPO=/home/certhub/certs.git
 
 # Remote
 Environment=CERTHUB_REPO_REMOTE=%I
-Enivornment=CERTHUB_REPO_PUSH_ARGS=--mirror
-Enivornment=CERTHUB_REPO_PUSH_REFSPEC=
+Environment=CERTHUB_REPO_PUSH_ARGS=--mirror
+Environment=CERTHUB_REPO_PUSH_REFSPEC=
 
 ExecStart=/usr/bin/env \
     git -C ${CERTHUB_REPO} push $CERTHUB_REPO_PUSH_ARGS ${CERTHUB_REPO_REMOTE} $CERTHUB_REPO_PUSH_REFSPEC
