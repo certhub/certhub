@@ -1,0 +1,8 @@
+[Unit]
+Description=Trigger services reload when certificate changed
+
+[Path]
+PathChanged=/etc/ssl/certhub/%i/fullchain.pem
+
+[Install]
+WantedBy=paths.target

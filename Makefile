@@ -70,6 +70,8 @@ install-bin: bin
 	install -m 0755 -D lib/dehydrated-hooks/nsupdate-auth $(DESTDIR)$(libdir)/certhub/dehydrated-hooks/nsupdate-auth
 	install -m 0644 -D lib/systemd/certhub-cert-export@.path $(DESTDIR)$(systemdsystemdir)/certhub-cert-export@.path
 	install -m 0644 -D lib/systemd/certhub-cert-export@.service $(DESTDIR)$(systemdsystemdir)/certhub-cert-export@.service
+	install -m 0644 -D lib/systemd/certhub-cert-reload@.path $(DESTDIR)$(systemdsystemdir)/certhub-cert-reload@.path
+	install -m 0644 -D lib/systemd/certhub-cert-reload@.service $(DESTDIR)$(systemdsystemdir)/certhub-cert-reload@.service
 	install -m 0644 -D lib/systemd/certhub-certbot-run@.path $(DESTDIR)$(systemdsystemdir)/certhub-certbot-run@.path
 	install -m 0644 -D lib/systemd/certhub-certbot-run@.service $(DESTDIR)$(systemdsystemdir)/certhub-certbot-run@.service
 	install -m 0644 -D lib/systemd/certhub-certrot-expiry@.path $(DESTDIR)$(systemdsystemdir)/certhub-certrot-expiry@.path
@@ -95,6 +97,8 @@ uninstall:
 	-rm -f $(DESTDIR)$(libdir)/certhub/dehydrated-hooks/nsupdate-auth
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-cert-export@.path
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-cert-export@.service
+	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-cert-reload@.path
+	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-cert-reload@.service
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-certbot-run@.path
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-certbot-run@.service
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-certrot-expiry@.path
