@@ -33,7 +33,7 @@ ExecStart=/usr/bin/env \
     git gau-ac \
     git gau-xargs -I{} \
     certhub-message-format "{}/%i" \
-    certhub-certbot-run "{}/%i" \
+    certhub-dehydrated-run "{}/%i" \
     dehydrated $DEHYDRATED_ARGS --config $DEHYDRATED_CONFIG
 
 SyslogIdentifier=certhub-dehydrated-run
