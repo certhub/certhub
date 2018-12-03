@@ -16,9 +16,9 @@ Environment=CERTHUB_REPO_PUSH_ARGS=--mirror
 Environment=CERTHUB_REPO_PUSH_REFSPEC=
 
 ExecStart=/usr/bin/env \
-    git -C ${CERTHUB_REPO} push $CERTHUB_REPO_PUSH_ARGS ${CERTHUB_REPO_REMOTE} $CERTHUB_REPO_PUSH_REFSPEC
+    git --git-dir=${CERTHUB_REPO} push $CERTHUB_REPO_PUSH_ARGS ${CERTHUB_REPO_REMOTE} $CERTHUB_REPO_PUSH_REFSPEC
 
-SyslogIdentifier=certhub-mirror-push
+SyslogIdentifier=certhub-repo-push
 StandardOutput=syslog
 StandardError=syslog
 
