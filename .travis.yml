@@ -1,5 +1,11 @@
 dist: xenial
+addons:
+  apt:
+    packages:
+    - pandoc
 language: shell
 script:
   - make lint
   - make python=python3 test
+  - make dist
+  - tar tf dist/certhub-dist.tar.gz
