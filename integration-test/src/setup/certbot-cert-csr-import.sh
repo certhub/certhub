@@ -5,4 +5,4 @@
     git gau-ac \
     git gau-xargs -I{} \
     certhub-message-format {}/certbot-cert \
-    rsync -av /home/certhub/input/certbot-cert/ {}/certbot-cert/
+    rsync -av /home/certhub/setup/certbot-cert/ {}/certbot-cert/
