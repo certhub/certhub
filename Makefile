@@ -157,7 +157,7 @@ integration-test:
 	install-bin \
 	install-doc \
 	integration-test \
-	integration-test-setup \
+	integration-test-images \
 	lint \
 	test \
 	uninstall \

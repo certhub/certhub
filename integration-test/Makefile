@@ -25,7 +25,7 @@ certhub-integration-node/certbot-cert.key.pem:
 	    -out certhub-integration-node/certbot-cert.key.pem
 
 certhub-integration-controller/certbot-digitalocean.ini:
-	# Ensure that DNS credentials are present.
+	# Ensure that LEXICON_DIGITALOCEAN_TOKEN environment variable is set.
 	@test -n "$(LEXICON_DIGITALOCEAN_TOKEN)"
 	@echo "dns_digitalocean_token = $(LEXICON_DIGITALOCEAN_TOKEN)" > certhub-integration-controller/certbot-digitalocean.ini
 
