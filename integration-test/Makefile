@@ -8,26 +8,26 @@ all: \
 
 test-certbot: controller
 	# Start containers
-	docker run $(dockerargs) -d --name certhub-integration-controller certhub-integration-controller /sbin/init
+	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-controller /sbin/init))
 	# Run the test
-	docker exec certhub-integration-controller su -s /bin/sh -c /home/certhub/setup/certbot-cert-csr-import.sh - certhub
-	docker exec certhub-integration-controller systemctl start certhub-certbot-run@certbot-cert.service
-	docker exec certhub-integration-controller journalctl -u certhub-certbot-run@certbot-cert.service
+	docker exec $($@_CONTAINER) su -s /bin/sh -c /home/certhub/setup/certbot-cert-csr-import.sh - certhub
+	docker exec $($@_CONTAINER) systemctl start certhub-certbot-run@certbot-cert.service
+	docker exec $($@_CONTAINER) journalctl -u certhub-certbot-run@certbot-cert.service
 	# Stop containers
-	docker exec certhub-integration-controller systemctl poweroff
-	docker wait certhub-integration-controller
+	docker exec $($@_CONTAINER) systemctl poweroff
+	docker wait $($@_CONTAINER)
 
 test-dehydrated: controller
-	# Start containers
-	docker run $(dockerargs) -d --name certhub-integration-controller certhub-integration-controller /sbin/init
+	# Start container
+	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-controller /sbin/init))
 	# Run the test
-	docker exec certhub-integration-controller su -s /bin/sh -c /home/certhub/setup/certbot-cert-csr-import.sh - certhub
-	docker exec certhub-integration-controller su -s /bin/sh -c "dehydrated --register --accept-terms --config /home/certhub/config/certbot-cert.dehydrated" - certhub
-	docker exec certhub-integration-controller systemctl start certhub-dehydrated-run@certbot-cert.service
-	docker exec certhub-integration-controller journalctl -u certhub-dehydrated-run@certbot-cert.service
+	docker exec $($@_CONTAINER) su -s /bin/sh -c /home/certhub/setup/certbot-cert-csr-import.sh - certhub
+	docker exec $($@_CONTAINER) su -s /bin/sh -c "dehydrated --register --accept-terms --config /home/certhub/config/certbot-cert.dehydrated" - certhub
+	docker exec $($@_CONTAINER) systemctl start certhub-dehydrated-run@certbot-cert.service
+	docker exec $($@_CONTAINER) journalctl -u certhub-dehydrated-run@certbot-cert.service
 	# Stop containers
-	docker exec certhub-integration-controller systemctl poweroff
-	docker wait certhub-integration-controller
+	docker exec $($@_CONTAINER) systemctl poweroff
+	docker wait $($@_CONTAINER)
 
 base/context:
 	mkdir base/context
