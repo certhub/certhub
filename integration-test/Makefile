@@ -2,6 +2,11 @@ ifeq ($(dockerargs),)
     dockerargs := --rm --tmpfs /run --tmpfs /tmp -v /sys/fs/cgroup:/sys/fs/cgroup:ro --cap-add SYS_ADMIN
 endif
 
+ifeq ($(hostsfx),)
+    hostsfx := $(shell openssl rand -hex 4)
+endif
+export hostsfx
+
 all: \
     test-certbot \
     test-dehydrated
@@ -10,9 +15,9 @@ test-certbot: controller
 	# Start containers
 	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-controller /sbin/init))
 	# Run the test
-	docker exec $($@_CONTAINER) su -s /bin/sh -c /home/certhub/setup/certbot-cert-csr-import.sh - certhub
-	docker exec $($@_CONTAINER) systemctl start certhub-certbot-run@certbot-cert.service
-	docker exec $($@_CONTAINER) journalctl -u certhub-certbot-run@certbot-cert.service
+	docker exec $($@_CONTAINER) su -s /bin/sh -c "/home/certhub/setup/csr-import.sh  /home/certhub/setup/certbot-test" - certhub
+	docker exec $($@_CONTAINER) systemctl start certhub-certbot-run@certbot-test.service
+	docker exec $($@_CONTAINER) journalctl -u certhub-certbot-run@certbot-test.service
 	# Stop containers
 	docker exec $($@_CONTAINER) systemctl poweroff
 	docker wait $($@_CONTAINER)
@@ -21,10 +26,10 @@ test-dehydrated: controller
 	# Start container
 	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-controller /sbin/init))
 	# Run the test
-	docker exec $($@_CONTAINER) su -s /bin/sh -c /home/certhub/setup/certbot-cert-csr-import.sh - certhub
-	docker exec $($@_CONTAINER) su -s /bin/sh -c "dehydrated --register --accept-terms --config /home/certhub/config/certbot-cert.dehydrated" - certhub
-	docker exec $($@_CONTAINER) systemctl start certhub-dehydrated-run@certbot-cert.service
-	docker exec $($@_CONTAINER) journalctl -u certhub-dehydrated-run@certbot-cert.service
+	docker exec $($@_CONTAINER) su -s /bin/sh -c "/home/certhub/setup/csr-import.sh /home/certhub/setup/dehydrated-test" - certhub
+	docker exec $($@_CONTAINER) su -s /bin/sh -c "dehydrated --register --accept-terms --config /home/certhub/config/dehydrated-test.dehydrated" - certhub
+	docker exec $($@_CONTAINER) systemctl start certhub-dehydrated-run@dehydrated-test.service
+	docker exec $($@_CONTAINER) journalctl -u certhub-dehydrated-run@dehydrated-test.service
 	# Stop containers
 	docker exec $($@_CONTAINER) systemctl poweroff
 	docker wait $($@_CONTAINER)
@@ -44,7 +49,7 @@ node/context:
 	mkdir node/context
 	# Generate private key and csr.
 	openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 \
-	    -out node/context/certbot-cert.key.pem
+	    -out node/context/key.pem
 
 node: base node/context
 	docker build -t certhub-integration-node node
@@ -56,6 +61,7 @@ controller/context: node/context
 	@test -n "$(LEXICON_DIGITALOCEAN_TOKEN)"
 	# Credentials for dehydrated / lexicon
 	@echo "[Service]" > controller/context/system/certhub-dehydrated-run@.service.d/dns-account.conf
+	@echo "Environment=DELEGATED=ci.certhub.io" >> controller/context/system/certhub-dehydrated-run@.service.d/dns-account.conf
 	@echo "Environment=PROVIDER=digitalocean" >> controller/context/system/certhub-dehydrated-run@.service.d/dns-account.conf
 	@echo "Environment=LEXICON_DIGITALOCEAN_TOKEN=$(LEXICON_DIGITALOCEAN_TOKEN)" >> controller/context/system/certhub-dehydrated-run@.service.d/dns-account.conf
 	# Credentials for certbot
@@ -69,10 +75,16 @@ controller/context: node/context
 	cp -r src/config controller/context/home/config
 	cp -r src/scripts controller/context/home/scripts
 	cp -r src/setup controller/context/home/setup
+	envsubst < controller/context/home/setup/certbot-test/csr.cnf.in > controller/context/home/setup/certbot-test/csr.cnf
 	openssl req -new \
-	    -config controller/context/home/setup/certbot-cert/csr.cnf \
-	    -key node/context/certbot-cert.key.pem \
-	    -out controller/context/home/setup/certbot-cert/csr.pem
+	    -config controller/context/home/setup/certbot-test/csr.cnf \
+	    -key node/context/key.pem \
+	    -out controller/context/home/setup/certbot-test/csr.pem
+	envsubst < controller/context/home/setup/dehydrated-test/csr.cnf.in > controller/context/home/setup/dehydrated-test/csr.cnf
+	openssl req -new \
+	    -config controller/context/home/setup/dehydrated-test/csr.cnf \
+	    -key node/context/key.pem \
+	    -out controller/context/home/setup/dehydrated-test/csr.pem
 
 controller: base controller/context
 	docker build -t certhub-integration-controller controller

@@ -6,7 +6,7 @@ default_md = sha256
 prompt = no
 
 [ req_distinguished_name ]
-commonName = ci.certhub.io
+commonName = certbot-test-${hostsfx}.ci.certhub.io
 
 [ v3_req ]
 basicConstraints = CA:FALSE

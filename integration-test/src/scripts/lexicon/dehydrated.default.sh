@@ -14,7 +14,7 @@ function deploy_challenge {
 
     echo "deploy_challenge called: ${DOMAIN}, ${TOKEN_FILENAME}, ${TOKEN_VALUE}"
 
-    lexicon --delegated ${DOMAIN} $PROVIDER create ${DOMAIN} TXT --name="_acme-challenge.${DOMAIN}." --content="${TOKEN_VALUE}" --log_level=INFO
+    lexicon --delegated ${DELEGATED} $PROVIDER create ${DOMAIN} TXT --name="_acme-challenge.${DOMAIN}." --content="${TOKEN_VALUE}" --log_level=INFO
     
     DELAY_COUNTDOWN=$PROVIDER_UPDATE_DELAY
     while [ $DELAY_COUNTDOWN -gt 0 ]; do
@@ -46,7 +46,7 @@ function clean_challenge {
 
     echo "clean_challenge called: ${DOMAIN}, ${TOKEN_FILENAME}, ${TOKEN_VALUE}"
 
-    lexicon --delegated ${DOMAIN} $PROVIDER delete ${DOMAIN} TXT --name="_acme-challenge.${DOMAIN}." --content="${TOKEN_VALUE}" --log_level=INFO
+    lexicon --delegated ${DELEGATED} $PROVIDER delete ${DOMAIN} TXT --name="_acme-challenge.${DOMAIN}." --content="${TOKEN_VALUE}" --log_level=INFO
 
     # This hook is called after attempting to validate each domain,
     # whether or not validation was successful. Here you can delete
