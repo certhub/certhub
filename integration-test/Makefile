@@ -15,6 +15,7 @@ test-certbot: controller
 	docker exec certhub-integration-controller journalctl -u certhub-certbot-run@certbot-cert.service
 	# Stop containers
 	docker exec certhub-integration-controller systemctl poweroff
+	docker wait certhub-integration-controller
 
 test-dehydrated: controller
 	# Start containers
@@ -26,6 +27,7 @@ test-dehydrated: controller
 	docker exec certhub-integration-controller journalctl -u certhub-dehydrated-run@certbot-cert.service
 	# Stop containers
 	docker exec certhub-integration-controller systemctl poweroff
+	docker wait certhub-integration-controller
 
 base/context:
 	mkdir base/context
