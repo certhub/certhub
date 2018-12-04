@@ -77,9 +77,10 @@ controller: base controller/context
 
 
 .PHONY: \
+	all \
 	base \
 	controller \
 	images \
-	integration-test \
 	node \
-	test \
+	test-certbot \
+	test-dehydrated \
