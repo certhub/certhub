@@ -1,0 +1,4 @@
+CA="https://acme-staging-v02.api.letsencrypt.org/directory"
+CHALLENGETYPE="dns-01"
+BASEDIR=/home/certhub/dehydrated
+HOOK=/home/certhub/scripts/lexicon/dehydrated.default.sh

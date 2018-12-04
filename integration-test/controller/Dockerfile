@@ -10,3 +10,6 @@ RUN yum install -y \
 
 # Add setup scripts and certhub config
 COPY --chown=certhub:certhub context/home /home/certhub/
+
+# Add systemd drop-ins
+COPY context/system /etc/systemd/system/
