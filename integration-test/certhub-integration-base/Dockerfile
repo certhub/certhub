@@ -8,7 +8,7 @@ RUN yum install -y git openssl openssh-server
 RUN systemctl enable sshd
 
 # Install git-gau and certhub
-ADD https://github.com/znerol/git-gau/releases/download/v1.0.0/git-gau-dist.tar.gz /root/
+COPY git-gau-dist.tar.gz /root/git-gau-dist.tar.gz
 RUN tar -C /usr/local -xf /root/git-gau-dist.tar.gz
 COPY certhub-dist.tar.gz /root/certhub-dist.tar.gz
 RUN tar -C /usr/local -xf /root/certhub-dist.tar.gz

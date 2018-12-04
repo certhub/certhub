@@ -141,34 +141,11 @@ dist-src:
 
 dist: dist-src dist-bin
 
+integration-test-images: dist
+	make -C integration-test images
+
 integration-test:
-	# Ensure that DNS credentials are present.
-	@test -n "$(LEXICON_DIGITALOCEAN_TOKEN)"
-	@echo "dns_digitalocean_token = $(LEXICON_DIGITALOCEAN_TOKEN)" > integration-test/certhub-integration-controller/certbot-digitalocean.ini
-	# Generate private key and csr.
-	openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 \
-	    -out integration-test/certhub-integration-node/certbot-cert.key.pem
-	openssl req -new \
-	    -config integration-test/certhub-integration-controller/certbot-cert.csr.cnf \
-	    -key integration-test/certhub-integration-node/certbot-cert.key.pem \
-	    -out integration-test/certhub-integration-controller/certbot-cert.csr.pem
-	cp dist/certhub-dist.tar.gz integration-test/certhub-integration-base/
-	# Build images.
-	docker build -t certhub-integration-base integration-test/certhub-integration-base
-	docker build -t certhub-integration-controller integration-test/certhub-integration-controller
-	docker build -t certhub-integration-node integration-test/certhub-integration-node
-	docker run --rm -d --tmpfs /run --tmpfs /tmp -v /sys/fs/cgroup:/sys/fs/cgroup:ro --cap-add SYS_ADMIN --name certhub-integration-node certhub-integration-node /sbin/init
-	docker run --rm -d --tmpfs /run --tmpfs /tmp -v /sys/fs/cgroup:/sys/fs/cgroup:ro --cap-add SYS_ADMIN --link certhub-integration-node --name certhub-integration-controller certhub-integration-controller /sbin/init
-	docker exec certhub-integration-controller bash -c 'ssh-keyscan certhub-integration-node > /etc/ssh/ssh_known_hosts'
-	# Run the test
-	docker exec certhub-integration-controller systemctl enable certhub-certbot-run@certbot-cert.path
-	docker exec certhub-integration-controller systemctl start certhub-certbot-run@certbot-cert.path
-	docker exec certhub-integration-controller systemctl enable certhub-repo-push@certhub\\x2dintegration\\x2dnode:-home-certhub-certs.git.path
-	docker exec certhub-integration-controller systemctl start certhub-repo-push@certhub\\x2dintegration\\x2dnode:-home-certhub-certs.git.path
-	docker exec certhub-integration-controller su -s /bin/sh -c /home/certhub/input/certbot-cert-csr-import.sh - certhub
-	# Cleanup
-	#docker exec certhub-integration-controller systemctl poweroff
-	#docker exec certhub-integration-node systemctl poweroff
+	make -C integration-test test
 
 .PHONY: \
 	all \
@@ -180,6 +157,7 @@ integration-test:
 	install-bin \
 	install-doc \
 	integration-test \
+	integration-test-setup \
 	lint \
 	test \
 	uninstall \
