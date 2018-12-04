@@ -2,7 +2,10 @@ ifeq ($(dockerargs),)
     dockerargs := --rm --tmpfs /run --tmpfs /tmp -v /sys/fs/cgroup:/sys/fs/cgroup:ro --cap-add SYS_ADMIN
 endif
 
-test:
+all: \
+    test-certbot
+
+test-certbot: controller
 	# Start containers
 	docker run $(dockerargs) -d --name certhub-integration-controller certhub-integration-controller /sbin/init
 	# Run the test
@@ -52,10 +55,6 @@ controller/context: node/context
 controller: base controller/context
 	docker build -t certhub-integration-controller controller
 
-images: \
-    base \
-    node \
-    controller
 
 .PHONY: \
 	base \
@@ -63,3 +62,4 @@ images: \
 	images \
 	integration-test \
 	node \
+	test \

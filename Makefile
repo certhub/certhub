@@ -142,7 +142,7 @@ dist-src:
 dist: dist-src dist-bin
 
 integration-test: dist
-	make -C integration-test images test
+	make -C integration-test all
 
 .PHONY: \
 	all \
