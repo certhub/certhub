@@ -111,7 +111,6 @@ controller: base controller/context
 	base \
 	controller \
 	controller/context-credentials \
-	images \
 	node \
 	test-certbot \
 	test-dehydrated \
