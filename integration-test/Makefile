@@ -7,6 +7,19 @@ ifeq ($(hostsfx),)
 endif
 export hostsfx
 
+ifeq ($(with_tor),)
+    ifeq ($(TRAVIS),)
+        with_tor := 0
+    else
+        with_tor := 1
+    endif
+endif
+
+ifneq ($(with_tor),0)
+    dehydrated_proxy_args = -e ALL_PROXY='socks5h://127.0.0.1:9050/'
+    dehydrated_proxy_systemd_env = Environment="ALL_PROXY=socks5h://127.0.0.1:9050/"
+endif
+
 all: \
     test-certbot \
     test-dehydrated
@@ -16,7 +29,7 @@ test-certbot: controller
 	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-controller /sbin/init))
 	# Run the test
 	docker exec $($@_CONTAINER) su -s /bin/sh -c "/home/certhub/setup/csr-import.sh  /home/certhub/setup/certbot-test" - certhub
-	-docker exec $($@_CONTAINER) systemctl start certhub-certbot-run@certbot-test.service
+	docker exec $($@_CONTAINER) systemctl start certhub-certbot-run@certbot-test.service
 	docker exec $($@_CONTAINER) journalctl -u certhub-certbot-run@certbot-test.service
 	# Stop containers
 	docker exec $($@_CONTAINER) systemctl poweroff
@@ -24,11 +37,11 @@ test-certbot: controller
 
 test-dehydrated: controller
 	# Start container
-	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-controller /sbin/init))
+	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) $(dehydrated_proxy_args) -d certhub-integration-controller /sbin/init))
 	# Run the test
 	docker exec $($@_CONTAINER) su -s /bin/sh -c "/home/certhub/setup/csr-import.sh /home/certhub/setup/dehydrated-test" - certhub
 	docker exec $($@_CONTAINER) su -s /bin/sh -c "dehydrated --register --accept-terms --config /home/certhub/config/dehydrated-test.dehydrated" - certhub
-	-docker exec $($@_CONTAINER) systemctl start certhub-dehydrated-run@dehydrated-test.service
+	docker exec $($@_CONTAINER) systemctl start certhub-dehydrated-run@dehydrated-test.service
 	docker exec $($@_CONTAINER) journalctl -u certhub-dehydrated-run@dehydrated-test.service
 	# Stop containers
 	docker exec $($@_CONTAINER) systemctl poweroff
@@ -54,7 +67,7 @@ node/context:
 node: base node/context
 	docker build -t certhub-integration-node node
 
-controller/context: node/context
+controller/context-credentials:
 	mkdir -p controller/context/home
 	mkdir -p controller/context/system/certhub-dehydrated-run@.service.d
 	# Ensure that LEXICON_DIGITALOCEAN_TOKEN environment variable is set.
@@ -64,8 +77,11 @@ controller/context: node/context
 	@echo "Environment=DELEGATED=ci.certhub.io" >> controller/context/system/certhub-dehydrated-run@.service.d/dns-account.conf
 	@echo "Environment=PROVIDER=digitalocean" >> controller/context/system/certhub-dehydrated-run@.service.d/dns-account.conf
 	@echo "Environment=LEXICON_DIGITALOCEAN_TOKEN=$(LEXICON_DIGITALOCEAN_TOKEN)" >> controller/context/system/certhub-dehydrated-run@.service.d/dns-account.conf
+	@echo "$(dehydrated_proxy_systemd_env)" >> controller/context/system/certhub-dehydrated-run@.service.d/dns-account.conf
 	# Credentials for certbot
 	@echo "dns_digitalocean_token = $(LEXICON_DIGITALOCEAN_TOKEN)" > controller/context/home/certbot-digitalocean.ini
+
+controller/context: controller/context-credentials node/context
 	mkdir -p controller/context/home/certbot/config
 	mkdir -p controller/context/home/certbot/log
 	mkdir -p controller/context/home/certbot/work
@@ -87,13 +103,14 @@ controller/context: node/context
 	    -out controller/context/home/setup/dehydrated-test/csr.pem
 
 controller: base controller/context
-	docker build -t certhub-integration-controller controller
+	docker build -t certhub-integration-controller --build-arg=WITH_TOR=$(with_tor) controller
 
 
 .PHONY: \
 	all \
 	base \
 	controller \
+	controller/context-credentials \
 	images \
 	node \
 	test-certbot \
