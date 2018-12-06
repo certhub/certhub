@@ -6,6 +6,11 @@ set -x
 
 STATUS=1
 
+env | grep PROXY
+curl https://ifconfig.co/
+curl https://ifconfig.co/
+curl https://ifconfig.co/
+
 /bin/su -s /bin/sh -c "/home/certhub/setup/csr-import.sh  /home/certhub/setup/certbot-test" - certhub
 if /bin/systemctl start certhub-certbot-run@certbot-test.service; then
     STATUS=0
