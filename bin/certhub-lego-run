@@ -1,0 +1,51 @@
+#!/bin/sh
+#
+# certhub-lego-run - Runs lego command once
+
+set -e
+set -u
+
+# Required binaries
+ECHO=/bin/echo
+MKTEMP=/bin/mktemp
+MV=/bin/mv
+RM=/bin/rm
+XARGS=/usr/bin/xargs
+BASENAME=/usr/bin/basename
+
+# Print usage message and exit.
+usage() {
+    ${ECHO} "${0}: /path/to/certhub/instance.example.com /path/to/lego/dir /path/to/lego [lego run args...]"
+    return 1
+}
+
+certhub_lego_run() {
+    INSTANCE_DIR="${1}"
+    CSR_PATH="${INSTANCE_DIR}/${CERTHUB_CSR_NAME:-csr.pem}"
+    FC_PATH="${INSTANCE_DIR}/${CERTHUB_FULLCHAIN_NAME:-fullchain.pem}"
+
+    # Setup temp dir inside lego directory for new certificate.
+    WORKDIR=$(${MKTEMP} -d -p "${2}/certificates")
+    cleanup() {
+        ${RM} -rf "${WORKDIR}"
+    }
+    trap cleanup EXIT
+
+    OUTFILEABS="${WORKDIR}/fullchain.crt"
+    OUTFILEBASE=$(${BASENAME} "${WORKDIR}")/fullchain
+    shift 2
+
+    ${ECHO} \
+        --csr "${CSR_PATH}" \
+        --filename "${OUTFILEBASE}" \
+        --path "${LEGO_DIR}" \
+        run | ${XARGS} "${@}"
+
+    ${MV} "${OUTFILEABS}" "${FC_PATH}"
+}
+
+if [ "${#}" -gt 2 ] && [ "${1:-}" != "-h" ] && [ "${1:-}" != "--help" ]; then
+    certhub_lego_run "${@}"
+else
+    usage
+fi

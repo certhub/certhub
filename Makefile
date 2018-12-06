@@ -37,6 +37,7 @@ bin:
 lint: bin
 	shellcheck bin/certhub-certbot-run
 	shellcheck bin/certhub-dehydrated-run
+	shellcheck bin/certhub-lego-run
 	shellcheck bin/certhub-message-format
 	shellcheck lib/certbot-hooks/lexicon-auth
 	shellcheck lib/certbot-hooks/nsupdate-auth
@@ -49,11 +50,13 @@ test: bin
 doc: \
 	doc/certhub-certbot-run.1 \
 	doc/certhub-dehydrated-run.1 \
+	doc/certhub-lego-run.1 \
 	doc/certhub-message-format.1
 
 clean:
 	-rm -f doc/certhub-certbot-run.1
 	-rm -f doc/certhub-dehydrated-run.1
+	-rm -f doc/certhub-lego-run.1
 	-rm -f doc/certhub-message-format.1
 	-rm -rf dist
 	-rm -rf build
@@ -61,11 +64,13 @@ clean:
 install-doc: doc
 	install -m 0644 -D doc/certhub-certbot-run.1 $(DESTDIR)$(mandir)/man1/certhub-certbot-run.1
 	install -m 0644 -D doc/certhub-dehydrated-run.1 $(DESTDIR)$(mandir)/man1/certhub-dehydrated-run.1
+	install -m 0644 -D doc/certhub-lego-run.1 $(DESTDIR)$(mandir)/man1/certhub-lego-run.1
 	install -m 0644 -D doc/certhub-message-format.1 $(DESTDIR)$(mandir)/man1/certhub-message-format.1
 
 install-bin: bin
 	install -m 0755 -D bin/certhub-certbot-run $(DESTDIR)$(bindir)/certhub-certbot-run
 	install -m 0755 -D bin/certhub-dehydrated-run $(DESTDIR)$(bindir)/certhub-dehydrated-run
+	install -m 0755 -D bin/certhub-lego-run $(DESTDIR)$(bindir)/certhub-lego-run
 	install -m 0755 -D bin/certhub-message-format $(DESTDIR)$(bindir)/certhub-message-format
 	install -m 0755 -D lib/certbot-hooks/lexicon-auth $(DESTDIR)$(libdir)/certhub/certbot-hooks/lexicon-auth
 	ln -s -f lexicon-auth $(DESTDIR)$(libdir)/certhub/certbot-hooks/lexicon-cleanup
@@ -85,6 +90,8 @@ install-bin: bin
 	install -m 0644 -D lib/systemd/certhub-certrot-server-https@.service $(DESTDIR)$(systemdsystemdir)/certhub-certrot-server-https@.service
 	install -m 0644 -D lib/systemd/certhub-dehydrated-run@.path $(DESTDIR)$(systemdsystemdir)/certhub-dehydrated-run@.path
 	install -m 0644 -D lib/systemd/certhub-dehydrated-run@.service $(DESTDIR)$(systemdsystemdir)/certhub-dehydrated-run@.service
+	install -m 0644 -D lib/systemd/certhub-lego-run@.path $(DESTDIR)$(systemdsystemdir)/certhub-lego-run@.path
+	install -m 0644 -D lib/systemd/certhub-lego-run@.service $(DESTDIR)$(systemdsystemdir)/certhub-lego-run@.service
 	install -m 0644 -D lib/systemd/certhub-repo-push@.path $(DESTDIR)$(systemdsystemdir)/certhub-repo-push@.path
 	install -m 0644 -D lib/systemd/certhub-repo-push@.service $(DESTDIR)$(systemdsystemdir)/certhub-repo-push@.service
 
@@ -93,9 +100,11 @@ install: install-bin install-doc
 uninstall:
 	-rm -f $(DESTDIR)$(bindir)/certhub-certbot-run
 	-rm -f $(DESTDIR)$(bindir)/certhub-dehydrated-run
+	-rm -f $(DESTDIR)$(bindir)/certhub-lego-run
 	-rm -f $(DESTDIR)$(bindir)/certhub-message-format
 	-rm -f $(DESTDIR)$(mandir)/man1/certhub-certbot-run.1
 	-rm -f $(DESTDIR)$(mandir)/man1/certhub-dehydrated-run.1
+	-rm -f $(DESTDIR)$(mandir)/man1/certhub-lego-run.1
 	-rm -f $(DESTDIR)$(mandir)/man1/certhub-message-format.1
 	-rm -f $(DESTDIR)$(libdir)/certhub/certbot-hooks/lexicon-auth
 	-rm -f $(DESTDIR)$(libdir)/certhub/certbot-hooks/lexicon-cleanup
@@ -115,6 +124,8 @@ uninstall:
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-certrot-server-https@.service
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-dehydrated-run@.path
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-dehydrated-run@.service
+	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-lego-run@.path
+	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-lego-run@.service
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-repo-push@.path
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-repo-push@.service
 
