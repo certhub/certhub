@@ -1,5 +1,5 @@
 ifeq ($(dockerargs),)
-    dockerargs := --rm --tmpfs /run --tmpfs /tmp -v /sys/fs/cgroup:/sys/fs/cgroup:ro --cap-add SYS_ADMIN
+    dockerargs := --rm --tmpfs /run --tmpfs /tmp -v /sys/fs/cgroup:/sys/fs/cgroup:ro --cap-add SYS_ADMIN --stop-signal SIGRTMIN+3
 endif
 
 ifeq ($(hostsfx),)
@@ -30,8 +30,7 @@ test-certbot: controller
 	# Run the test
 	docker exec -i $($@_CONTAINER) /bin/sh < test/test-certbot.sh
 	# Stop containers
-	docker exec $($@_CONTAINER) systemctl poweroff
-	docker wait $($@_CONTAINER)
+	docker stop $($@_CONTAINER)
 
 test-dehydrated: controller
 	# Start container
@@ -39,8 +38,7 @@ test-dehydrated: controller
 	# Run the test
 	docker exec -i $($@_CONTAINER) /bin/sh < test/test-dehydrated.sh
 	# Stop containers
-	docker exec $($@_CONTAINER) systemctl poweroff
-	docker wait $($@_CONTAINER)
+	docker stop $($@_CONTAINER)
 
 base/context:
 	mkdir base/context
