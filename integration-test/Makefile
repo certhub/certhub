@@ -64,7 +64,7 @@ node: base node/context
 
 controller/context: node/context
 	mkdir -p controller/context/system/certhub-dehydrated-run@.service.d
-	echo '[Service]' > controller/context/system/certhub-certbot-run@.service.d/tor.conf
+	echo '[Service]' > controller/context/system/certhub-dehydrated-run@.service.d/tor.conf
 	echo "$(dehydrated_proxy_systemd_env)" >> controller/context/system/certhub-dehydrated-run@.service.d/tor.conf
 	mkdir -p controller/context/home/certbot/config
 	mkdir -p controller/context/home/certbot/log
