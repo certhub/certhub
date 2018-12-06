@@ -47,7 +47,7 @@ case ${1} in
         ${SLEEP} "${CERTHUB_LEXICON_CREATE_EXIT_DELAY:-5}"
         ;;
 
-    cleanup_challenge)
+    clean_challenge)
         shift
         _lexicon delete "${@}"
         ;;

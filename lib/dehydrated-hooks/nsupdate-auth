@@ -42,7 +42,7 @@ case ${1} in
         _nsupdate add "${@}"
         ;;
 
-    cleanup_challenge)
+    clean_challenge)
         shift
         _nsupdate delete "${@}"
         ;;
