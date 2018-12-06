@@ -78,7 +78,7 @@ controller/context: node/context
 	mkdir -p controller/context/home/certbot/log
 	mkdir -p controller/context/home/certbot/work
 	mkdir -p controller/context/home/dehydrated
-	mkdir -p controller/context/home/lego
+	mkdir -p controller/context/home/lego/certificates
 	mkdir -p controller/context/home/.config/letsencrypt
 	cp src/certbot-cli.ini controller/context/home/.config/letsencrypt/cli.ini
 	cp -r src/config controller/context/home/config
