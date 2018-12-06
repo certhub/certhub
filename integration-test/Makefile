@@ -67,21 +67,7 @@ node/context:
 node: base node/context
 	docker build -t certhub-integration-node node
 
-controller/context-credentials:
-	mkdir -p controller/context/home
-	mkdir -p controller/context/system/certhub-dehydrated-run@.service.d
-	# Ensure that LEXICON_DIGITALOCEAN_TOKEN environment variable is set.
-	@test -n "$(LEXICON_DIGITALOCEAN_TOKEN)"
-	# Credentials for dehydrated / lexicon
-	@echo "[Service]" > controller/context/system/certhub-dehydrated-run@.service.d/dns-account.conf
-	@echo "Environment=DELEGATED=ci.certhub.io" >> controller/context/system/certhub-dehydrated-run@.service.d/dns-account.conf
-	@echo "Environment=PROVIDER=digitalocean" >> controller/context/system/certhub-dehydrated-run@.service.d/dns-account.conf
-	@echo "Environment=LEXICON_DIGITALOCEAN_TOKEN=$(LEXICON_DIGITALOCEAN_TOKEN)" >> controller/context/system/certhub-dehydrated-run@.service.d/dns-account.conf
-	@echo "$(dehydrated_proxy_systemd_env)" >> controller/context/system/certhub-dehydrated-run@.service.d/dns-account.conf
-	# Credentials for certbot
-	@echo "dns_digitalocean_token = $(LEXICON_DIGITALOCEAN_TOKEN)" > controller/context/home/certbot-digitalocean.ini
-
-controller/context: controller/context-credentials node/context
+controller/context: node/context
 	mkdir -p controller/context/home/certbot/config
 	mkdir -p controller/context/home/certbot/log
 	mkdir -p controller/context/home/certbot/work
@@ -89,7 +75,6 @@ controller/context: controller/context-credentials node/context
 	mkdir -p controller/context/home/.config/letsencrypt
 	cp src/certbot-cli.ini controller/context/home/.config/letsencrypt/cli.ini
 	cp -r src/config controller/context/home/config
-	cp -r src/scripts controller/context/home/scripts
 	cp -r src/setup controller/context/home/setup
 	envsubst < controller/context/home/setup/certbot-test/csr.cnf.in > controller/context/home/setup/certbot-test/csr.cnf
 	openssl req -new \

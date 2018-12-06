@@ -13,7 +13,7 @@ matrix:
     - env: TEST_SUITE=test
 
     - env:
-        - TEST_SUITE: integration-test
+        - TEST_SUITE: integration-test-travis-creds integration-test
         - secure: b4zF90vI1t+qEWzt09s1Tzb1BZj0bg3ttaO2Tw37vgRmSWzj5Pyp7P0Kn0ldReo9nEcFshZIToAHlR0VGvEwg5CLuawXfureYNJMT3w3Nr26NBsn0LGnbokkmCRt8Bk3KOng9+qB3BVdGyLii8hjDgHZ4Snvd3NsjJiHS4bGGo8vPrNW8XQSgfM88FvLKGuyO5CltMDjtChmNaIBA09TTpyzoXEftAodoTwbgdVOSYnOp0GM1T9mE+JaRKyr05QVDyMNQgm24ggNQbfGmfdA5AqC86v1g9KJdySRR/+5CjvSEl/ndQzhN5c+YPSgkkr75e1dkDCNOUmT7062yie1BolTf83g/dMo5TXXF/Vl1pS1AC7mpsUD8EFM6hvo7GbmJJlbhRFT9fu2CMz5pL6trsnSG1IvUT/Fm8JbM4Km6KT5LL5H7SzOoKpE+PppN6gmo0yjiYeR2PzHuuKoK5zbH0qleaTbwc29KUWMfG3e/sMujm6xp+p6vgSC+u6cIuh9vxhACiUcXmtu9k/Ni6kcBEcCcMsDjjAM1Nc3pLJeIcLYOVMrX2zVsam9sNAbpwWDW5ClkvLsJ8Osh6f24Yz3IauSZJqPsNSetlEl00KT/v9mn0ldw+HAVAtYVbDnEuDntKNquW4GWZuwvsK4j1LEWfEqaVZa8SkH+8tBwuEZbek=
       services:
         - docker
