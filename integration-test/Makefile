@@ -68,6 +68,8 @@ node: base node/context
 	docker build -t certhub-integration-node node
 
 controller/context: node/context
+	mkdir -p controller/context/system/certhub-dehydrated-run@.service.d
+	echo "$(dehydrated_proxy_systemd_env)" >> controller/context/system/certhub-dehydrated-run@.service.d/tor.conf
 	mkdir -p controller/context/home/certbot/config
 	mkdir -p controller/context/home/certbot/log
 	mkdir -p controller/context/home/certbot/work
