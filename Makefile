@@ -131,7 +131,7 @@ uninstall:
 
 dist-bin:
 	-rm -rf build
-	make DESTDIR=build prefix=/ install
+	${MAKE} DESTDIR=build prefix=/ install
 	mkdir -p dist
 	tar --owner=root:0 --group=root:0 -czf dist/certhub-dist.tar.gz -C build .
 
@@ -153,8 +153,8 @@ integration-test-travis-creds:
 	cp integration-test/controller/context/system/certhub-certbot-run@.service.d/hook.conf integration-test/controller/context/system/certhub-dehydrated-run@.service.d/hook.conf
 
 integration-test: dist
-	[ -z "$(TRAVIS)" ] || make integration-test-travis-creds
-	make -C integration-test all
+	[ -z "$(TRAVIS)" ] || ${MAKE} integration-test-travis-creds
+	${MAKE} -C integration-test all
 
 .PHONY: \
 	all \
