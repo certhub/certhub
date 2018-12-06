@@ -6,7 +6,13 @@ set -x
 
 STATUS=1
 
+yum install -y nmap-ncat
+
 if env | grep PROXY; then
+    while ! nc 127.0.0.1 9050 < /dev/null ; do
+        sleep 1
+        continue
+    done
     curl http://checkip.dyndns.org/
     curl http://checkip.dyndns.org/
     curl http://checkip.dyndns.org/
