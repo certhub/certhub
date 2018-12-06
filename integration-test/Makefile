@@ -41,7 +41,7 @@ test-dehydrated: controller
 	# Run the test
 	docker exec $($@_CONTAINER) su -s /bin/sh -c "/home/certhub/setup/csr-import.sh /home/certhub/setup/dehydrated-test" - certhub
 	docker exec $($@_CONTAINER) su -s /bin/sh -c "dehydrated --register --accept-terms --config /home/certhub/config/dehydrated-test.dehydrated" - certhub
-	docker exec $($@_CONTAINER) systemctl start certhub-dehydrated-run@dehydrated-test.service
+	-docker exec $($@_CONTAINER) systemctl start certhub-dehydrated-run@dehydrated-test.service
 	docker exec $($@_CONTAINER) journalctl -u certhub-dehydrated-run@dehydrated-test.service
 	# Stop containers
 	docker exec $($@_CONTAINER) systemctl poweroff
