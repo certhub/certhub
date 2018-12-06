@@ -1,0 +1,50 @@
+#!/bin/sh
+#
+# Deploy DNS challenge using lexicon
+#
+# Set at least the following variables in your environment:
+#
+# Lexicon provider name, e.g.:
+# CERTHUB_LEXICON_PROVIDER=cloudflare
+#
+# Lexicon provider credentials, e.g.:
+# LEXICON_CLOUDFLARE_AUTH_USERNAME=me
+# LEXICON_CLOUDFLARE_AUTH_TOKEN=xxx
+#
+# Optional delay in seconds after record creation (defaults to 5):
+# CERTHUB_LEXICON_CREATE_EXIT_DELAY=30
+#
+# Optional additional global lexicon argumnets:
+# CERTHUB_LEXICON_GLOBAL_ARGS="--delegated sub.example.org"
+#
+# Optional additional lexicon provider arguments (e.g. logging):
+# CERTHUB_LEXICON_PROVIDER_ARGS="--ttl=300 --log-level=DEBUG"
+
+set -e
+set -u
+
+ECHO=/bin/echo
+XARGS=/usr/bin/xargs
+LEXICON=/usr/bin/lexicon
+SLEEP=/bin/sleep
+
+# Determine action according to executable name.
+if [ -z "${0##*-auth}" ]; then
+    ACTION=create
+    EXIT_DELAY="${CERTHUB_LEXICON_CREATE_EXIT_DELAY:-5}"
+elif [ -z "${0##*-cleanup}" ]; then
+    EXIT_DELAY=0
+    ACTION=delete
+else
+    ${ECHO} "${0}: called with unknown action"
+    exit 1
+fi
+
+DOMAIN=${CERTHUB_LEXICON_DOMAIN:-${CERTBOT_DOMAIN}}
+NAME=${CERTHUB_LEXICON_NAME:-_acme-challenge.${CERTBOT_DOMAIN}.}
+
+${ECHO} "${CERTHUB_LEXICON_GLOBAL_ARGS:-}" "${CERTHUB_LEXICON_PROVIDER}" "${ACTION}" \
+    "${DOMAIN}" TXT --name="${NAME}." --content="${CERTBOT_VALIDATION}" \
+    "${CERTHUB_LEXICON_PROVIDER_ARGS:-}" | ${XARGS} ${LEXICON}
+
+${SLEEP} "${EXIT_DELAY}"

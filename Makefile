@@ -38,7 +38,9 @@ lint: bin
 	shellcheck bin/certhub-certbot-run
 	shellcheck bin/certhub-dehydrated-run
 	shellcheck bin/certhub-message-format
+	shellcheck lib/certbot-hooks/lexicon-auth
 	shellcheck lib/certbot-hooks/nsupdate-auth
+	shellcheck lib/dehydrated-hooks/lexicon-auth
 	shellcheck lib/dehydrated-hooks/nsupdate-auth
 
 test: bin
@@ -65,8 +67,11 @@ install-bin: bin
 	install -m 0755 -D bin/certhub-certbot-run $(DESTDIR)$(bindir)/certhub-certbot-run
 	install -m 0755 -D bin/certhub-dehydrated-run $(DESTDIR)$(bindir)/certhub-dehydrated-run
 	install -m 0755 -D bin/certhub-message-format $(DESTDIR)$(bindir)/certhub-message-format
+	install -m 0755 -D lib/certbot-hooks/lexicon-auth $(DESTDIR)$(libdir)/certhub/certbot-hooks/lexicon-auth
+	ln -s -f lexicon-auth $(DESTDIR)$(libdir)/certhub/certbot-hooks/lexicon-cleanup
 	install -m 0755 -D lib/certbot-hooks/nsupdate-auth $(DESTDIR)$(libdir)/certhub/certbot-hooks/nsupdate-auth
 	ln -s -f nsupdate-auth $(DESTDIR)$(libdir)/certhub/certbot-hooks/nsupdate-cleanup
+	install -m 0755 -D lib/dehydrated-hooks/lexicon-auth $(DESTDIR)$(libdir)/certhub/dehydrated-hooks/lexicon-auth
 	install -m 0755 -D lib/dehydrated-hooks/nsupdate-auth $(DESTDIR)$(libdir)/certhub/dehydrated-hooks/nsupdate-auth
 	install -m 0644 -D lib/systemd/certhub-cert-export@.path $(DESTDIR)$(systemdsystemdir)/certhub-cert-export@.path
 	install -m 0644 -D lib/systemd/certhub-cert-export@.service $(DESTDIR)$(systemdsystemdir)/certhub-cert-export@.service
@@ -92,8 +97,11 @@ uninstall:
 	-rm -f $(DESTDIR)$(mandir)/man1/certhub-certbot-run.1
 	-rm -f $(DESTDIR)$(mandir)/man1/certhub-dehydrated-run.1
 	-rm -f $(DESTDIR)$(mandir)/man1/certhub-message-format.1
+	-rm -f $(DESTDIR)$(libdir)/certhub/certbot-hooks/lexicon-auth
+	-rm -f $(DESTDIR)$(libdir)/certhub/certbot-hooks/lexicon-cleanup
 	-rm -f $(DESTDIR)$(libdir)/certhub/certbot-hooks/nsupdate-auth
 	-rm -f $(DESTDIR)$(libdir)/certhub/certbot-hooks/nsupdate-cleanup
+	-rm -f $(DESTDIR)$(libdir)/certhub/dehydrated-hooks/lexicon-auth
 	-rm -f $(DESTDIR)$(libdir)/certhub/dehydrated-hooks/nsupdate-auth
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-cert-export@.path
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-cert-export@.service

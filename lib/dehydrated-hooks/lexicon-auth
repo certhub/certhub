@@ -1,0 +1,55 @@
+#!/bin/sh
+#
+# Deploy DNS challenge using lexicon
+#
+# Set at least the following variables in your environment:
+#
+# Lexicon provider name, e.g.:
+# CERTHUB_LEXICON_PROVIDER=cloudflare
+#
+# Lexicon provider credentials, e.g.:
+# LEXICON_CLOUDFLARE_AUTH_USERNAME=me
+# LEXICON_CLOUDFLARE_AUTH_TOKEN=xxx
+#
+# Optional delay in seconds after record creation (defaults to 5):
+# CERTHUB_LEXICON_CREATE_EXIT_DELAY=30
+#
+# Optional additional global lexicon argumnets:
+# CERTHUB_LEXICON_GLOBAL_ARGS="--delegated sub.example.org"
+#
+# Optional additional lexicon provider arguments (e.g. logging):
+# CERTHUB_LEXICON_PROVIDER_ARGS="--ttl=300 --log-level=DEBUG"
+
+set -e
+set -u
+
+# Required binaries
+ECHO=/bin/echo
+LEXICON=/usr/bin/lexicon
+SLEEP=/bin/sleep
+XARGS=/usr/bin/xargs
+
+_lexicon() {
+    ACTION="${1}"
+
+    DOMAIN=${CERTHUB_LEXICON_DOMAIN:-${2}}
+    NAME=${CERTHUB_LEXICON_NAME:-_acme-challenge.${2}.}
+
+    ${ECHO} "${CERTHUB_LEXICON_GLOBAL_ARGS:-}" "${CERTHUB_LEXICON_PROVIDER}" "${ACTION}" \
+        "${DOMAIN}" TXT --name="${NAME}." --content="${4}" \
+        "${CERTHUB_LEXICON_PROVIDER_ARGS:-}" | ${XARGS} ${LEXICON}
+}
+
+case ${1} in
+    deploy_challenge)
+        shift
+        _lexicon create "${@}"
+        ${SLEEP} "${CERTHUB_LEXICON_CREATE_EXIT_DELAY:-5}"
+        ;;
+
+    cleanup_challenge)
+        shift
+        _lexicon delete "${@}"
+        ;;
+
+esac
