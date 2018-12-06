@@ -22,6 +22,7 @@ endif
 
 all: \
     test-certbot \
+    test-lego \
     test-dehydrated
 
 test-certbot: controller
@@ -29,6 +30,14 @@ test-certbot: controller
 	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-controller /sbin/init))
 	# Run the test
 	docker exec -i $($@_CONTAINER) /bin/sh < test/test-certbot.sh
+	# Stop containers
+	docker stop $($@_CONTAINER)
+
+test-lego: controller
+	# Start containers
+	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-controller /sbin/init))
+	# Run the test
+	docker exec -i $($@_CONTAINER) /bin/sh < test/test-lego.sh
 	# Stop containers
 	docker stop $($@_CONTAINER)
 
@@ -45,6 +54,7 @@ base/context:
 	mkdir -m 0700 base/context/.ssh
 	cp ../dist/certhub-dist.tar.gz base/context/certhub-dist.tar.gz
 	curl -L -o base/context/git-gau-dist.tar.gz 'https://github.com/znerol/git-gau/releases/download/v1.0.0/git-gau-dist.tar.gz'
+	curl -L -o base/context/lego_v1.2.1_linux_amd64.tar.gz 'https://github.com/xenolf/lego/releases/download/v1.2.1/lego_v1.2.1_linux_amd64.tar.gz'
 	ssh-keygen -b 1024 -t rsa -f base/context/.ssh/id_rsa -q -N "" -C "Bogus key for CI only. Never use in production"
 	cp base/context/.ssh/id_rsa.pub base/context/.ssh/authorized_keys
 
@@ -68,6 +78,7 @@ controller/context: node/context
 	mkdir -p controller/context/home/certbot/log
 	mkdir -p controller/context/home/certbot/work
 	mkdir -p controller/context/home/dehydrated
+	mkdir -p controller/context/home/lego
 	mkdir -p controller/context/home/.config/letsencrypt
 	cp src/certbot-cli.ini controller/context/home/.config/letsencrypt/cli.ini
 	cp -r src/config controller/context/home/config
@@ -82,6 +93,11 @@ controller/context: node/context
 	    -config controller/context/home/setup/dehydrated-test/csr.cnf \
 	    -key node/context/key.pem \
 	    -out controller/context/home/setup/dehydrated-test/csr.pem
+	envsubst < controller/context/home/setup/lego-test/csr.cnf.in > controller/context/home/setup/lego-test/csr.cnf
+	openssl req -new \
+	    -config controller/context/home/setup/lego-test/csr.cnf \
+	    -key node/context/key.pem \
+	    -out controller/context/home/setup/lego-test/csr.pem
 
 controller: base controller/context
 	docker build -t certhub-integration-controller --build-arg=WITH_TOR=$(with_tor) controller

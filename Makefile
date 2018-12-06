@@ -151,6 +151,10 @@ integration-test-travis-creds:
 	@echo 'Environment=LEXICON_DIGITALOCEAN_TOKEN=$(LEXICON_DIGITALOCEAN_TOKEN)' >> integration-test/controller/context/system/certhub-certbot-run@.service.d/hook.conf
 	mkdir -p integration-test/controller/context/system/certhub-dehydrated-run@.service.d
 	cp integration-test/controller/context/system/certhub-certbot-run@.service.d/hook.conf integration-test/controller/context/system/certhub-dehydrated-run@.service.d/hook.conf
+	mkdir -p integration-test/controller/context/system/certhub-lego-run@.service.d
+	@echo '[Service]' > integration-test/controller/context/system/certhub-lego-run@.service.d/hook.conf
+	@echo 'Environment="LEGO_ARGS=--dns digitalocean"' >> integration-test/controller/context/system/certhub-lego-run@.service.d/hook.conf
+	@echo 'Environment="DO_AUTH_TOKEN=$(LEXICON_DIGITALOCEAN_TOKEN)"' >> integration-test/controller/context/system/certhub-lego-run@.service.d/hook.conf
 
 integration-test: dist
 	[ -z "$(TRAVIS)" ] || ${MAKE} integration-test-travis-creds
