@@ -6,10 +6,11 @@ set -x
 
 STATUS=1
 
-env | grep PROXY
-curl https://ifconfig.co/
-curl https://ifconfig.co/
-curl https://ifconfig.co/
+if env | grep PROXY; then
+    curl http://checkip.dyndns.org/
+    curl http://checkip.dyndns.org/
+    curl http://checkip.dyndns.org/
+fi
 
 /bin/su -s /bin/sh -c "/home/certhub/setup/csr-import.sh  /home/certhub/setup/lego-test" - certhub
 if /bin/systemctl start certhub-lego-run@lego-test.service; then
