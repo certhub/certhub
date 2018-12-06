@@ -153,6 +153,7 @@ integration-test-travis-creds:
 	cp integration-test/controller/context/system/certhub-certbot-run@.service.d/hook.conf integration-test/controller/context/system/certhub-dehydrated-run@.service.d/hook.conf
 
 integration-test: dist
+	[ -z "$(TRAVIS)" ] || make integration-test-travis-creds
 	make -C integration-test all
 
 .PHONY: \
