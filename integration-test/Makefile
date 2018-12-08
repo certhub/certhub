@@ -16,8 +16,8 @@ ifeq ($(with_tor),)
 endif
 
 ifneq ($(with_tor),0)
-    dehydrated_proxy_args = -e ALL_PROXY='socks5h://127.0.0.1:9050/'
-    dehydrated_proxy_systemd_env = Environment="ALL_PROXY=socks5h://127.0.0.1:9050/"
+    dehydrated_tor_config = CURL_OPTS='-x socks5h://127.0.0.1:9050/'
+    dehydrated_ip_config = IP_VERSION=4
 endif
 
 all: \
@@ -43,7 +43,7 @@ test-lego: controller
 
 test-dehydrated: controller
 	# Start container
-	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) $(dehydrated_proxy_args) -d certhub-integration-controller /sbin/init))
+	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-controller /sbin/init))
 	# Run the test
 	docker exec -i $($@_CONTAINER) /bin/sh < test/test-dehydrated.sh
 	# Stop containers
@@ -71,9 +71,6 @@ node: base node/context
 	docker build -t certhub-integration-node node
 
 controller/context: node/context
-	mkdir -p controller/context/system/certhub-dehydrated-run@.service.d
-	echo '[Service]' > controller/context/system/certhub-dehydrated-run@.service.d/tor.conf
-	echo "$(dehydrated_proxy_systemd_env)" >> controller/context/system/certhub-dehydrated-run@.service.d/tor.conf
 	mkdir -p controller/context/home/certbot/config
 	mkdir -p controller/context/home/certbot/log
 	mkdir -p controller/context/home/certbot/work
@@ -98,6 +95,8 @@ controller/context: node/context
 	    -config controller/context/home/setup/lego-test/csr.cnf \
 	    -key node/context/key.pem \
 	    -out controller/context/home/setup/lego-test/csr.pem
+	echo "$(dehydrated_tor_config)" >> controller/context/home/config/dehydrated-test.dehydrated
+	echo "$(dehydrated_ip_config)" >> controller/context/home/config/dehydrated-test.dehydrated
 
 controller: base controller/context
 	docker build -t certhub-integration-controller --build-arg=WITH_TOR=$(with_tor) controller
