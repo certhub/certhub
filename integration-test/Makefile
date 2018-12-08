@@ -7,6 +7,14 @@ ifeq ($(hostsfx),)
 endif
 export hostsfx
 
+ifeq ($(challenge),)
+    ifeq ($(TRAVIS),)
+        challenge := local
+    else
+        challenge := travis
+    endif
+endif
+
 ifeq ($(with_tor),)
     ifeq ($(TRAVIS),)
         with_tor := 0
@@ -70,7 +78,14 @@ node/context:
 node: base node/context
 	docker build -t certhub-integration-node node
 
-controller/context: node/context
+controller/context/system:
+	mkdir -p controller/context/system/
+	cp -r src/challenge/$(challenge)/* controller/context/system/
+	envsubst < controller/context/system/certhub-certbot-run@.service.d/challenge.conf.in > controller/context/system/certhub-certbot-run@.service.d/challenge.conf
+	envsubst < controller/context/system/certhub-dehydrated-run@.service.d/challenge.conf.in > controller/context/system/certhub-dehydrated-run@.service.d/challenge.conf
+	envsubst < controller/context/system/certhub-lego-run@.service.d/challenge.conf.in > controller/context/system/certhub-lego-run@.service.d/challenge.conf
+
+controller/context/home: node/context
 	mkdir -p controller/context/home/certbot/config
 	mkdir -p controller/context/home/certbot/log
 	mkdir -p controller/context/home/certbot/work
@@ -98,15 +113,15 @@ controller/context: node/context
 	echo "$(dehydrated_tor_config)" >> controller/context/home/config/dehydrated-test.dehydrated
 	echo "$(dehydrated_ip_config)" >> controller/context/home/config/dehydrated-test.dehydrated
 
+controller/context: controller/context/system controller/context/home
+
 controller: base controller/context
 	docker build -t certhub-integration-controller --build-arg=WITH_TOR=$(with_tor) controller
-
 
 .PHONY: \
 	all \
 	base \
 	controller \
-	controller/context-credentials \
 	node \
 	test-certbot \
 	test-dehydrated \

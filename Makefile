@@ -141,23 +141,7 @@ dist-src:
 
 dist: dist-src dist-bin
 
-integration-test-travis-creds:
-	# Ensure that LEXICON_DIGITALOCEAN_TOKEN environment variable is set.
-	@test -n "$(LEXICON_DIGITALOCEAN_TOKEN)"
-	mkdir -p integration-test/controller/context/system/certhub-certbot-run@.service.d
-	@echo '[Service]' > integration-test/controller/context/system/certhub-certbot-run@.service.d/hook.conf
-	@echo 'Environment="CERTHUB_LEXICON_GLOBAL_ARGS=--delegated ci.certhub.io"' >> integration-test/controller/context/system/certhub-certbot-run@.service.d/hook.conf
-	@echo 'Environment=CERTHUB_LEXICON_PROVIDER=digitalocean' >> integration-test/controller/context/system/certhub-certbot-run@.service.d/hook.conf
-	@echo 'Environment=LEXICON_DIGITALOCEAN_TOKEN=$(LEXICON_DIGITALOCEAN_TOKEN)' >> integration-test/controller/context/system/certhub-certbot-run@.service.d/hook.conf
-	mkdir -p integration-test/controller/context/system/certhub-dehydrated-run@.service.d
-	cp integration-test/controller/context/system/certhub-certbot-run@.service.d/hook.conf integration-test/controller/context/system/certhub-dehydrated-run@.service.d/hook.conf
-	mkdir -p integration-test/controller/context/system/certhub-lego-run@.service.d
-	@echo '[Service]' > integration-test/controller/context/system/certhub-lego-run@.service.d/hook.conf
-	@echo 'Environment="LEGO_ARGS=--dns digitalocean"' >> integration-test/controller/context/system/certhub-lego-run@.service.d/hook.conf
-	@echo 'Environment="DO_AUTH_TOKEN=$(LEXICON_DIGITALOCEAN_TOKEN)"' >> integration-test/controller/context/system/certhub-lego-run@.service.d/hook.conf
-
 integration-test: dist
-	[ -z "$(TRAVIS)" ] || ${MAKE} integration-test-travis-creds
 	${MAKE} -C integration-test all
 
 .PHONY: \
@@ -170,7 +154,6 @@ integration-test: dist
 	install-bin \
 	install-doc \
 	integration-test \
-	integration-test-travis-creds \
 	lint \
 	test \
 	uninstall \
