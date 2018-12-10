@@ -131,7 +131,7 @@ uninstall:
 
 dist-bin:
 	-rm -rf build
-	make DESTDIR=build prefix=/ install
+	${MAKE} DESTDIR=build prefix=/ install
 	mkdir -p dist
 	tar --owner=root:0 --group=root:0 -czf dist/certhub-dist.tar.gz -C build .
 
@@ -140,6 +140,9 @@ dist-src:
 	git archive -o dist/certhub-src.tar.gz HEAD
 
 dist: dist-src dist-bin
+
+integration-test: dist
+	${MAKE} -C integration-test all
 
 .PHONY: \
 	all \
@@ -150,6 +153,7 @@ dist: dist-src dist-bin
 	install \
 	install-bin \
 	install-doc \
+	integration-test \
 	lint \
 	test \
 	uninstall \

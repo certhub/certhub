@@ -1,0 +1,14 @@
+[ req ]
+distinguished_name = req_distinguished_name
+req_extensions = v3_req
+string_mask = utf8only
+default_md = sha256
+prompt = no
+
+[ req_distinguished_name ]
+commonName = lego-test-${hostsfx}.ci.certhub.io
+
+[ v3_req ]
+basicConstraints = CA:FALSE
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+
