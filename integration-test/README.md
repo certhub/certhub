@@ -20,6 +20,21 @@ Or run individual tests. E.g.:
     make with_tor=1 test-dehydrated
 ```
 
+## Note: Local integration test setup
+
+Copy the whole `src/travis` directory to `src/local` and modify its contents.
+In order to identify all files which probably need to be changed use something
+like `find src/local -name '*.in'`. The environment can be selected using the
+`testenv` variable.
+
+```
+    make testenv=local all
+```
+
+Note: Docker images are only rebuilt when the docker context changes. It is
+necessary to remove `controller/context` after changing anything in the `src`
+directory.
+
 ## Note: Docker and systemd
 
 Certhub ships with numerous systemd units. In order to really test all of those
