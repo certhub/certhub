@@ -24,7 +24,7 @@ ifeq ($(with_tor),)
 endif
 
 ifneq ($(with_tor),0)
-    export DEHYDRATED_CURL_OPTS=-x socks5h://127.0.0.1:9050/
+    export DEHYDRATED_CURL_OPTS=-x socks5h://127.0.0.1:9050/ --retry 3 --retry-connrefused --connect-timeout 180
     export DEHYDRATED_IP_VERSION=4
 endif
 
