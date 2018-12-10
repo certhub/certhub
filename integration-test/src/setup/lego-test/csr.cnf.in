@@ -6,7 +6,7 @@ default_md = sha256
 prompt = no
 
 [ req_distinguished_name ]
-commonName = lego-test-${hostsfx}.ci.certhub.io
+commonName = lego-test-${hostsfx}.${domain}
 
 [ v3_req ]
 basicConstraints = CA:FALSE
