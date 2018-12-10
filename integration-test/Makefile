@@ -7,11 +7,6 @@ ifeq ($(hostsfx),)
 endif
 export hostsfx
 
-ifeq ($(domain),)
-    domain := ci.cerhub.io
-endif
-export domain
-
 ifeq ($(challenge),)
     ifeq ($(TRAVIS),)
         challenge := local
