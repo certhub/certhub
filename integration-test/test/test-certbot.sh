@@ -6,13 +6,16 @@ set -x
 
 STATUS=1
 
-if env | grep PROXY; then
-    curl http://checkip.dyndns.org/
-    curl http://checkip.dyndns.org/
-    curl http://checkip.dyndns.org/
-fi
+# Import csr from setup/certbot-test into certs.git
+cat <<EOF | /bin/su -s /bin/sh - certhub
+/usr/bin/env \
+    git gau-exec /home/certhub/certs.git \
+    git gau-ac \
+    git gau-xargs -I{} \
+    certhub-message-format {} \
+    rsync -av "/home/certhub/setup/certbot-test" {}
+EOF
 
-/bin/su -s /bin/sh -c "/home/certhub/setup/csr-import.sh  /home/certhub/setup/certbot-test" - certhub
 if /bin/systemctl start certhub-certbot-run@certbot-test.service; then
     STATUS=0
 fi
