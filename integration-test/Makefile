@@ -7,11 +7,11 @@ ifeq ($(hostsfx),)
 endif
 export hostsfx
 
-ifeq ($(challenge),)
+ifeq ($(testenv),)
     ifeq ($(TRAVIS),)
-        challenge := local
+        testenv := local
     else
-        challenge := travis
+        testenv := travis
     endif
 endif
 
@@ -24,8 +24,8 @@ ifeq ($(with_tor),)
 endif
 
 ifneq ($(with_tor),0)
-    dehydrated_tor_config = CURL_OPTS='-x socks5h://127.0.0.1:9050/'
-    dehydrated_ip_config = IP_VERSION=4
+    export DEHYDRATED_CURL_OPTS=-x socks5h://127.0.0.1:9050/
+    export DEHYDRATED_IP_VERSION=4
 endif
 
 all: \
@@ -78,23 +78,15 @@ node/context:
 node: base node/context
 	docker build -t certhub-integration-node node
 
-controller/context/system:
-	mkdir -p controller/context/system/
-	cp -r src/challenge/$(challenge)/* controller/context/system/
-	envsubst < controller/context/system/certhub-certbot-run@.service.d/challenge.conf.in > controller/context/system/certhub-certbot-run@.service.d/challenge.conf
-	envsubst < controller/context/system/certhub-dehydrated-run@.service.d/challenge.conf.in > controller/context/system/certhub-dehydrated-run@.service.d/challenge.conf
-	envsubst < controller/context/system/certhub-lego-run@.service.d/challenge.conf.in > controller/context/system/certhub-lego-run@.service.d/challenge.conf
-
-controller/context/home: node/context
-	mkdir -p controller/context/home/certbot/config
-	mkdir -p controller/context/home/certbot/log
-	mkdir -p controller/context/home/certbot/work
-	mkdir -p controller/context/home/dehydrated
-	mkdir -p controller/context/home/lego/certificates
-	mkdir -p controller/context/home/.config/letsencrypt
-	cp src/certbot-cli.ini controller/context/home/.config/letsencrypt/cli.ini
-	cp -r src/config controller/context/home/config
-	cp -r src/setup controller/context/home/setup
+controller/context: node/context
+	# home
+	mkdir -p controller/context
+	cp -r src/$(testenv)/home controller/context/home
+	# config
+	envsubst < controller/context/home/config/certbot-test.certbot.ini.in > controller/context/home/config/certbot-test.certbot.ini
+	envsubst < controller/context/home/config/dehydrated-test.dehydrated.in > controller/context/home/config/dehydrated-test.dehydrated
+	envsubst < controller/context/home/config/lego-test.lego.in > controller/context/home/config/lego-test.lego
+	# setup
 	envsubst < controller/context/home/setup/certbot-test/csr.cnf.in > controller/context/home/setup/certbot-test/csr.cnf
 	openssl req -new \
 	    -config controller/context/home/setup/certbot-test/csr.cnf \
@@ -110,10 +102,11 @@ controller/context/home: node/context
 	    -config controller/context/home/setup/lego-test/csr.cnf \
 	    -key node/context/key.pem \
 	    -out controller/context/home/setup/lego-test/csr.pem
-	echo "$(dehydrated_tor_config)" >> controller/context/home/config/dehydrated-test.dehydrated
-	echo "$(dehydrated_ip_config)" >> controller/context/home/config/dehydrated-test.dehydrated
-
-controller/context: controller/context/system controller/context/home
+	# system
+	cp -r src/$(testenv)/system controller/context/system
+	envsubst < controller/context/system/certhub-certbot-run@.service.d/challenge.conf.in > controller/context/system/certhub-certbot-run@.service.d/challenge.conf
+	envsubst < controller/context/system/certhub-dehydrated-run@.service.d/challenge.conf.in > controller/context/system/certhub-dehydrated-run@.service.d/challenge.conf
+	envsubst < controller/context/system/certhub-lego-run@.service.d/challenge.conf.in > controller/context/system/certhub-lego-run@.service.d/challenge.conf
 
 controller: base controller/context
 	docker build -t certhub-integration-controller --build-arg=WITH_TOR=$(with_tor) controller
@@ -125,3 +118,4 @@ controller: base controller/context
 	node \
 	test-certbot \
 	test-dehydrated \
+	test-lego \
