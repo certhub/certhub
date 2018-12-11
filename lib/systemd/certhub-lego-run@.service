@@ -31,8 +31,8 @@ ExecStart=/usr/bin/env \
     git gau-ac \
     git gau-xargs -I{} \
     xargs -a ${LEGO_CONFIG} \
-    certhub-message-format "{}/%i" \
-    certhub-lego-run "{}/%i"/${CERTHUB_CERT_NAME} "{}/%i"/${CERTHUB_CSR_NAME} ${LEGO_DIR} \
+    certhub-message-format "{}/%i/${CERTHUB_CERT_NAME}" x509 \
+    certhub-lego-run "{}/%i/${CERTHUB_CERT_NAME}" "{}/%i/${CERTHUB_CSR_NAME}" ${LEGO_DIR} \
     lego $LEGO_ARGS
 
 SyslogIdentifier=certhub-lego-run

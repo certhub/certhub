@@ -34,8 +34,8 @@ ExecStart=/usr/bin/env \
     git gau-exec $CERTHUB_REPO \
     git gau-ac \
     git gau-xargs -I{} \
-    certhub-message-format "{}/%i" \
-    certhub-dehydrated-run "{}/%i"/${CERTHUB_CERT_NAME} "{}/%i"/${CERTHUB_CSR_NAME} \
+    certhub-message-format "{}/%i/${CERTHUB_CERT_NAME}" x509 \
+    certhub-dehydrated-run "{}/%i/${CERTHUB_CERT_NAME}" "{}/%i/${CERTHUB_CSR_NAME}" \
     dehydrated $DEHYDRATED_ARGS --config $DEHYDRATED_CONFIG
 
 SyslogIdentifier=certhub-dehydrated-run

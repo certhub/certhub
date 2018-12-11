@@ -12,7 +12,7 @@ cat <<EOF | /bin/su -s /bin/sh - certhub
     git gau-exec /home/certhub/certs.git \
     git gau-ac \
     git gau-xargs -I{} \
-    certhub-message-format {} \
+    certhub-message-format "{}/dehydrated-test/csr.pem" req \
     rsync -av "/home/certhub/setup/dehydrated-test" {}
 EOF
 
