@@ -8,12 +8,12 @@ certhub-dehydrated-run - Runs dehydrated --signcsr command once
 
 # SYNOPSIS
 
-certhub-dehydrated-run instance-directory dehydrated [dehydrated-args...]
+certhub-dehydrated-run output-cert-file input-csr-file dehydrated [dehydrated-args...]
 
 # DESCRIPTION
 
-Runs the given *dehydrated* binary with CSR read from instance-directory. Writes
-the resulting certificate to the instance-directory as well.
+Runs the given *dehydrated* binary with CSR read from input-csr-file. Writes
+the resulting certificate to the output-cert-file as well.
 
 # EXAMPLES
 
@@ -23,19 +23,9 @@ certificate is committed to the repository as well.
     git gau-exec /home/certhub/certs.git \
     git gau-ac \
     git gau-xargs -I{} \
-    certhub-message-format {}/example.com \
-    certhub-dehydrated-run {}/example.com \
+    certhub-message-format {}/example.com/fullchain.pem x509 \
+    certhub-dehydrated-run {}/example.com/fullchain.pem {}/example.com/csr.pem \
     dehydrated --config /home/certhub/config/example.com.dehydrated
-
-# VARIABLES
-
-CERTHUB\_CSR\_NAME
-:   Specify the filename used for the CSR inside the repository. Defaults to
-    *csr.pem*.
-
-CERTHUB\_FULLCHAIN\_NAME
-:   Specify the filename used for the certificate inside the repository.
-    Defaults to *fullchain.pem*.
 
 # SEE ALSO
 

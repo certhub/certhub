@@ -8,12 +8,12 @@ certhub-certbot-run - Runs certbot certonly command once
 
 # SYNOPSIS
 
-certhub-certbot-run instance-directory certbot [certbot-certonly-args...]
+certhub-certbot-run output-cert-file input-csr-file certbot [certbot-certonly-args...]
 
 # DESCRIPTION
 
-Runs the given *certbot* binary with CSR read from instance-directory. Writes
-the resulting certificate to the instance-directory as well.
+Runs the given *certbot* binary with CSR read from input-csr-file. Writes
+the resulting certificate to the output-cert-file as well.
 
 # EXAMPLES
 
@@ -23,21 +23,11 @@ certificate is committed to the repository as well.
     git gau-exec /home/certhub/certs.git \
     git gau-ac \
     git gau-xargs -I{} \
-    certhub-message-format {}/example.com \
-    certhub-certbot-run {}/example.com \
+    certhub-message-format {}/example.com/fullchain.pem x509 \
+    certhub-certbot-run {}/example.com/fullchain.pem {}/example.com/csr.pem \
     certbot --config /home/certhub/config/example.com.certbot.ini
-
-# VARIABLES
-
-CERTHUB\_CSR\_NAME
-:   Specify the filename used for the CSR inside the repository. Defaults to
-    *csr.pem*.
-
-CERTHUB\_FULLCHAIN\_NAME
-:   Specify the filename used for the certificate inside the repository.
-    Defaults to *fullchain.pem*.
 
 # SEE ALSO
 
-`dehydrated` (1).
+`certbot` (1).
 `certhub-message-format` (1).
