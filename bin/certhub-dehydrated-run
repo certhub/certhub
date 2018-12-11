@@ -14,16 +14,15 @@ XARGS=/usr/bin/xargs
 
 # Print usage message and exit.
 usage() {
-    ${ECHO} "${0}: /path/to/certhub/instance.example.com dehydrated [dehydrated args...]"
+    ${ECHO} "${0}: cert-output-file csr-input-file dehydrated [dehydrated args...]"
     return 1
 }
 
 certhub_dehydrated_run() {
     WORKDIR="${1}"
-    INSTANCE_DIR="${2}"
-    CSR_PATH="${INSTANCE_DIR}/${CERTHUB_CSR_NAME:-csr.pem}"
-    FC_PATH="${INSTANCE_DIR}/${CERTHUB_FULLCHAIN_NAME:-fullchain.pem}"
-    shift 2
+    FC_PATH="${2}"
+    CSR_PATH="${3}"
+    shift 3
 
     ${ECHO} --full-chain \
         --signcsr "${CSR_PATH}" | ${XARGS} "${@}" > "${WORKDIR}/fullchain.pem"
@@ -38,7 +37,7 @@ cleanup() {
 }
 trap cleanup EXIT
 
-if [ "${#}" -gt 1 ] && [ "${1:-}" != "-h" ] && [ "${1:-}" != "--help" ]; then
+if [ "${#}" -gt 2 ] && [ "${1:-}" != "-h" ] && [ "${1:-}" != "--help" ]; then
     certhub_dehydrated_run "${WORKDIR}" "${@}"
 else
     usage

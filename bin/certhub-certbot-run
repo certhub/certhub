@@ -14,16 +14,15 @@ XARGS=/usr/bin/xargs
 
 # Print usage message and exit.
 usage() {
-    ${ECHO} "${0}: /path/to/certhub/instance.example.com /path/to/certbot [certbot certonly args...]"
+    ${ECHO} "${0}: cert-output-file csr-input-file certbot [certbot certonly args...]"
     return 1
 }
 
 certhub_certbot_run() {
     WORKDIR="${1}"
-    INSTANCE_DIR="${2}"
-    CSR_PATH="${INSTANCE_DIR}/${CERTHUB_CSR_NAME:-csr.pem}"
-    FC_PATH="${INSTANCE_DIR}/${CERTHUB_FULLCHAIN_NAME:-fullchain.pem}"
-    shift 2
+    FC_PATH="${2}"
+    CSR_PATH="${3}"
+    shift 3
 
     ${ECHO} certonly \
         --csr "${CSR_PATH}" \
@@ -41,7 +40,7 @@ cleanup() {
 }
 trap cleanup EXIT
 
-if [ "${#}" -gt 1 ] && [ "${1:-}" != "-h" ] && [ "${1:-}" != "--help" ]; then
+if [ "${#}" -gt 2 ] && [ "${1:-}" != "-h" ] && [ "${1:-}" != "--help" ]; then
     certhub_certbot_run "${WORKDIR}" "${@}"
 else
     usage

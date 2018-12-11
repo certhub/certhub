@@ -8,12 +8,12 @@ certhub-lego-run - Runs lego run command once
 
 # SYNOPSIS
 
-certhub-lego-run instance-directory lego-directory lego [lego-run-args...]
+certhub-lego-run output-cert-file input-csr-file lego-directory lego [lego-run-args...]
 
 # DESCRIPTION
 
-Runs the given *lego* binary with CSR read from instance-directory. Writes
-the resulting certificate to the instance-directory as well.
+Runs the given *lego* binary with CSR read from input-csr-file. Writes
+the resulting certificate to the output-cert-file as well.
 
 Note, *lego-directory* must point to the directory where lego stores account
 data and certificates (usually $HOME/.lego).
@@ -27,19 +27,9 @@ certificate is committed to the repository as well.
     git gau-ac \
     git gau-xargs -I{} \
     xargs -a /home/certhub/config/example.com.lego.ini
-    certhub-message-format {}/example.com \
+    certhub-message-format {}/example.com/fullchain.pem {}/example.com/csr.pem \
     certhub-lego-run {}/example.com /home/certhub/lego \
     lego
-
-# VARIABLES
-
-CERTHUB\_CSR\_NAME
-:   Specify the filename used for the CSR inside the repository. Defaults to
-    *csr.pem*.
-
-CERTHUB\_FULLCHAIN\_NAME
-:   Specify the filename used for the certificate inside the repository.
-    Defaults to *fullchain.pem*.
 
 # SEE ALSO
 
