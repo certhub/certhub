@@ -55,7 +55,7 @@ certhub_message_format() {
     fi
 }
 
-if [ "${#}" -gt 2 ] && [ "${1:-}" != "-h" ] && [ "${1:-}" != "--help" ] && ( [ "${2}" = "req" ] || [ "${2}" = "x509" ] ) ; then
+if [ "${#}" -gt 2 ] && [ "${1:-}" != "-h" ] && [ "${1:-}" != "--help" ] && { [ "${2}" = "req" ] || [ "${2}" = "x509" ] } ; then
     certhub_message_format "${@}"
 else
     usage
