@@ -17,6 +17,7 @@ Environment=CERTHUB_CERT_NAME=fullchain.pem
 # Parameters for certhub-cert-expiry
 Environment=CERTHUB_CERT_EXPIRY_STATUSFILE=/home/certhub/status/%i.expiry.status
 Environment=CERTHUB_CERT_EXPIRY_TTL=2592000
+Environment="CERTHUB_CERT_EXPIRY_MESSAGE=Certificate will expire within 30 days"
 
 ExecStart=/usr/bin/env \
     git gau-exec ${CERTHUB_REPO} \
@@ -24,7 +25,7 @@ ExecStart=/usr/bin/env \
     certhub-status-file ${CERTHUB_CERT_EXPIRY_STATUSFILE} \
     certhub-cert-expiry "{}/%i/${CERTHUB_CERT_NAME}" ${CERTHUB_CERT_EXPIRY_TTL} \
     certhub-message-format "{}/%i/${CERTHUB_CERT_NAME}" x509 \
-    echo "Certificate will expire within ${CERTHUB_CERT_EXPIRY_TTL} seconds"
+    echo ${CERTHUB_CERT_EXPIRY_MESSAGE}
 
 SyslogIdentifier=certhub-cert-expiry
 StandardOutput=syslog
