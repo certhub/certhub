@@ -39,6 +39,7 @@ lint: bin
 	shellcheck bin/certhub-dehydrated-run
 	shellcheck bin/certhub-lego-run
 	shellcheck bin/certhub-message-format
+	shellcheck bin/certhub-status-file
 	shellcheck lib/certbot-hooks/lexicon-auth
 	shellcheck lib/certbot-hooks/nsupdate-auth
 	shellcheck lib/dehydrated-hooks/lexicon-auth
@@ -51,13 +52,15 @@ doc: \
 	doc/certhub-certbot-run.1 \
 	doc/certhub-dehydrated-run.1 \
 	doc/certhub-lego-run.1 \
-	doc/certhub-message-format.1
+	doc/certhub-message-format.1 \
+	doc/certhub-status-file.1
 
 clean:
 	-rm -f doc/certhub-certbot-run.1
 	-rm -f doc/certhub-dehydrated-run.1
 	-rm -f doc/certhub-lego-run.1
 	-rm -f doc/certhub-message-format.1
+	-rm -f doc/certhub-status-file.1
 	-rm -rf dist
 	-rm -rf build
 
@@ -66,12 +69,14 @@ install-doc: doc
 	install -m 0644 -D doc/certhub-dehydrated-run.1 $(DESTDIR)$(mandir)/man1/certhub-dehydrated-run.1
 	install -m 0644 -D doc/certhub-lego-run.1 $(DESTDIR)$(mandir)/man1/certhub-lego-run.1
 	install -m 0644 -D doc/certhub-message-format.1 $(DESTDIR)$(mandir)/man1/certhub-message-format.1
+	install -m 0644 -D doc/certhub-status-file.1 $(DESTDIR)$(mandir)/man1/certhub-status-file.1
 
 install-bin: bin
 	install -m 0755 -D bin/certhub-certbot-run $(DESTDIR)$(bindir)/certhub-certbot-run
 	install -m 0755 -D bin/certhub-dehydrated-run $(DESTDIR)$(bindir)/certhub-dehydrated-run
 	install -m 0755 -D bin/certhub-lego-run $(DESTDIR)$(bindir)/certhub-lego-run
 	install -m 0755 -D bin/certhub-message-format $(DESTDIR)$(bindir)/certhub-message-format
+	install -m 0755 -D bin/certhub-status-file $(DESTDIR)$(bindir)/certhub-status-file
 	install -m 0755 -D lib/certbot-hooks/lexicon-auth $(DESTDIR)$(libdir)/certhub/certbot-hooks/lexicon-auth
 	ln -s -f lexicon-auth $(DESTDIR)$(libdir)/certhub/certbot-hooks/lexicon-cleanup
 	install -m 0755 -D lib/certbot-hooks/nsupdate-auth $(DESTDIR)$(libdir)/certhub/certbot-hooks/nsupdate-auth
@@ -102,10 +107,12 @@ uninstall:
 	-rm -f $(DESTDIR)$(bindir)/certhub-dehydrated-run
 	-rm -f $(DESTDIR)$(bindir)/certhub-lego-run
 	-rm -f $(DESTDIR)$(bindir)/certhub-message-format
+	-rm -f $(DESTDIR)$(bindir)/certhub-status-file
 	-rm -f $(DESTDIR)$(mandir)/man1/certhub-certbot-run.1
 	-rm -f $(DESTDIR)$(mandir)/man1/certhub-dehydrated-run.1
 	-rm -f $(DESTDIR)$(mandir)/man1/certhub-lego-run.1
 	-rm -f $(DESTDIR)$(mandir)/man1/certhub-message-format.1
+	-rm -f $(DESTDIR)$(mandir)/man1/certhub-status-file.1
 	-rm -f $(DESTDIR)$(libdir)/certhub/certbot-hooks/lexicon-auth
 	-rm -f $(DESTDIR)$(libdir)/certhub/certbot-hooks/lexicon-cleanup
 	-rm -f $(DESTDIR)$(libdir)/certhub/certbot-hooks/nsupdate-auth
