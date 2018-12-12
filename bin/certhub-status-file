@@ -10,7 +10,7 @@ RM=/bin/rm
 
 # Print usage message and exit.
 usage() {
-    ${ECHO} "${0}: status-file command [args...]" >&2
+    ${ECHO} "${0}: output-status-file command [args...]" >&2
     exit 1
 }
 
