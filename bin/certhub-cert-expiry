@@ -24,8 +24,8 @@ certbot_cert_expiry() {
     THRESHOLD="${2}"
     shift 2
 
-    if ${OPENSSL} x509 -in "${CERTFILE}" -noout >/dev/null 2>&1; then
-        if ! ${OPENSSL} x509 -in "${CERTFILE}" -checkend "${THRESHOLD}" -noout >/dev/null 2>&1; then
+    if ${OPENSSL} x509 -in "${CERTFILE}" -noout >/dev/null; then
+        if ! ${OPENSSL} x509 -in "${CERTFILE}" -checkend "${THRESHOLD}" -noout >/dev/null; then
             "${@}"
         fi
         RESULT=0
