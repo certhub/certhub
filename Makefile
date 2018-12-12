@@ -35,8 +35,8 @@ bin:
 	# empty for now
 
 lint: bin
-	shellcheck bin/certhub-certbot-run
 	shellcheck bin/certhub-cert-expiry
+	shellcheck bin/certhub-certbot-run
 	shellcheck bin/certhub-dehydrated-run
 	shellcheck bin/certhub-lego-run
 	shellcheck bin/certhub-message-format
@@ -50,16 +50,16 @@ test: bin
 	PATH="$(shell pwd)/bin:${PATH}" $(python) -m test
 
 doc: \
-	doc/certhub-certbot-run.1 \
 	doc/certhub-cert-expiry.1 \
+	doc/certhub-certbot-run.1 \
 	doc/certhub-dehydrated-run.1 \
 	doc/certhub-lego-run.1 \
 	doc/certhub-message-format.1 \
 	doc/certhub-status-file.1
 
 clean:
-	-rm -f doc/certhub-certbot-run.1
 	-rm -f doc/certhub-cert-expiry.1
+	-rm -f doc/certhub-certbot-run.1
 	-rm -f doc/certhub-dehydrated-run.1
 	-rm -f doc/certhub-lego-run.1
 	-rm -f doc/certhub-message-format.1
@@ -68,16 +68,16 @@ clean:
 	-rm -rf build
 
 install-doc: doc
-	install -m 0644 -D doc/certhub-certbot-run.1 $(DESTDIR)$(mandir)/man1/certhub-certbot-run.1
 	install -m 0644 -D doc/certhub-cert-expiry.1 $(DESTDIR)$(mandir)/man1/certhub-cert-expiry.1
+	install -m 0644 -D doc/certhub-certbot-run.1 $(DESTDIR)$(mandir)/man1/certhub-certbot-run.1
 	install -m 0644 -D doc/certhub-dehydrated-run.1 $(DESTDIR)$(mandir)/man1/certhub-dehydrated-run.1
 	install -m 0644 -D doc/certhub-lego-run.1 $(DESTDIR)$(mandir)/man1/certhub-lego-run.1
 	install -m 0644 -D doc/certhub-message-format.1 $(DESTDIR)$(mandir)/man1/certhub-message-format.1
 	install -m 0644 -D doc/certhub-status-file.1 $(DESTDIR)$(mandir)/man1/certhub-status-file.1
 
 install-bin: bin
-	install -m 0755 -D bin/certhub-certbot-run $(DESTDIR)$(bindir)/certhub-certbot-run
 	install -m 0755 -D bin/certhub-cert-expiry $(DESTDIR)$(bindir)/certhub-cert-expiry
+	install -m 0755 -D bin/certhub-certbot-run $(DESTDIR)$(bindir)/certhub-certbot-run
 	install -m 0755 -D bin/certhub-dehydrated-run $(DESTDIR)$(bindir)/certhub-dehydrated-run
 	install -m 0755 -D bin/certhub-lego-run $(DESTDIR)$(bindir)/certhub-lego-run
 	install -m 0755 -D bin/certhub-message-format $(DESTDIR)$(bindir)/certhub-message-format
@@ -108,14 +108,14 @@ install-bin: bin
 install: install-bin install-doc
 
 uninstall:
-	-rm -f $(DESTDIR)$(bindir)/certhub-certbot-run
 	-rm -f $(DESTDIR)$(bindir)/certhub-cert-expiry
+	-rm -f $(DESTDIR)$(bindir)/certhub-certbot-run
 	-rm -f $(DESTDIR)$(bindir)/certhub-dehydrated-run
 	-rm -f $(DESTDIR)$(bindir)/certhub-lego-run
 	-rm -f $(DESTDIR)$(bindir)/certhub-message-format
 	-rm -f $(DESTDIR)$(bindir)/certhub-status-file
-	-rm -f $(DESTDIR)$(mandir)/man1/certhub-certbot-run.1
 	-rm -f $(DESTDIR)$(mandir)/man1/certhub-cert-expiry.1
+	-rm -f $(DESTDIR)$(mandir)/man1/certhub-certbot-run.1
 	-rm -f $(DESTDIR)$(mandir)/man1/certhub-dehydrated-run.1
 	-rm -f $(DESTDIR)$(mandir)/man1/certhub-lego-run.1
 	-rm -f $(DESTDIR)$(mandir)/man1/certhub-message-format.1
