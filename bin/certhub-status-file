@@ -7,6 +7,7 @@ set -u
 ECHO=/bin/echo
 MV=/bin/mv
 RM=/bin/rm
+MKTEMP=/bin/mktemp
 
 # Print usage message and exit.
 usage() {
