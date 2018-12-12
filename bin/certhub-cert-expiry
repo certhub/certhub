@@ -1,4 +1,6 @@
 #!/bin/sh
+#
+# certhub-cert-expiry - Run a command if certificate is about to expire
 
 set -e
 set -u

@@ -1,4 +1,6 @@
 #!/bin/sh
+#
+# certhub-status-file - Write a status file with content from a command
 
 set -e
 set -u
