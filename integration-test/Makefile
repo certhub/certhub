@@ -30,6 +30,7 @@ endif
 
 all: \
     test-cert-expire \
+    test-cert-export\
     test-repo-push \
     test-certbot \
     test-dehydrated \
@@ -40,6 +41,14 @@ test-cert-expiry: controller
 	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-controller /sbin/init))
 	# Run the test
 	docker exec -i $($@_CONTAINER) /bin/sh < test/cert-expiry-test.sh
+	# Stop containers
+	docker stop $($@_CONTAINER)
+
+test-cert-export: node
+	# Start containers
+	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-node /sbin/init))
+	# Run the test
+	docker exec -i $($@_CONTAINER) /bin/sh < test/cert-export-test.sh
 	# Stop containers
 	docker stop $($@_CONTAINER)
 
