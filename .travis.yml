@@ -36,5 +36,8 @@ jobs:
         apt:
           packages:
             - pandoc
+      before_script:
+        - make dist
+        - make -C integration-test images
       script:
-        - make integration-test
+        - make -C integration-test all

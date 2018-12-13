@@ -29,13 +29,18 @@ ifneq ($(with_tor),0)
 endif
 
 all: \
-    test-cert-expiry \
-    test-cert-export \
-    test-cert-reload \
-    test-repo-push \
-    test-certbot \
-    test-lego \
-    test-dehydrated
+	test-cert-expiry \
+	test-cert-export \
+	test-cert-reload \
+	test-repo-push \
+	test-certbot \
+	test-lego \
+	test-dehydrated
+
+images: \
+	base \
+	controller \
+	node
 
 test-cert-expiry: controller
 	# Start containers
@@ -155,6 +160,10 @@ controller: base controller/context
 	base \
 	controller \
 	node \
+	test-cert-expiry \
+	test-cert-export \
+	test-cert-reload \
+	test-repo-push \
 	test-certbot \
 	test-dehydrated \
-	test-lego \
+	test-lego
