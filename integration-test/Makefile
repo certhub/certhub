@@ -29,9 +29,21 @@ ifneq ($(with_tor),0)
 endif
 
 all: \
+    test-repo-push \
     test-certbot \
     test-lego \
     test-dehydrated
+
+test-repo-push: controller node
+	# Start containers
+	$(eval $@_NODE := $(shell docker run $(dockerargs) -d certhub-integration-node /sbin/init))
+	$(eval $@_CONTROLLER := $(shell docker run $(dockerargs) --link=$($@_NODE):node -d certhub-integration-controller /sbin/init))
+	# Run the test
+	docker exec -i $($@_CONTROLLER) /bin/sh < test/repo-push-test.sh
+	docker exec -i $($@_NODE) /bin/sh < test/repo-push-verify.sh
+	# Stop containers
+	docker stop $($@_CONTROLLER)
+	docker stop $($@_NODE)
 
 test-certbot: controller
 	# Start containers
