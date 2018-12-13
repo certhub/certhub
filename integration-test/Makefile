@@ -29,9 +29,48 @@ ifneq ($(with_tor),0)
 endif
 
 all: \
+    test-cert-expiry \
+    test-cert-export \
+    test-cert-reload \
+    test-repo-push \
     test-certbot \
     test-lego \
     test-dehydrated
+
+test-cert-expiry: controller
+	# Start containers
+	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-controller /sbin/init))
+	# Run the test
+	docker exec -i $($@_CONTAINER) /bin/sh < test/cert-expiry-test.sh
+	# Stop containers
+	docker stop $($@_CONTAINER)
+
+test-cert-export: node
+	# Start containers
+	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-node /sbin/init))
+	# Run the test
+	docker exec -i $($@_CONTAINER) /bin/sh < test/cert-export-test.sh
+	# Stop containers
+	docker stop $($@_CONTAINER)
+
+test-cert-reload: node
+	# Start containers
+	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-node /sbin/init))
+	# Run the test
+	docker exec -i $($@_CONTAINER) /bin/sh < test/cert-reload-test.sh
+	# Stop containers
+	docker stop $($@_CONTAINER)
+
+test-repo-push: controller node
+	# Start containers
+	$(eval $@_NODE := $(shell docker run $(dockerargs) -d certhub-integration-node /sbin/init))
+	$(eval $@_CONTROLLER := $(shell docker run $(dockerargs) --link=$($@_NODE):node -d certhub-integration-controller /sbin/init))
+	# Run the test
+	docker exec -i $($@_CONTROLLER) /bin/sh < test/repo-push-test.sh
+	docker exec -i $($@_NODE) /bin/sh < test/repo-push-verify.sh
+	# Stop containers
+	docker stop $($@_CONTROLLER)
+	docker stop $($@_NODE)
 
 test-certbot: controller
 	# Start containers
