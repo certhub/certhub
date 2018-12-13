@@ -1,0 +1,34 @@
+[Unit]
+Description=Check for certificates which are about to expire
+Documentation=man:certhub-cert-expiry(1)
+
+[Service]
+Type=oneshot
+User=certhub
+Group=certhub
+
+# Git repository where certificates are stored. Note that certhub user needs
+# write access to this repo.
+Environment=CERTHUB_REPO=/home/certhub/certs.git
+
+Environment="CERTHUB_MESSAGE_SUBJECT=[Certhub] Certificate expiration %i"
+Environment=CERTHUB_CERT_NAME=fullchain.pem
+
+# Parameters for certhub-cert-expiry
+Environment=CERTHUB_CERT_EXPIRY_STATUSFILE=/home/certhub/status/%i.expiry.status
+Environment=CERTHUB_CERT_EXPIRY_TTL=2592000
+Environment="CERTHUB_CERT_EXPIRY_MESSAGE=Certificate will expire within 30 days"
+
+ExecStart=/usr/bin/env \
+    git gau-exec ${CERTHUB_REPO} \
+    git gau-xargs -I{} \
+    certhub-status-file ${CERTHUB_CERT_EXPIRY_STATUSFILE} \
+    certhub-cert-expiry "{}/%i/${CERTHUB_CERT_NAME}" ${CERTHUB_CERT_EXPIRY_TTL} \
+    certhub-message-format "{}/%i/${CERTHUB_CERT_NAME}" x509 \
+    echo ${CERTHUB_CERT_EXPIRY_MESSAGE}
+
+SyslogIdentifier=certhub-cert-expiry
+StandardOutput=syslog
+StandardError=syslog
+
+PrivateTmp=true

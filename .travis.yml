@@ -15,6 +15,15 @@ jobs:
         - make lint
 
     - stage: "Unit test"
+      addons:
+        apt:
+          packages:
+            - python3
+            - python3-pip
+            - python3-setuptools
+            - python3-wheel
+      before_script:
+        - pip3 install --user -r test/requirements.txt
       script:
         - make python=python3 test
 

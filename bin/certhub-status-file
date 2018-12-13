@@ -1,0 +1,48 @@
+#!/bin/sh
+#
+# certhub-status-file - Write a status file with content from a command
+
+set -e
+set -u
+
+# Required binaries
+ECHO=/bin/echo
+MV=/bin/mv
+RM=/bin/rm
+MKTEMP=/bin/mktemp
+
+# Print usage message and exit.
+usage() {
+    ${ECHO} "${0}: output-status-file command [args...]" >&2
+    exit 1
+}
+
+# Writes stdout optained from command to status-file. Removes the status file
+# if command doesn't output anything.
+#
+# $1: Path to status file
+# $@: Command [args...]
+certhub_update_status() {
+    STATUSFILE="${1}"
+    shift
+
+    LOGFILE="$(${MKTEMP})"
+    cleanup() {
+        ${RM} -f "${LOGFILE}"
+    }
+    trap cleanup EXIT
+
+    "${@}" > "${LOGFILE}"
+
+    if [ -s "${LOGFILE}" ]; then
+        ${MV} "${LOGFILE}" "${STATUSFILE}"
+    else
+        ${RM} -f "${STATUSFILE}"
+    fi
+}
+
+if [ "${#}" -gt 1 ] && [ "${1:-}" != "-h" ] && [ "${1:-}" != "--help" ]; then
+    certhub_update_status "${@}"
+else
+    usage
+fi

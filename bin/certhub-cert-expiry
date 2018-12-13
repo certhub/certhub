@@ -1,0 +1,46 @@
+#!/bin/sh
+#
+# certhub-cert-expiry - Run a command if certificate is about to expire
+
+set -e
+set -u
+
+# Required binaries
+ECHO=/bin/echo
+OPENSSL=/usr/bin/openssl
+
+# Print usage message and exit.
+usage() {
+    ${ECHO} "${0}: cert-input-file seconds command [args...]" >&2
+    exit 1
+}
+
+# Run a command if certificate is about to expire.
+#
+# $1: Path to cert file
+# $2: Minimal remaining time to certificate expiration in seconds
+# $@: Command [args...]
+certbot_cert_expiry() {
+    RESULT=1
+    CERTFILE="${1}"
+    THRESHOLD="${2}"
+    shift 2
+
+    if ${OPENSSL} x509 -in "${CERTFILE}" -noout >/dev/null; then
+        if ! ${OPENSSL} x509 -in "${CERTFILE}" -checkend "${THRESHOLD}" -noout >/dev/null; then
+            "${@}"
+        fi
+        RESULT=0
+    else
+        ${ECHO} "Certificate file missing or invalid" >&2
+        RESULT=1
+    fi
+
+    return ${RESULT}
+}
+
+if [ "${#}" -gt 2 ] && [ "${1:-}" != "-h" ] && [ "${1:-}" != "--help" ]; then
+    certbot_cert_expiry "${@}"
+else
+    usage
+fi
