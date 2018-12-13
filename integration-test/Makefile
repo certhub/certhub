@@ -34,8 +34,8 @@ all: \
     test-cert-reload \
     test-repo-push \
     test-certbot \
-    test-dehydrated \
-    test-lego
+    test-lego \
+    test-dehydrated
 
 test-cert-expiry: controller
 	# Start containers
