@@ -29,8 +29,9 @@ ifneq ($(with_tor),0)
 endif
 
 all: \
-    test-cert-expire \
-    test-cert-export\
+    test-cert-expiry \
+    test-cert-export \
+    test-cert-reload \
     test-repo-push \
     test-certbot \
     test-dehydrated \
@@ -49,6 +50,14 @@ test-cert-export: node
 	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-node /sbin/init))
 	# Run the test
 	docker exec -i $($@_CONTAINER) /bin/sh < test/cert-export-test.sh
+	# Stop containers
+	docker stop $($@_CONTAINER)
+
+test-cert-reload: node
+	# Start containers
+	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-node /sbin/init))
+	# Run the test
+	docker exec -i $($@_CONTAINER) /bin/sh < test/cert-reload-test.sh
 	# Stop containers
 	docker stop $($@_CONTAINER)
 
