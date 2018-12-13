@@ -97,7 +97,6 @@ install-bin: bin
 	install -m 0644 -D lib/systemd/certhub-cert-reload@.service $(DESTDIR)$(systemdsystemdir)/certhub-cert-reload@.service
 	install -m 0644 -D lib/systemd/certhub-certbot-run@.path $(DESTDIR)$(systemdsystemdir)/certhub-certbot-run@.path
 	install -m 0644 -D lib/systemd/certhub-certbot-run@.service $(DESTDIR)$(systemdsystemdir)/certhub-certbot-run@.service
-	install -m 0644 -D lib/systemd/certhub-certrot-server-https@.service $(DESTDIR)$(systemdsystemdir)/certhub-certrot-server-https@.service
 	install -m 0644 -D lib/systemd/certhub-dehydrated-run@.path $(DESTDIR)$(systemdsystemdir)/certhub-dehydrated-run@.path
 	install -m 0644 -D lib/systemd/certhub-dehydrated-run@.service $(DESTDIR)$(systemdsystemdir)/certhub-dehydrated-run@.service
 	install -m 0644 -D lib/systemd/certhub-lego-run@.path $(DESTDIR)$(systemdsystemdir)/certhub-lego-run@.path
@@ -135,7 +134,6 @@ uninstall:
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-cert-reload@.service
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-certbot-run@.path
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-certbot-run@.service
-	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-certrot-server-https@.service
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-dehydrated-run@.path
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-dehydrated-run@.service
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-lego-run@.path
