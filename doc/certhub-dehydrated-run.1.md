@@ -29,5 +29,5 @@ certificate is committed to the repository as well.
 
 # SEE ALSO
 
-`certbot` (1).
+`dehydrated` (1).
 `certhub-message-format` (1).

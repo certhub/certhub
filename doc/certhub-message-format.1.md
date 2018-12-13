@@ -44,4 +44,4 @@ CERTHUB\_CERT\_TEXTOPTS
 
 # SEE ALSO
 
-`certhub-csr-import` (1).
+`certhub-certbot-run` (1).
