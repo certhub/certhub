@@ -10,6 +10,8 @@ Welcome to Certhub's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   intro
+
 
 
 Indices and tables
