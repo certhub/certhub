@@ -31,6 +31,6 @@ RUN \
     git config --global push.default simple && \
     git --bare init /home/certhub/certs.git && \
     git gau-exec /home/certhub/certs.git git commit --allow-empty -m'Init'
-# Setup certhub config and state directories.
-RUN mkdir /home/certhub/config /home/certhub/state
+# Setup certhub config and status directories.
+RUN mkdir /home/certhub/config /home/certhub/status
 USER root

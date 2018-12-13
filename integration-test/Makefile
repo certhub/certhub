@@ -29,10 +29,19 @@ ifneq ($(with_tor),0)
 endif
 
 all: \
+    test-cert-expire \
     test-repo-push \
     test-certbot \
-    test-lego \
-    test-dehydrated
+    test-dehydrated \
+    test-lego
+
+test-cert-expiry: controller
+	# Start containers
+	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-controller /sbin/init))
+	# Run the test
+	docker exec -i $($@_CONTAINER) /bin/sh < test/cert-expiry-test.sh
+	# Stop containers
+	docker stop $($@_CONTAINER)
 
 test-repo-push: controller node
 	# Start containers
