@@ -30,7 +30,7 @@ cat <<EOF | /bin/su -s /bin/sh - certhub
     git gau-ac \
     git gau-xargs -I{} \
     certhub-message-format "{}/export-test.fullchain.pem" x509 \
-    cp "{}/export-test.fullchain.pem" {}
+    cp "${WORKDIR}/export-test.fullchain.pem" {}
 EOF
 rm -rf "${WORKDIR}/export-test"
 
