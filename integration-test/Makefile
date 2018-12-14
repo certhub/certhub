@@ -126,26 +126,24 @@ controller/context: node/context
 	# home
 	mkdir -p controller/context
 	cp -r src/$(testenv)/home controller/context/home
-	# config
 	envsubst < controller/context/home/config/certbot-test.certbot.ini.in > controller/context/home/config/certbot-test.certbot.ini
 	envsubst < controller/context/home/config/dehydrated-test.dehydrated.in > controller/context/home/config/dehydrated-test.dehydrated
 	envsubst < controller/context/home/config/lego-test.lego.in > controller/context/home/config/lego-test.lego
-	# setup
-	envsubst < controller/context/home/setup/certbot-test/csr.cnf.in > controller/context/home/setup/certbot-test/csr.cnf
+	envsubst < controller/context/home/config/certbot-test.csr.cnf.in > controller/context/home/config/certbot-test.csr.cnf
 	openssl req -new \
-	    -config controller/context/home/setup/certbot-test/csr.cnf \
+	    -config controller/context/home/config/certbot-test.csr.cnf \
 	    -key node/context/key.pem \
-	    -out controller/context/home/setup/certbot-test/csr.pem
-	envsubst < controller/context/home/setup/dehydrated-test/csr.cnf.in > controller/context/home/setup/dehydrated-test/csr.cnf
+	    -out controller/context/home/config/certbot-test.csr.pem
+	envsubst < controller/context/home/config/dehydrated-test.csr.cnf.in > controller/context/home/config/dehydrated-test.csr.cnf
 	openssl req -new \
-	    -config controller/context/home/setup/dehydrated-test/csr.cnf \
+	    -config controller/context/home/config/dehydrated-test.csr.cnf \
 	    -key node/context/key.pem \
-	    -out controller/context/home/setup/dehydrated-test/csr.pem
-	envsubst < controller/context/home/setup/lego-test/csr.cnf.in > controller/context/home/setup/lego-test/csr.cnf
+	    -out controller/context/home/config/dehydrated-test.csr.pem
+	envsubst < controller/context/home/config/lego-test.csr.cnf.in > controller/context/home/config/lego-test.csr.cnf
 	openssl req -new \
-	    -config controller/context/home/setup/lego-test/csr.cnf \
+	    -config controller/context/home/config/lego-test.csr.cnf \
 	    -key node/context/key.pem \
-	    -out controller/context/home/setup/lego-test/csr.pem
+	    -out controller/context/home/config/lego-test.csr.pem
 	# system
 	cp -r src/$(testenv)/system controller/context/system
 	envsubst < controller/context/system/certhub-certbot-run@.service.d/challenge.conf.in > controller/context/system/certhub-certbot-run@.service.d/challenge.conf

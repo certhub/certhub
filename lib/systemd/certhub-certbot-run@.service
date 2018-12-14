@@ -13,8 +13,8 @@ Group=certhub
 Environment=CERTHUB_REPO=/home/certhub/certs.git
 
 Environment="CERTHUB_MESSAGE_SUBJECT=[Certhub] Certbot renew %i"
-Environment=CERTHUB_CERT_NAME=fullchain.pem
-Environment=CERTHUB_CSR_NAME=csr.pem
+Environment=CERTHUB_CERT_PATH={WORKDIR}/%i.fullchain.pem
+Environment=CERTHUB_CSR_PATH=/home/certhub/config/%i.csr.pem
 
 # Additional git environment variables.
 Environment=GIT_AUTHOR_EMAIL=certhub@%H
@@ -33,9 +33,9 @@ Environment="CERTHUB_NSUPDATE_ARGS=-k /home/certhub/config/%i.nsupdate.key"
 ExecStart=/usr/bin/env \
     git gau-exec $CERTHUB_REPO \
     git gau-ac \
-    git gau-xargs -I{} \
-    certhub-message-format "{}/%i/${CERTHUB_CERT_NAME}" x509 \
-    certhub-certbot-run "{}/%i/${CERTHUB_CERT_NAME}" "{}/%i/${CERTHUB_CSR_NAME}" \
+    git gau-xargs -I{WORKDIR} \
+    certhub-message-format ${CERTHUB_CERT_PATH} x509 \
+    certhub-certbot-run ${CERTHUB_CERT_PATH} ${CERTHUB_CSR_PATH} \
     certbot $CERTBOT_ARGS --config $CERTBOT_CONFIG
 
 SyslogIdentifier=certhub-certbot-run

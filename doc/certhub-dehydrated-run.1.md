@@ -23,8 +23,8 @@ certificate is committed to the repository as well.
     git gau-exec /home/certhub/certs.git \
     git gau-ac \
     git gau-xargs -I{} \
-    certhub-message-format {}/example.com/fullchain.pem x509 \
-    certhub-dehydrated-run {}/example.com/fullchain.pem {}/example.com/csr.pem \
+    certhub-message-format {}/example.com.fullchain.pem x509 \
+    certhub-dehydrated-run {}/example.com.fullchain.pem {}/example.com/csr.pem \
     dehydrated --config /home/certhub/config/example.com.dehydrated
 
 # SEE ALSO
