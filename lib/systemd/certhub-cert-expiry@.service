@@ -12,7 +12,7 @@ Group=certhub
 Environment=CERTHUB_REPO=/home/certhub/certs.git
 
 Environment="CERTHUB_MESSAGE_SUBJECT=[Certhub] Certificate expiration %i"
-Environment=CERTHUB_CERT_PATH={WORKDIR}/%i/fullchain.pem
+Environment=CERTHUB_CERT_PATH={WORKDIR}/%i.fullchain.pem
 
 # Parameters for certhub-cert-expiry
 Environment=CERTHUB_CERT_EXPIRY_STATUSFILE=/home/certhub/status/%i.expiry.status

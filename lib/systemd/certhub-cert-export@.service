@@ -8,7 +8,8 @@ Group=certhub
 
 # Git repository where certificates are stored.
 Environment=CERTHUB_REPO=/home/certhub/certs.git
-Environment=CERTHUB_EXPORT_DEST=/etc/ssl/certhub/%i/
+Environment=CERTHUB_EXPORT_SRC={WORKDIR}/%i.fullchain.pem
+Environment=CERTHUB_EXPORT_DEST=/etc/ssl/certhub/%i.fullchain.pem
 Environment="CERTHUB_RSYNC_ARGS=\
     --checksum \
     --delete \
@@ -21,8 +22,8 @@ Environment="CERTHUB_RSYNC_ARGS=\
 
 ExecStart=/usr/bin/env \
     git gau-exec $CERTHUB_REPO \
-    git gau-xargs -I{} \
-    rsync $CERTHUB_RSYNC_ARGS {}/%i/ ${CERTHUB_EXPORT_DEST}
+    git gau-xargs -I{WORKDIR} \
+    rsync $CERTHUB_RSYNC_ARGS ${CERTHUB_EXPORT_SRC} ${CERTHUB_EXPORT_DEST}
 
 SyslogIdentifier=certhub-cert-export
 StandardOutput=syslog

@@ -27,8 +27,8 @@ certificate is committed to the repository as well.
     git gau-ac \
     git gau-xargs -I{} \
     xargs -a /home/certhub/config/example.com.lego.ini
-    certhub-message-format {}/example.com/fullchain.pem x509 \
-    certhub-lego-run {}/example.com/fullchain.pem {}/example.com/csr.pem /home/certhub/lego \
+    certhub-message-format {}/example.com.fullchain.pem x509 \
+    certhub-lego-run {}/example.com.fullchain.pem {}/example.com/csr.pem /home/certhub/lego \
     lego
 
 # SEE ALSO

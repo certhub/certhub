@@ -13,9 +13,8 @@ Group=certhub
 Environment=CERTHUB_REPO=/home/certhub/certs.git
 
 Environment="CERTHUB_MESSAGE_SUBJECT=[Certhub] Dehydrated renew %i"
-Environment=CERTHUB_CERT_PATH={WORKDIR}/%i/fullchain.pem
+Environment=CERTHUB_CERT_PATH={WORKDIR}/%i.fullchain.pem
 Environment=CERTHUB_CSR_PATH=/home/certhub/config/%i.csr.pem
-Environment='CERTHUB_WORKDIR_SCRIPT=mkdir -p "{WORKDIR}/%i" && "${@}"'
 
 # Additional git environment variables.
 Environment=GIT_AUTHOR_EMAIL=certhub@%H
@@ -35,7 +34,6 @@ ExecStart=/usr/bin/env \
     git gau-exec $CERTHUB_REPO \
     git gau-ac \
     git gau-xargs -I{WORKDIR} \
-    sh -c ${CERTHUB_WORKDIR_SCRIPT} -- \
     certhub-message-format ${CERTHUB_CERT_PATH} x509 \
     certhub-dehydrated-run ${CERTHUB_CERT_PATH} ${CERTHUB_CSR_PATH} \
     dehydrated $DEHYDRATED_ARGS --config $DEHYDRATED_CONFIG
