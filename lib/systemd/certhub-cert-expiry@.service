@@ -7,8 +7,7 @@ Type=oneshot
 User=certhub
 Group=certhub
 
-# Git repository where certificates are stored. Note that certhub user needs
-# write access to this repo.
+# Git repository where certificates are stored.
 Environment=CERTHUB_REPO=/home/certhub/certs.git
 
 Environment="CERTHUB_MESSAGE_SUBJECT=[Certhub] Certificate expiration %i"
