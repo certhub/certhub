@@ -16,9 +16,9 @@ Run *certhub-cert-expiry* with certificate read from the repository. Format a
 message containing information about the certificate and write it to the status
 file if its expiration date is within 30 days.
 
-    git gau-exec /home/certhub/certs.git \
+    git gau-exec /var/lib/certhub/certs.git \
     git gau-xargs -I{} \
-    certhub-status-file /home/certhub/status/example.com.expiry.status
+    certhub-status-file /var/lib/certhub/status/example.com.expiry.status
     certhub-cert-expiry "{}/example.com.fullchain.pem" 2592000 \
     certhub-message-format "{}/example.com.fullchain.pem" x509 \
     echo "Certificate will expire within 30 days"

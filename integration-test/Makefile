@@ -126,25 +126,27 @@ controller/context: node/context
 	# home
 	mkdir -p controller/context
 	cp -r src/$(testenv)/home controller/context/home
-	envsubst < controller/context/home/config/certbot-test.certbot.ini.in > controller/context/home/config/certbot-test.certbot.ini
-	envsubst < controller/context/home/config/dehydrated-test.dehydrated.in > controller/context/home/config/dehydrated-test.dehydrated
-	envsubst < controller/context/home/config/lego-test.lego.in > controller/context/home/config/lego-test.lego
-	envsubst < controller/context/home/config/certbot-test.csr.cnf.in > controller/context/home/config/certbot-test.csr.cnf
+	# etc/certhub
+	cp -r src/$(testenv)/etc controller/context/etc
+	envsubst < controller/context/etc/certbot-test.certbot.ini.in > controller/context/etc/certbot-test.certbot.ini
+	envsubst < controller/context/etc/dehydrated-test.dehydrated.conf.in > controller/context/etc/dehydrated-test.dehydrated.conf
+	envsubst < controller/context/etc/lego-test.lego.args.in > controller/context/etc/lego-test.lego.args
+	envsubst < controller/context/etc/certbot-test.csr.cnf.in > controller/context/etc/certbot-test.csr.cnf
 	openssl req -new \
-	    -config controller/context/home/config/certbot-test.csr.cnf \
+	    -config controller/context/etc/certbot-test.csr.cnf \
 	    -key node/context/key.pem \
-	    -out controller/context/home/config/certbot-test.csr.pem
-	envsubst < controller/context/home/config/dehydrated-test.csr.cnf.in > controller/context/home/config/dehydrated-test.csr.cnf
+	    -out controller/context/etc/certbot-test.csr.pem
+	envsubst < controller/context/etc/dehydrated-test.csr.cnf.in > controller/context/etc/dehydrated-test.csr.cnf
 	openssl req -new \
-	    -config controller/context/home/config/dehydrated-test.csr.cnf \
+	    -config controller/context/etc/dehydrated-test.csr.cnf \
 	    -key node/context/key.pem \
-	    -out controller/context/home/config/dehydrated-test.csr.pem
-	envsubst < controller/context/home/config/lego-test.csr.cnf.in > controller/context/home/config/lego-test.csr.cnf
+	    -out controller/context/etc/dehydrated-test.csr.pem
+	envsubst < controller/context/etc/lego-test.csr.cnf.in > controller/context/etc/lego-test.csr.cnf
 	openssl req -new \
-	    -config controller/context/home/config/lego-test.csr.cnf \
+	    -config controller/context/etc/lego-test.csr.cnf \
 	    -key node/context/key.pem \
-	    -out controller/context/home/config/lego-test.csr.pem
-	# system
+	    -out controller/context/etc/lego-test.csr.pem
+	# etc/system/systemd
 	cp -r src/$(testenv)/system controller/context/system
 	envsubst < controller/context/system/certhub-certbot-run@.service.d/hook-lexicon-auth.conf.in > controller/context/system/certhub-certbot-run@.service.d/hook-lexicon-auth.conf
 	envsubst < controller/context/system/certhub-dehydrated-run@.service.d/hook-lexicon-auth.conf.in > controller/context/system/certhub-dehydrated-run@.service.d/hook-lexicon-auth.conf

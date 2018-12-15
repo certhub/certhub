@@ -11,13 +11,13 @@ ssh-keyscan node > /etc/ssh/ssh_known_hosts
 
 cat <<EOF | /bin/su -s /bin/sh - certhub
 /usr/bin/env \
-    git gau-exec /home/certhub/certs.git \
+    git gau-exec /var/lib/certhub/certs.git \
     git commit --allow-empty --message="From controller: Hello node!"
 EOF
 
-if systemctl start "certhub-repo-push@node:-home-certhub-certs.git.service"; then
+if systemctl start "certhub-repo-push@node:-var-lib-certhub-certs.git.service"; then
     STATUS=0
 fi
-journalctl -u "certhub-repo-push@node:-home-certhub-certs.git.service"
+journalctl -u "certhub-repo-push@node:-var-lib-certhub-certs.git.service"
 
 exit ${STATUS}
