@@ -4,16 +4,6 @@ Documentation=man:git-push(1)
 
 [Service]
 Type=oneshot
-User=certhub
-Group=certhub
-
-# Git repository where certificates are stored.
-Environment=CERTHUB_REPO=/home/certhub/certs.git
-
-# Remote
-Environment=CERTHUB_REPO_REMOTE=%I
-Environment=CERTHUB_REPO_PUSH_ARGS=--mirror
-Environment=CERTHUB_REPO_PUSH_REFSPEC=
 
 ExecStart=/usr/bin/env \
     git --git-dir=${CERTHUB_REPO} push $CERTHUB_REPO_PUSH_ARGS ${CERTHUB_REPO_REMOTE} $CERTHUB_REPO_PUSH_REFSPEC

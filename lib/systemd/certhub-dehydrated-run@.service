@@ -5,20 +5,6 @@ Documentation=man:dehydrated(1)
 
 [Service]
 Type=oneshot
-User=certhub
-Group=certhub
-
-# Git repository where certificates are stored. Note that certhub user needs
-# write access to this repo.
-Environment=CERTHUB_REPO=/home/certhub/certs.git
-
-Environment="CERTHUB_MESSAGE_SUBJECT=[Certhub] Dehydrated renew %i"
-Environment=CERTHUB_CERT_PATH={WORKDIR}/%i.fullchain.pem
-Environment=CERTHUB_CSR_PATH=/home/certhub/config/%i.csr.pem
-
-# Additional Arguments for dehydrated --signcsr (see man:dehydhrated(1))
-Environment=DEHYDRATED_ARGS=
-Environment=DEHYDRATED_CONFIG=/home/certhub/config/%i.dehydrated
 
 ExecStart=/usr/bin/env \
     git gau-exec $CERTHUB_REPO \

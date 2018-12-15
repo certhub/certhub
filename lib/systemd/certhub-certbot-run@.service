@@ -5,20 +5,6 @@ Documentation=man:certbot(1)
 
 [Service]
 Type=oneshot
-User=certhub
-Group=certhub
-
-# Git repository where certificates are stored. Note that certhub user needs
-# write access to this repo.
-Environment=CERTHUB_REPO=/home/certhub/certs.git
-
-Environment="CERTHUB_MESSAGE_SUBJECT=[Certhub] Certbot renew %i"
-Environment=CERTHUB_CERT_PATH={WORKDIR}/%i.fullchain.pem
-Environment=CERTHUB_CSR_PATH=/home/certhub/config/%i.csr.pem
-
-# Additional Arguments for certbot certonly run (see man:certbot(1))
-Environment=CERTBOT_ARGS=--non-interactive
-Environment=CERTBOT_CONFIG=/home/certhub/config/%i.certbot.ini
 
 ExecStart=/usr/bin/env \
     git gau-exec $CERTHUB_REPO \

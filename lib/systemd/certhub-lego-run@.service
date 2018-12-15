@@ -4,21 +4,6 @@ Documentation=man:certhub-lego-run
 
 [Service]
 Type=oneshot
-User=certhub
-Group=certhub
-
-# Git repository where certificates are stored. Note that certhub user needs
-# write access to this repo.
-Environment=CERTHUB_REPO=/home/certhub/certs.git
-
-Environment="CERTHUB_MESSAGE_SUBJECT=[Certhub] lego renew %i"
-Environment=CERTHUB_CERT_PATH={WORKDIR}/%i.fullchain.pem
-Environment=CERTHUB_CSR_PATH=/home/certhub/config/%i.csr.pem
-
-# Additional Arguments for lego --csr
-Environment=LEGO_ARGS=
-Environment=LEGO_DIR=/home/certhub/lego
-Environment=LEGO_CONFIG=/home/certhub/config/%i.lego
 
 ExecStart=/usr/bin/env \
     git gau-exec $CERTHUB_REPO \
