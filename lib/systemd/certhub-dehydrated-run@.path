@@ -2,8 +2,5 @@
 Description=Trigger certificate renewal via certhub/dehydrated when expiry status changed
 Documentation=man:dehydrated(1)
 
-[Path]
-PathExists=/home/certhub/status/%i.expiry.status
-
 [Install]
 WantedBy=paths.target
