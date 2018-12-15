@@ -1,6 +1,6 @@
 CA="https://acme-staging-v02.api.letsencrypt.org/directory"
 CHALLENGETYPE="dns-01"
-BASEDIR=/home/certhub/dehydrated
+BASEDIR=/var/lib/certhub/private/dehydrated
 HOOK=/usr/local/lib/certhub/dehydrated-hooks/lexicon-auth
 CURL_OPTS="${DEHYDRATED_CURL_OPTS}"
 IP_VERSION="${DEHYDRATED_IP_VERSION}"

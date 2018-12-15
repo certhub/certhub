@@ -38,12 +38,12 @@ systemctl start test-tls-service@instance2.service
 systemctl start test-fail-service@instance3.service
 systemctl start test-tls-service@instance4.service
 
-cat <<EOF > /home/certhub/config/reload-test-with-multi.services-reload.txt
+cat <<EOF > /etc/certhub/reload-test-with-multi.services-reload.txt
 test-tls-service@instance1.service
 test-tls-service@instance2.service
 EOF
 
-cat <<EOF > /home/certhub/config/reload-test-with-fails.services-reload.txt
+cat <<EOF > /etc/certhub/reload-test-with-fails.services-reload.txt
 test-tls-service@instance3.service
 test-tls-service@instance4.service
 EOF

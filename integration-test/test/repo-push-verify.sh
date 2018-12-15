@@ -11,7 +11,7 @@ cleanup() {
 trap cleanup EXIT
 
 # Optain commit log.
-git --git-dir /home/certhub/certs.git log --oneline > "${LOGFILE}"
+git --git-dir /var/lib/certhub/certs.git log --oneline > "${LOGFILE}"
 
 # Debug output.
 cat "${LOGFILE}" >&2
