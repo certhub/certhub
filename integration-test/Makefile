@@ -146,9 +146,9 @@ controller/context: node/context
 	    -out controller/context/home/config/lego-test.csr.pem
 	# system
 	cp -r src/$(testenv)/system controller/context/system
-	envsubst < controller/context/system/certhub-certbot-run@.service.d/challenge.conf.in > controller/context/system/certhub-certbot-run@.service.d/challenge.conf
-	envsubst < controller/context/system/certhub-dehydrated-run@.service.d/challenge.conf.in > controller/context/system/certhub-dehydrated-run@.service.d/challenge.conf
-	envsubst < controller/context/system/certhub-lego-run@.service.d/challenge.conf.in > controller/context/system/certhub-lego-run@.service.d/challenge.conf
+	envsubst < controller/context/system/certhub-certbot-run@.service.d/hook-lexicon-auth.conf.in > controller/context/system/certhub-certbot-run@.service.d/challenge.conf
+	envsubst < controller/context/system/certhub-dehydrated-run@.service.d/hook-lexicon-auth.conf.in > controller/context/system/certhub-dehydrated-run@.service.d/challenge.conf
+	envsubst < controller/context/system/certhub-lego-run@.service.d/lego.conf.in > controller/context/system/certhub-lego-run@.service.d/challenge.conf
 
 controller: base controller/context
 	docker build -t certhub-integration-controller --build-arg=WITH_TOR=$(with_tor) controller
