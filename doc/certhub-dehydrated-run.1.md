@@ -17,14 +17,14 @@ the resulting certificate to the output-cert-file as well.
 
 # EXAMPLES
 
-Run *dehydrated certonly* with CSR read from the repository. Resulting fullchain
-certificate is committed to the repository as well.
+Run *dehydrated --signcsr* with CSR from the configuration directory. Resulting
+fullchain certificate is committed to the repository.
 
     git gau-exec /var/lib/certhub/certs.git \
     git gau-ac \
     git gau-xargs -I{} \
     certhub-message-format {}/example.com.fullchain.pem x509 \
-    certhub-dehydrated-run {}/example.com.fullchain.pem {}/example.com/csr.pem \
+    certhub-dehydrated-run {}/example.com.fullchain.pem /etc/certhub/example.com.csr.pem \
     dehydrated --config /etc/certhub/example.com.dehydrated.conf
 
 # SEE ALSO

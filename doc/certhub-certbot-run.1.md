@@ -17,14 +17,14 @@ the resulting certificate to the output-cert-file as well.
 
 # EXAMPLES
 
-Run *certbot certonly* with CSR read from the repository. Resulting fullchain
-certificate is committed to the repository as well.
+Run *certbot certonly* with CSR from the configuration directory. Resulting
+fullchain certificate is committed to the repository.
 
     git gau-exec /var/lib/certhub/certs.git \
     git gau-ac \
     git gau-xargs -I{} \
     certhub-message-format {}/example.com.fullchain.pem x509 \
-    certhub-certbot-run {}/example.com.fullchain.pem {}/example.com/csr.pem \
+    certhub-certbot-run {}/example.com.fullchain.pem /etc/certhub/example.com.csr.pem \
     certbot --config /etc/certhub/example.com.certbot.ini
 
 # SEE ALSO

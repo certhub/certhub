@@ -20,15 +20,15 @@ data and certificates (usually $HOME/.lego).
 
 # EXAMPLES
 
-Run *lego run* with CSR read from the repository. Resulting fullchain
-certificate is committed to the repository as well.
+Run *lego run* with CSR from configuration directory. Resulting fullchain
+certificate is committed to the repository.
 
     git gau-exec /var/lib/certhub/certs.git \
     git gau-ac \
     git gau-xargs -I{} \
     xargs -a /etc/certhub/example.com.lego.args
     certhub-message-format {}/example.com.fullchain.pem x509 \
-    certhub-lego-run {}/example.com.fullchain.pem {}/example.com/csr.pem /var/lib/certhub/private/lego \
+    certhub-lego-run {}/example.com.fullchain.pem /etc/certhub/example.com.csr.pem /var/lib/certhub/private/lego \
     lego
 
 # SEE ALSO
