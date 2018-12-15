@@ -4,8 +4,6 @@ Description=Services reload
 [Service]
 Type=oneshot
 
-Environment=CERTHUB_CERT_SERVICES_RELOAD=/home/certhub/config/%i.services-reload.txt
-
 ExecStart=/usr/bin/env \
     xargs -a ${CERTHUB_CERT_SERVICES_RELOAD} -I{} \
     systemctl reload {}

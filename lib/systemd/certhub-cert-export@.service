@@ -3,22 +3,6 @@ Description=Certificate export
 
 [Service]
 Type=oneshot
-User=certhub
-Group=certhub
-
-# Git repository where certificates are stored.
-Environment=CERTHUB_REPO=/home/certhub/certs.git
-Environment=CERTHUB_EXPORT_SRC={WORKDIR}/%i.fullchain.pem
-Environment=CERTHUB_EXPORT_DEST=/etc/ssl/certhub/%i.fullchain.pem
-Environment="CERTHUB_RSYNC_ARGS=\
-    --checksum \
-    --delete \
-    --devices \
-    --links \
-    --perms \
-    --recursive \
-    --specials \
-    --verbose"
 
 ExecStart=/usr/bin/env \
     git gau-exec $CERTHUB_REPO \

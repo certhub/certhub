@@ -1,8 +1,5 @@
 [Unit]
 Description=Trigger certificate renewal via certhub/lego when expiry status changed
 
-[Path]
-PathExists=/home/certhub/status/%i.expiry.status
-
 [Install]
 WantedBy=paths.target
