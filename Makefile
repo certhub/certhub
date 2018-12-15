@@ -106,6 +106,7 @@ install-bin: bin
 	install -m 0644 -D lib/systemd/certhub-dehydrated-run@.service.d/dehydrated.conf $(DESTDIR)$(systemdsystemdir)/certhub-dehydrated-run@.service.d/dehydrated.conf
 	install -m 0644 -D lib/systemd/certhub-lego-run@.path $(DESTDIR)$(systemdsystemdir)/certhub-lego-run@.path
 	install -m 0644 -D lib/systemd/certhub-lego-run@.service $(DESTDIR)$(systemdsystemdir)/certhub-lego-run@.service
+	install -m 0644 -D lib/systemd/certhub-lego-run@.service.d/lego-challenge.conf $(DESTDIR)$(systemdsystemdir)/certhub-lego-run@.service.d/lego-challenge.conf
 	install -m 0644 -D lib/systemd/certhub-lego-run@.service.d/lego.conf $(DESTDIR)$(systemdsystemdir)/certhub-lego-run@.service.d/lego.conf
 	install -m 0644 -D lib/systemd/certhub-repo-push@.path $(DESTDIR)$(systemdsystemdir)/certhub-repo-push@.path
 	install -m 0644 -D lib/systemd/certhub-repo-push@.service $(DESTDIR)$(systemdsystemdir)/certhub-repo-push@.service
@@ -197,6 +198,7 @@ uninstall:
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-lego-run@.service
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-lego-run@.service.d/commit.conf
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-lego-run@.service.d/csr.conf
+	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-lego-run@.service.d/lego-challenge.conf
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-lego-run@.service.d/lego.conf
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-lego-run@.service.d/repo.conf
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-lego-run@.service.d/user.conf

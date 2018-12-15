@@ -12,7 +12,7 @@ ExecStart=/usr/bin/env \
     xargs -a ${LEGO_CONFIG} \
     certhub-message-format ${CERTHUB_CERT_PATH} x509 \
     certhub-lego-run ${CERTHUB_CERT_PATH} ${CERTHUB_CSR_PATH} ${LEGO_DIR} \
-    lego $LEGO_ARGS
+    lego $LEGO_CHALLENGE_ARGS $LEGO_ARGS
 
 SyslogIdentifier=certhub-lego-run
 StandardOutput=syslog

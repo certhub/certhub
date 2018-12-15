@@ -148,7 +148,7 @@ controller/context: node/context
 	cp -r src/$(testenv)/system controller/context/system
 	envsubst < controller/context/system/certhub-certbot-run@.service.d/hook-lexicon-auth.conf.in > controller/context/system/certhub-certbot-run@.service.d/hook-lexicon-auth.conf
 	envsubst < controller/context/system/certhub-dehydrated-run@.service.d/hook-lexicon-auth.conf.in > controller/context/system/certhub-dehydrated-run@.service.d/hook-lexicon-auth.conf
-	envsubst < controller/context/system/certhub-lego-run@.service.d/lego.conf.in > controller/context/system/certhub-lego-run@.service.d/lego.conf
+	envsubst < controller/context/system/certhub-lego-run@.service.d/lego-challenge.conf.in > controller/context/system/certhub-lego-run@.service.d/lego-challenge.conf
 
 controller: base controller/context
 	docker build -t certhub-integration-controller --build-arg=WITH_TOR=$(with_tor) controller
