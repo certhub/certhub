@@ -187,6 +187,7 @@ uninstall:
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-cert-expiry@.service
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-cert-expiry@.service.d/certhub-paths.conf
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-cert-expiry@.service.d/certhub-user.conf
+	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-cert-expiry@.service.d/expiry-paths.conf
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-cert-expiry@.service.d/expiry.conf
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-cert-expiry@.service.d/git.conf
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-cert-expiry@.timer
@@ -202,9 +203,9 @@ uninstall:
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-cert-reload@.path.d/export-paths.conf
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-cert-reload@.service
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-cert-reload@.service.d/reload-paths.conf
-	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-cert-reload@.service.d/reload-users.conf
+	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-cert-reload@.service.d/reload-user.conf
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-certbot-run@.path
-	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-certbot-run@.path.d/certhub-paths.conf
+	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-certbot-run@.path.d/expiry-paths.conf
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-certbot-run@.service
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-certbot-run@.service.d/certbot.conf
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-certbot-run@.service.d/certhub-paths.conf
@@ -214,7 +215,7 @@ uninstall:
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-certbot-run@.service.d/hook-lexicon-auth.conf
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-certbot-run@.service.d/hook-nsupdate-auth.conf
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-dehydrated-run@.path
-	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-dehydrated-run@.path.d/certhub-paths.conf
+	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-dehydrated-run@.path.d/expiry-paths.conf
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-dehydrated-run@.service
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-dehydrated-run@.service.d/certhub-paths.conf
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-dehydrated-run@.service.d/certhub-user.conf
@@ -224,7 +225,7 @@ uninstall:
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-dehydrated-run@.service.d/hook-lexicon-auth.conf
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-dehydrated-run@.service.d/hook-nsupdate-auth.conf
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-lego-run@.path
-	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-lego-run@.path.d/certhub-paths.conf
+	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-lego-run@.path.d/expiry-paths.conf
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-lego-run@.service
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-lego-run@.service.d/certhub-paths.conf
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-lego-run@.service.d/certhub-user.conf
@@ -239,17 +240,23 @@ uninstall:
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-repo-push@.service.d/certhub-user.conf
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-repo-push@.service.d/git.conf
 	-rm -f $(DESTDIR)$(systemdsystemdir)/certhub-repo-push@.service.d/remote.conf
-	-rmdir $(DESTDIR)$(systemdsystemdir)/certhub-cert-expiry@.path.d
-	-rmdir $(DESTDIR)$(systemdsystemdir)/certhub-cert-expiry@.service.d
-	-rmdir $(DESTDIR)$(systemdsystemdir)/certhub-cert-export@.path.d
-	-rmdir $(DESTDIR)$(systemdsystemdir)/certhub-cert-export@.service.d
-	-rmdir $(DESTDIR)$(systemdsystemdir)/certhub-cert-reload@.path.d
-	-rmdir $(DESTDIR)$(systemdsystemdir)/certhub-cert-reload@.service.d
-	-rmdir $(DESTDIR)$(systemdsystemdir)/certhub-certbot-run@.service.d
-	-rmdir $(DESTDIR)$(systemdsystemdir)/certhub-dehydrated-run@.service.d
-	-rmdir $(DESTDIR)$(systemdsystemdir)/certhub-lego-run@.service.d
-	-rmdir $(DESTDIR)$(systemdsystemdir)/certhub-repo-push@.path.d
 	-rmdir $(DESTDIR)$(systemdsystemdir)/certhub-repo-push@.service.d
+	-rmdir $(DESTDIR)$(systemdsystemdir)/certhub-repo-push@.path.d
+	-rmdir $(DESTDIR)$(systemdsystemdir)/certhub-lego-run@.service.d
+	-rmdir $(DESTDIR)$(systemdsystemdir)/certhub-lego-run@.path.d
+	-rmdir $(DESTDIR)$(systemdsystemdir)/certhub-dehydrated-run@.service.d
+	-rmdir $(DESTDIR)$(systemdsystemdir)/certhub-dehydrated-run@.path.d
+	-rmdir $(DESTDIR)$(systemdsystemdir)/certhub-cert-reload@.service.d
+	-rmdir $(DESTDIR)$(systemdsystemdir)/certhub-cert-reload@.path.d
+	-rmdir $(DESTDIR)$(systemdsystemdir)/certhub-cert-export@.service.d
+	-rmdir $(DESTDIR)$(systemdsystemdir)/certhub-cert-export@.path.d
+	-rmdir $(DESTDIR)$(systemdsystemdir)/certhub-cert-expiry@.service.d
+	-rmdir $(DESTDIR)$(systemdsystemdir)/certhub-cert-expiry@.path.d
+	-rmdir $(DESTDIR)$(systemdsystemdir)/certhub-certbot-run@.service.d
+	-rmdir $(DESTDIR)$(systemdsystemdir)/certhub-certbot-run@.path.d
+	-rmdir $(DESTDIR)$(libdir)/certhub/dehydrated-hooks
+	-rmdir $(DESTDIR)$(libdir)/certhub/certbot-hooks
+	-rmdir $(DESTDIR)$(libdir)/certhub
 
 dist-bin:
 	-rm -rf build
