@@ -1,8 +1,5 @@
 [Unit]
 Description=Trigger services reload when certificate changed
 
-[Path]
-PathChanged=/var/lib/certhub/certs/%i.fullchain.pem
-
 [Install]
 WantedBy=paths.target
