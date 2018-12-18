@@ -9,7 +9,7 @@ stages:
   - name: "Integration test"
     if: fork = false AND type = push
   - name: "GitHub release"
-    if: fork = false AND type = push AND branch = master AND tag IS present
+    if: fork = false AND type = push AND tag IS present
 
 jobs:
   include:

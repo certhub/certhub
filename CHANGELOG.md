@@ -8,8 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - ...
 
+## [1.0.0-beta2] - 2018-12-18
+### Added
+- Fix automatic releases.
+
 ## 1.0.0-beta1 - 2018-12-18
 ### Added
 - Initial release.
 
-[Unreleased]: https://github.com/znerol/git-gau/compare/v1.0.0-beta1...HEAD
+[Unreleased]: https://github.com/znerol/git-gau/compare/v1.0.0-beta2...HEAD
+[1.0.0-beta2]: https://github.com/znerol/git-gau/compare/v1.0.0-beta1...v1.0.0-beta2
