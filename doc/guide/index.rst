@@ -11,6 +11,8 @@ Welcome to Certhub's documentation!
    :caption: Contents:
 
    intro
+   installation
+   systemd
 
 
 
