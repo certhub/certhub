@@ -6,9 +6,9 @@ sudo: false
 stages:
   - "Lint"
   - "Unit test"
-  - "Integration test"
+  - name: "Integration test"
     if: fork = false AND type = push
-  - "GitHub release"
+  - name: "GitHub release"
     if: fork = false AND type = push AND branch = master AND tag IS present
 
 jobs:
