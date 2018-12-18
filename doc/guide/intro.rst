@@ -27,6 +27,14 @@ built and deployed more frequently. Keeping software state across those builds
 in various vendor specific formats is inconvenient.
 
 
+Configuration
+-------------
+
+Certhub strictly separates (read-only) configuration from (read-write) state.
+As a result it naturally integrates well with configuration management and IT
+automation systems.
+
+
 State
 -----
 
