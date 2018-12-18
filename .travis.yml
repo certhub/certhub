@@ -6,7 +6,10 @@ sudo: false
 stages:
   - "Lint"
   - "Unit test"
-  - "Integration test"
+  - name: "Integration test"
+    if: fork = false AND type = push
+  - name: "GitHub release"
+    if: fork = false AND type = push AND branch = master AND tag IS present
 
 jobs:
   include:
@@ -41,3 +44,23 @@ jobs:
         - make -C integration-test images
       script:
         - make -C integration-test all
+
+    - stage: "GitHub release"
+      addons:
+        apt:
+          packages:
+            - pandoc
+      script:
+        - make dist
+      deploy:
+        provider: releases
+        api_key:
+          secure: Prt6R7qAfOJGi/HLcyGUFCZG/QZGqjA+l553zZ7owT2n72skyzR3NAdMRi90hCzzIbnEGctQnVVKlrK75BnoAGWrTo0m5h2vtxpYy91k7GdlhRiswCn3X2hlqUnmeN7+rHuKK16BGx9Nn5JWo8sHAcFPJXFTH3Ad7k2h62D+L/p/hU5YvPOT9n5r3xkMUnOBLnx9ZHvmU6YastB6QkCz1LAAbox5xTO/NmiEswUt+E8MMAqEQU1JlwkhgnW24znFgi8JYq6MTyuC9P0M9JPzjaVaAy0gETGZzL5XVdX/W147VIW2UDlgqVgn+30JfMwlLERiU9NuDO1bllPo9WzkpXyqPN/4upQS8v6WD3u8rBwftK0+MkhHQwBoG3qjnPm01mWh+M9gP/JC1cjgXUmGasmkJDh/r9wPk8Of1ZOFCvE2jdAnbXnuvzimMUPhdFj412QQBnGsBGqVoJwOSZJ2s/A0Bo/LGYiEtZqfWeSjLifNar83fwIdb3P8HUV/+hdUwyBsKW5DbhwMBroGr151W1wIiqQ+UVaFiFdZw1E86MB46lSgMCRCYVdow+LO/WYAz6C9/FVFnfazxCcbdAymPm29lVsM9agQb/+Br0+Nz12oUpNk8olRDeQng5bdPH2EcGUsRPZtDnoyCxofc8LdJ0h9eXOG/sBeuKL5hpjcP1I=
+        file:
+          - dist/certhub-src.tar.gz
+          - dist/certhub-dist.tar.gz
+        skip_cleanup: true
+        draft: true
+        on:
+          repo: znerol/certhub
+          tags: true
