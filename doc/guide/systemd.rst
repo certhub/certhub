@@ -269,7 +269,7 @@ hooks need to be configured via the
 and `hook-lexicon-auth.conf <https://github.com/znerol/certhub/blob/master/lib/systemd/dropins/hook-lexicon-auth.conf>`__
 unit drop-ins shipped with certhub.
 
-There is a separate `lego-challenge.conf <https://github.com/znerol/certhub/blob/master/lib/systemd/dropins/lego-challenge.conf>`
+There is a separate `lego-challenge.conf <https://github.com/znerol/certhub/blob/master/lib/systemd/dropins/lego-challenge.conf>`__
 drop-in for lego.
 
 Note that it is not recommended to specify secrets like API tokens in
@@ -292,7 +292,7 @@ services via drop-ins.
 Systemd Unit Customization
 --------------------------
 
-Certhub ships with `systemd units <https://github.com/znerol/certhub/tree/master/lib/systemd>`
+Certhub ships with `systemd units <https://github.com/znerol/certhub/tree/master/lib/systemd>`__
 which are capable of running one of the supported ACME clients in order to
 issue or renew a certificate and then store it in the certificate repository.
 
