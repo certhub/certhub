@@ -12,10 +12,9 @@ home directory by default is expected to be located at ``/var/lib/certhub``.
 Certhub User
 ------------
 
-Add the ``certhub`` user and group on the target system. If ``git``
-repositories should be replicated to other hosts and this host receives changes
-from other hosts respectively, then it is recommended to supply
-``--shell /usr/bin/git-shell`` option.
+Add the ``certhub`` user and group on the target system. Use the
+``--shell /usr/bin/git-shell`` option in order to enable ``git`` repository
+replication.
 
 .. code-block:: shell
 
@@ -273,12 +272,13 @@ There is a separate `lego-challenge.conf <https://github.com/znerol/certhub/blob
 drop-in for lego.
 
 Note that it is not recommended to specify secrets like API tokens in
-environment variables or command line flags. Regrettably most of todays
-software authors seem ignore this fact. An effective way to prevent secrets
+environment variables or command line flags. Regrettably most of today's
+software authors seem to ignore this fact. An effective way to prevent secrets
 from leaking via process table is to keep them in files with tight access
 restrictions. Regrettably neither Lexicon_ nor lego do support this approach.
 Thus for production grade setups it is unavoidable to either use the
-``nsupdate`` method or implement custom challenge hook scripts.
+``nsupdate`` method or implement custom challenge hook scripts which are
+capable of reading API tokens from files.
 
 Also note that HTTP-01 validation can be implemented quite easily if a reverse
 proxy serving the whole range of sites is already in place. In this case it is
@@ -445,3 +445,55 @@ Shell:
 Ansible:
 
 .. code-block:: yaml
+
+    - name: Certificate distribution activated
+      loop:
+        - certhub-repo-push@tls\x2dserver.example.com:-var-lib-certhub-certs.git.path
+        - certhub-repo-push@tls\x2dserver.example.com:-var-lib-certhub-certs.git.service
+      systemd:
+        name: "{{ item }}"
+        enabled: true
+        state: started
+
+
+Certificate export and service reload
+-------------------------------------
+
+Whenever a new commit is pushed to the local repository on a tls server node,
+selected certificates may be exported such that they can be used in the config
+of tls servers. Also affected tls services should be reloaded wenever an
+exported certificate was renewed. Enable and start
+``certhub-cert-export@.path`` and ``certhub-cert-reload@.path`` in order to
+automate this process on tls server nodes. Both of these units take a
+certificate configuration basename as their instance name.
+
+All units which should be reloaded whenever the exported certificate changes
+should be listed in ``/etc/certhub/<basename>.services-reload.txt``.
+
+.. code-block:: shell
+
+    $ sudo -u certhub tee /etc/certhub/tls-server.example.com.services-reload.txt <<EOF
+    nginx.service
+    EOF
+    $ sudo systemctl enable --now certhub-cert-export@tls-server.example.com.path
+    $ sudo systemctl enable --now certhub-cert-reload@tls-server.example.com.timer
+
+.. code-block:: yaml
+
+    - name: Service reload configuration
+      copy:
+        dest: /etc/certhub/tls-server.example.com.services-reload.txt
+        owner: root
+        group: root
+        mode: 0644
+        content: |
+          nginx.service
+
+    - name: Certificate export and service reload path units enabled and started
+      loop:
+        - certhub-cert-expiry@tls-server.example.com.path
+        - certhub-cert-reload@tls-server.example.com.path
+      systemd:
+        name: "{{ item }}"
+        enabled: true
+        state: started
