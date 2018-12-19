@@ -288,6 +288,8 @@ controller and then run a HTTP server and an ACME client in webroot-mode.
 Refer to the following section for detailed directives on how to customize
 services via drop-ins.
 
+.. _Lexicon: https://github.com/AnalogJ/lexicon
+
 
 Systemd Unit Customization
 --------------------------
@@ -315,24 +317,131 @@ the period and minus.
 
 The following steps are required to configure a new certificate.
 
-* Generate a CSR from the TLS servers private key. When working with Ansible
-  use `delegation <https://docs.ansible.com/ansible/latest/user_guide/playbooks_delegation.html#delegation>`__
-  to run the ``openssl req`` command on another host than the certhub
-  controller.
-* Add the CSR to ``/etc/certhub/<basename>.csr.pem``. In simple setups it is
-  recommended to use the domain name as the config base name.
-* Add additional configuration for the ACME client to one of the following
-  files: ``/etc/certhub/<basename>.certbot.ini``,
-  ``/etc/certhub/<basename>.dehydrated.conf`` or
-  ``/etc/certhub/<basename>.lego.args``. Working examples for testing purposes
-  are part of certhub `integration tests
-  <https://github.com/znerol/certhub/tree/master/integration-test/src/travis/etc>`__
-* Run the ACME client once in order to initially optain the certificate:
-  ``systemctl start certhub-<acme-client-name>-run@<basename>.service``
-* Setup automatic renewal via expiry check:
-  ``systemctl enable --now certhub-<acme-client-name>-run@<basename>.path``
-  ``systemctl enable --now certhub-cert-expiry@<basename>.timer``
-  ``systemctl enable --now certhub-cert-expiry@<basename>.path``
-  ``systemctl enable certhub-cert-expiry@<basename>.service``
 
-.. _Lexicon: https://github.com/AnalogJ/lexicon
+CSR
+^^^
+
+Generate a CSR from the TLS servers private key. When working with Ansible use
+`delegation <https://docs.ansible.com/ansible/latest/user_guide/playbooks_delegation.html#delegation>`__
+to run the ``openssl req`` command on another host than the certhub controller.
+Add the CSR to ``/etc/certhub/<basename>.csr.pem``. In simple setups it is
+recommended to use the domain name as the config base name.
+
+Shell:
+
+.. code-block:: shell
+
+    $ ssh tls-server.example.com sudo openssl req -new \
+        -key /etc/ssl/private/tls-server.example.com.key.pem \
+        -subj /CN=tls-server.example.com \
+        | sudo tee /etc/certhub/tls-server.example.com.csr.pem
+
+Ansible:
+
+.. code-block:: yaml
+
+    - name: CSR generated
+      delegate_to: tls-server.example.com
+      changed_when: false
+      register: csr_generated
+      command: >
+        openssl req -new
+        -key /etc/ssl/private/tls-server.example.com.key.pem
+        -subj /CN=tls-server.example.com
+
+    - name: CSR configured
+      register: csr_configured
+      copy:
+        dest: /etc/certhub/tls-server.example.com.csr.pem
+        content: "{{ csr_generated.stdout }}
+        owner: root
+        group: root
+        mode: 0644
+
+
+ACME Client Configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Add additional configuration for the ACME client to one of the following files:
+``/etc/certhub/<basename>.certbot.ini``,
+``/etc/certhub/<basename>.dehydrated.conf`` or
+``/etc/certhub/<basename>.lego.args``. Working examples for testing purposes
+are part of certhub
+`integration tests <https://github.com/znerol/certhub/tree/master/integration-test/src/travis/etc>`__
+
+
+Initial Certificate
+^^^^^^^^^^^^^^^^^^^
+
+Run ``certhub-<acme-client-name>-run@<basename>.service`` once in order to
+obtain the first certificate and add it to the repository.
+
+Example for ``certbot`` and ``tls-server.example.com``
+
+.. code-block:: shell
+
+    $ sudo systemctl enable --now certhub-certhub-run@tls-server.example.com.service
+
+Ansible:
+
+.. code-block:: yaml
+
+    - name: Certificate issued
+      systemd:
+        name: certhub-certhub-run@tls-server.example.com.service
+        enabled: true
+        state: started
+
+
+Configure Certificate Renewal
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Enable  and start ``timer`` and ``path`` units.
+
+Shell:
+
+.. code-block:: shell
+
+    $ sudo systemctl enable --now certhub-cert-expiry@tls-server.example.com.path
+    $ sudo systemctl enable --now certhub-cert-expiry@tls-server.example.com.timer
+    $ sudo systemctl enable --now certhub-certbot-run@tls-server.example.com.path
+
+Ansible:
+
+.. code-block:: yaml
+
+    - name: Path and timer units enabled and started
+      loop:
+        - certhub-cert-expiry@tls-server.example.com.path
+        - certhub-cert-expiry@tls-server.example.com.timer
+        - certhub-certbot-run@tls-server.example.com.path
+      systemd:
+        name: "{{ item }}"
+        enabled: true
+        state: started
+
+
+Certificate Distribution
+------------------------
+
+In order to propagate certificates to tls servers it is recommended to mirror
+the repository from the certhub controller to the respective machines. The
+``certhub-repo-push@.service`` unit can be used to propagate these changes to
+another host, ``certhub-repo-push@.path`` unit to trigger it automatically
+whenever the ``master`` branch of the repository changes.
+
+This unit takes the full remote URL including the path as the service instance
+name which needs to be escaped using ``systemd-escape --template``.
+
+Shell:
+
+.. code-block:: shell
+
+    $ systemd-escape --template certhub-repo-push@.service tls-server.example.com:/var/lib/certhub/certs.git
+    certhub-repo-push@tls\x2dserver.example.com:-var-lib-certhub-certs.git.service
+    $ sudo systemctl enable --now certhub-repo-push@tls\x2dserver.example.com:-var-lib-certhub-certs.git.path
+    $ sudo systemctl enable --now certhub-repo-push@tls\x2dserver.example.com:-var-lib-certhub-certs.git.service
+
+Ansible:
+
+.. code-block:: yaml
