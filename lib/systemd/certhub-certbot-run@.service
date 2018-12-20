@@ -12,7 +12,7 @@ ExecStart=/usr/bin/env \
     git gau-xargs -I{WORKDIR} \
     certhub-message-format ${CERTHUB_CERT_PATH} x509 \
     certhub-certbot-run ${CERTHUB_CERT_PATH} ${CERTHUB_CSR_PATH} \
-    certbot $CERTBOT_ARGS --config $CERTBOT_CONFIG
+    certbot $CERTHUB_CERTBOT_ARGS --config $CERTHUB_CERTBOT_CONFIG
 
 SyslogIdentifier=certhub-certbot-run
 StandardOutput=syslog
