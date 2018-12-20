@@ -7,7 +7,7 @@ Type=oneshot
 ExecStart=/usr/bin/env \
     git gau-exec $CERTHUB_REPO \
     git gau-xargs -I{WORKDIR} \
-    rsync $CERTHUB_RSYNC_ARGS ${CERTHUB_EXPORT_SRC} ${CERTHUB_EXPORT_DEST}
+    rsync $CERTHUB_CERT_EXPORT_RSYNC_ARGS ${CERTHUB_CERT_EXPORT_SRC} ${CERTHUB_CERT_EXPORT_DEST}
 
 SyslogIdentifier=certhub-cert-export
 StandardOutput=syslog
