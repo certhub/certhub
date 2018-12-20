@@ -94,19 +94,15 @@ set. Thus it is best to specify that explicitly as well.
 
 .. code-block:: yaml
 
-    - name: Git config present
+    - name: Git configured
       loop:
-        - { section: user, option: name, value: Certhub }
-        - { section: user, option: email, value: "certhub@{{ inventory_hostname }}" }
-        - { section: push, option: default, value: simple}
-      ini_file:
-        path: /var/lib/certhub/.gitconfig
-        section: "{{ item.section }}"
-        option: "{{ item.option }}"
+        - { name: "user.name", value: Certhub }
+        - { name: "user.email", value: "certhub@{{ ansible_fqdn }}" }
+        - { name: "push.default", value: simple}
+      git_config:
+        name: "{{ item.name }}"
         value: "{{ item.value }}"
-        owner: certhub
-        group: certhub
-        mode: 0644
+        scope: global
 
     - name: Certhub repository present
       become: yes
