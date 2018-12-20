@@ -324,35 +324,37 @@ CSR
 Generate a CSR from the TLS servers private key. When working with Ansible use
 `delegation <https://docs.ansible.com/ansible/latest/user_guide/playbooks_delegation.html#delegation>`__
 to run the ``openssl req`` command on another host than the certhub controller.
-Add the CSR to ``/etc/certhub/<basename>.csr.pem``. In simple setups it is
+Add the CSR to ``/etc/certhub/${DOMAIN}.csr.pem``. In simple setups it is
 recommended to use the domain name as the config base name.
 
 Shell:
 
 .. code-block:: shell
 
-    $ ssh tls-server.example.com sudo openssl req -new \
-        -key /etc/ssl/private/tls-server.example.com.key.pem \
-        -subj /CN=tls-server.example.com \
-        | sudo tee /etc/certhub/tls-server.example.com.csr.pem
+    $ export SERVER=tls-server.example.com
+    $ export DOMAIN=tls-server.example.com
+    $ ssh "${SERVER}" sudo openssl req -new \
+        -key "/etc/ssl/private/${DOMAIN}.key.pem" \
+        -subj "/CN=${DOMAIN}" \
+        | sudo tee "/etc/certhub/${DOMAIN}.csr.pem"
 
 Ansible:
 
 .. code-block:: yaml
 
     - name: CSR generated
-      delegate_to: tls-server.example.com
+      delegate_to: "{{ SERVER }}"
       changed_when: false
       register: csr_generated
       command: >
         openssl req -new
-        -key /etc/ssl/private/tls-server.example.com.key.pem
-        -subj /CN=tls-server.example.com
+        -key "/etc/ssl/private/{{ DOMAIN }}.key.pem"
+        -subj "/CN={{ DOMAIN }}"
 
     - name: CSR configured
       register: csr_configured
       copy:
-        dest: /etc/certhub/tls-server.example.com.csr.pem
+        dest: "/etc/certhub/{{ DOMAIN }}.csr.pem"
         content: "{{ csr_generated.stdout }}
         owner: root
         group: root
@@ -363,9 +365,9 @@ ACME Client Configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Add additional configuration for the ACME client to one of the following files:
-``/etc/certhub/<basename>.certbot.ini``,
-``/etc/certhub/<basename>.dehydrated.conf`` or
-``/etc/certhub/<basename>.lego.args``. Working examples for testing purposes
+``/etc/certhub/${DOMAIN}.certbot.ini``,
+``/etc/certhub/${DOMAIN}.dehydrated.conf`` or
+``/etc/certhub/${DOMAIN}.lego.args``. Working examples for testing purposes
 are part of certhub
 `integration tests <https://github.com/znerol/certhub/tree/master/integration-test/src/travis/etc>`__
 
@@ -373,14 +375,16 @@ are part of certhub
 Initial Certificate
 ^^^^^^^^^^^^^^^^^^^
 
-Run ``certhub-<acme-client-name>-run@<basename>.service`` once in order to
+Run ``certhub-${ACME_CLIENT}-run@${DOMAIN}.service`` once in order to
 obtain the first certificate and add it to the repository.
 
-Example for ``certbot`` and ``tls-server.example.com``
+Example for ``ACME_CLIENT=certbot`` and ``DOMAIN=tls-server.example.com``
 
 .. code-block:: shell
 
-    $ sudo systemctl start certhub-certbot-run@tls-server.example.com.service
+    $ export ACME_CLIENT=certbot
+    $ export DOMAIN=tls-server.example.com
+    $ sudo systemctl start "certhub-${ACME_CLIENT}-run@${DOMAIN}.service"
 
 Ansible:
 
@@ -388,7 +392,7 @@ Ansible:
 
     - name: Certificate issued
       systemd:
-        name: certhub-certhub-run@tls-server.example.com.service
+        name: "certhub-{{ ACME_CLIENT }}-run@{{ DOMAIN }}.service"
         state: started
 
 
@@ -401,9 +405,10 @@ Shell:
 
 .. code-block:: shell
 
-    $ sudo systemctl enable --now certhub-cert-expiry@tls-server.example.com.path
-    $ sudo systemctl enable --now certhub-cert-expiry@tls-server.example.com.timer
-    $ sudo systemctl enable --now certhub-certbot-run@tls-server.example.com.path
+    $ export DOMAIN=tls-server.example.com
+    $ sudo systemctl enable --now "certhub-cert-expiry@${DOMAIN}.path"
+    $ sudo systemctl enable --now "certhub-cert-expiry@${DOMAIN}.timer"
+    $ sudo systemctl enable --now "certhub-certbot-run@${DOMAIN}.path"
 
 Ansible:
 
@@ -411,9 +416,9 @@ Ansible:
 
     - name: Path and timer units enabled and started
       loop:
-        - certhub-cert-expiry@tls-server.example.com.path
-        - certhub-cert-expiry@tls-server.example.com.timer
-        - certhub-certbot-run@tls-server.example.com.path
+        - "certhub-cert-expiry@{{ DOMAIN }}.path"
+        - "certhub-cert-expiry@{{ DOMAIN }}.timer"
+        - "certhub-certbot-run@{{ DOMAIN }}.path"
       systemd:
         name: "{{ item }}"
         enabled: true
@@ -441,10 +446,11 @@ Shell:
 
 .. code-block:: shell
 
-    $ systemd-escape --template certhub-repo-push@.service tls-server.example.com:/var/lib/certhub/certs.git
-    certhub-repo-push@tls\x2dserver.example.com:-var-lib-certhub-certs.git.service
-    $ sudo systemctl enable --now certhub-repo-push@tls\\x2dserver.example.com:-var-lib-certhub-certs.git.path
-    $ sudo systemctl start certhub-repo-push@tls\\x2dserver.example.com:-var-lib-certhub-certs.git.service
+    $ export REMOTE="tls-server.example.com:/var/lib/certhub/certs.git"
+    $ export PATH_UNIT="$(systemd-escape --template certhub-repo-push@.path ${REMOTE})"
+    $ export SERVICE_UNIT="$(systemd-escape --template certhub-repo-push@.service ${REMOTE})"
+    $ sudo systemctl enable --now "${PATH_UNIT}"
+    $ sudo systemctl start "${SERVICE_UNIT}"
 
 Ansible:
 
@@ -453,15 +459,19 @@ Ansible:
     tasks:
       - name: Certificate distribution activated
         notify: Certificate distribution run
+        vars:
+          UNIT: "{{ lookup('pipe','systemd-escape --template certhub-repo-push@.path ' + REMOTE|quote) }}"
         systemd:
-          name: "certhub-repo-push@tls\x2dserver.example.com:-var-lib-certhub-certs.git.path"
+          name: "{{ UNIT }}"
           enabled: true
           state: started
 
     handlers:
       - name: Certificate distribution run
+        vars:
+          UNIT: "{{ lookup('pipe','systemd-escape --template certhub-repo-push@.service ' + REMOTE|quote) }}"
         systemd:
-          name: certhub-repo-push@tls\x2dserver.example.com:-var-lib-certhub-certs.git.service
+          name: "{{ UNIT }}"
           state: started
 
 
@@ -477,7 +487,7 @@ automate this process on tls server nodes. Both of these units take a
 certificate configuration basename as their instance name.
 
 All units which should be reloaded whenever the exported certificate changes
-should be listed in ``/etc/certhub/<basename>.services-reload.txt``.
+should be listed in ``/etc/certhub/${DOMAIN}.services-reload.txt``.
 
 The default destination for exported certificates is ``/var/lib/certhub/certs``.
 
@@ -485,13 +495,15 @@ Shell:
 
 .. code-block:: shell
 
+
+    $ export DOMAIN=tls-server.example.com
     $ sudo -u certhub mkdir /var/lib/certhub/certs
-    $ sudo tee /etc/certhub/tls-server.example.com.services-reload.txt <<EOF
+    $ sudo tee "/etc/certhub/${DOMAIN}.services-reload.txt" <<EOF
     nginx.service
     EOF
-    $ sudo systemctl enable --now certhub-cert-export@tls-server.example.com.path
-    $ sudo systemctl enable --now certhub-cert-reload@tls-server.example.com.path
-    $ sudo systemctl start certhub-cert-export@tls-server.example.com.service
+    $ sudo systemctl enable --now "certhub-cert-export@${DOMAIN}.path"
+    $ sudo systemctl enable --now "certhub-cert-reload@${DOMAIN}.path"
+    $ sudo systemctl start "certhub-cert-export@${DOMAIN}.service"
 
 Ansible:
 
@@ -508,7 +520,7 @@ Ansible:
 
       - name: Service reload configuration
         copy:
-          dest: /etc/certhub/tls-server.example.com.services-reload.txt
+          dest: "/etc/certhub/{{ DOMAIN }}.services-reload.txt"
           owner: root
           group: root
           mode: 0644
@@ -518,8 +530,8 @@ Ansible:
       - name: Certificate export and service reload path units enabled and started
         notify: Certificate exported
         loop:
-          - certhub-cert-export@tls-server.example.com.path
-          - certhub-cert-reload@tls-server.example.com.path
+          - "certhub-cert-export@{{ DOMAIN }}.path"
+          - "certhub-cert-reload@{{ DOMAIN }}.path"
         systemd:
           name: "{{ item }}"
           enabled: true
@@ -528,5 +540,5 @@ Ansible:
     handlers:
       - name: Certificate exported
         systemd:
-          name: certhub-cert-export@tls-server.example.com.service
+          name: "certhub-cert-export@{{ DOMAIN }}.service"
           state: started
