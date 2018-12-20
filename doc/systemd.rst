@@ -95,6 +95,8 @@ set. Thus it is best to specify that explicitly as well.
 .. code-block:: yaml
 
     - name: Git configured
+      become: yes
+      become_user: certhub
       loop:
         - { name: "user.name", value: Certhub }
         - { name: "user.email", value: "certhub@{{ ansible_fqdn }}" }
