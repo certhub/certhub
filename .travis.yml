@@ -38,7 +38,8 @@ jobs:
       addons:
         apt:
           packages:
-            - pandoc
+            - python3-sphinx
+            - python3-sphinx-rtd-theme
       before_script:
         - make dist
         - make -C integration-test images
@@ -49,7 +50,8 @@ jobs:
       addons:
         apt:
           packages:
-            - pandoc
+            - python3-sphinx
+            - python3-sphinx-rtd-theme
       script:
         - make dist
       deploy:

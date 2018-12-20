@@ -18,7 +18,7 @@
 # CERTHUB_LEXICON_GLOBAL_ARGS="--delegated sub.example.org"
 #
 # Optional additional lexicon provider arguments (e.g. logging):
-# CERTHUB_LEXICON_PROVIDER_ARGS="--ttl=300 --log-level=DEBUG"
+# CERTHUB_LEXICON_PROVIDER_ARGS="--ttl=300 --log_level=DEBUG"
 
 set -e
 set -u
