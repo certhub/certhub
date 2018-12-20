@@ -38,7 +38,7 @@ variable in order to change the installation prefix to something else than
     $ make all
     $ sudo make prefix=/opt/local install
 
-[Pandoc](https://pandoc.org) is necessary in order to build the man pages. This
+[Sphinx] is necessary in order to build the man pages and the users guide. This
 step can be skipped by using the `install-bin` target.
 
 [Certbot]: https://certbot.eff.org/
@@ -46,3 +46,4 @@ step can be skipped by using the `install-bin` target.
 [Lego]: https://github.com/xenolf/lego
 [Lexicon]: https://github.com/AnalogJ/lexicon
 [git-gau]: https://github.com/znerol/git-gau
+[Sphinx]: https://www.sphinx-doc.org/

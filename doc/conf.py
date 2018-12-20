@@ -144,8 +144,12 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'certhub', 'Certhub Documentation',
-     [author], 1)
+    ('certhub-certbot-run.1', 'certhub-certbot-run', 'Certhub Documentation', [author], 1),
+    ('certhub-cert-expiry.1', 'certhub-cert-expiry', 'Certhub Documentation', [author], 1),
+    ('certhub-dehydrated-run.1', 'certhub-dehydrated-run', 'Certhub Documentation', [author], 1),
+    ('certhub-lego-run.1', 'certhub-lego-run', 'Certhub Documentation', [author], 1),
+    ('certhub-message-format.1', 'certhub-message-format', 'Certhub Documentation', [author], 1),
+    ('certhub-status-file.1', 'certhub-status-file', 'Certhub Documentation', [author], 1),
 ]
 
 

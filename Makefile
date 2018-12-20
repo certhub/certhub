@@ -28,8 +28,8 @@ endif
 
 all: bin test doc
 
-manpages := $(patsubst %.1.md,%.1,$(wildcard doc/*.1.md))
-manpages_installed := $(patsubst doc/%,$(DESTDIR)$(mandir)/man1/%,$(manpages))
+manpages := $(patsubst doc/%.1.rst,doc/_build/man/%.1,$(wildcard doc/*.1.rst))
+manpages_installed := $(patsubst doc/_build/man/%,$(DESTDIR)$(mandir)/man1/%,$(manpages))
 
 scriptdirs := bin $(wildcard lib/*hooks)
 scripts := $(foreach dir,$(scriptdirs),$(wildcard $(dir)/*))
@@ -55,8 +55,8 @@ dropins := $(foreach dir,$(dropindirs),$(wildcard $(dir)/*.conf))
 dropins_installed := \
     $(patsubst lib/systemd/%,$(DESTDIR)$(systemdsystemdir)/%,$(dropins))
 
-%.1 : %.1.md
-	pandoc -s -t man $< -o $@
+doc/_build/man/%.1 : doc/%.1.rst
+	${MAKE} -C doc man
 
 bin: $(scripts)
 	# empty for now
@@ -70,7 +70,7 @@ test: bin
 doc: $(manpages)
 
 clean:
-	-rm -f $(manpages)
+	${MAKE} -C doc clean
 	-rm -rf dist
 	-rm -rf build
 
@@ -87,7 +87,7 @@ $(DESTDIR)$(systemdsystemdir)/%: lib/systemd/%
 	install -m 0644 -D $< $@
 
 # Install rule for manpages
-$(DESTDIR)$(mandir)/man1/% : doc/%
+$(DESTDIR)$(mandir)/man1/% : doc/_build/man/%
 	install -m 0644 -D $< $@
 
 install-doc: doc $(manpages_installed)
