@@ -13,6 +13,10 @@ includes DNS-01 challenge hooks for `nsupdate` and [Lexicon].
 
 In order to use the systemd units, `git` and [git-gau] is required.
 
+## DOCS AND MANPAGES
+
+* https://certhub.readthedocs.io/
+
 ## INSTALL
 
 Navigate to the releases page and pick the latest `certhub-dist.tar.gz`
