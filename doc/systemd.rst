@@ -380,7 +380,7 @@ Example for ``certbot`` and ``tls-server.example.com``
 
 .. code-block:: shell
 
-    $ sudo systemctl enable --now certhub-certhub-run@tls-server.example.com.service
+    $ sudo systemctl start certhub-certbot-run@tls-server.example.com.service
 
 Ansible:
 
@@ -389,7 +389,6 @@ Ansible:
     - name: Certificate issued
       systemd:
         name: certhub-certhub-run@tls-server.example.com.service
-        enabled: true
         state: started
 
 
@@ -430,8 +429,13 @@ the repository from the certhub controller to the respective machines. The
 another host, ``certhub-repo-push@.path`` unit to trigger it automatically
 whenever the ``master`` branch of the repository changes.
 
+Note, ``certhub-repo-push@.service`` requires working SSH access via public key
+authentication to the remote end.
+
 This unit takes the full remote URL including the path as the service instance
-name which needs to be escaped using ``systemd-escape --template``.
+name which needs to be escaped using ``systemd-escape --template``. Note, when
+copy-pasting output from ``system-escape`` into a shell then it is necessary to
+escape backslashes with an additional backslash.
 
 Shell:
 
@@ -439,21 +443,26 @@ Shell:
 
     $ systemd-escape --template certhub-repo-push@.service tls-server.example.com:/var/lib/certhub/certs.git
     certhub-repo-push@tls\x2dserver.example.com:-var-lib-certhub-certs.git.service
-    $ sudo systemctl enable --now certhub-repo-push@tls\x2dserver.example.com:-var-lib-certhub-certs.git.path
-    $ sudo systemctl enable --now certhub-repo-push@tls\x2dserver.example.com:-var-lib-certhub-certs.git.service
+    $ sudo systemctl enable --now certhub-repo-push@tls\\x2dserver.example.com:-var-lib-certhub-certs.git.path
+    $ sudo systemctl start certhub-repo-push@tls\\x2dserver.example.com:-var-lib-certhub-certs.git.service
 
 Ansible:
 
 .. code-block:: yaml
 
-    - name: Certificate distribution activated
-      loop:
-        - certhub-repo-push@tls\x2dserver.example.com:-var-lib-certhub-certs.git.path
-        - certhub-repo-push@tls\x2dserver.example.com:-var-lib-certhub-certs.git.service
-      systemd:
-        name: "{{ item }}"
-        enabled: true
-        state: started
+    tasks:
+      - name: Certificate distribution activated
+        notify: Certificate distribution run
+        systemd:
+          name: "certhub-repo-push@tls\x2dserver.example.com:-var-lib-certhub-certs.git.path"
+          enabled: true
+          state: started
+
+    handlers:
+      - name: Certificate distribution run
+        systemd:
+          name: certhub-repo-push@tls\x2dserver.example.com:-var-lib-certhub-certs.git.service
+          state: started
 
 
 Certificate export and service reload
@@ -470,30 +479,54 @@ certificate configuration basename as their instance name.
 All units which should be reloaded whenever the exported certificate changes
 should be listed in ``/etc/certhub/<basename>.services-reload.txt``.
 
+The default destination for exported certificates is ``/var/lib/certhub/certs``.
+
+Shell:
+
 .. code-block:: shell
 
-    $ sudo -u certhub tee /etc/certhub/tls-server.example.com.services-reload.txt <<EOF
+    $ sudo -u certhub mkdir /var/lib/certhub/certs
+    $ sudo tee /etc/certhub/tls-server.example.com.services-reload.txt <<EOF
     nginx.service
     EOF
     $ sudo systemctl enable --now certhub-cert-export@tls-server.example.com.path
-    $ sudo systemctl enable --now certhub-cert-reload@tls-server.example.com.timer
+    $ sudo systemctl enable --now certhub-cert-reload@tls-server.example.com.path
+    $ sudo systemctl start certhub-cert-export@tls-server.example.com.service
+
+Ansible:
 
 .. code-block:: yaml
 
-    - name: Service reload configuration
-      copy:
-        dest: /etc/certhub/tls-server.example.com.services-reload.txt
-        owner: root
-        group: root
-        mode: 0644
-        content: |
-          nginx.service
+    tasks:
+      - name: Certhub certificate directory exists
+        file:
+          path: /var/lib/certhub/certs
+          state: directory
+          owner: certhub
+          group: certhub
+          mode: 0755
 
-    - name: Certificate export and service reload path units enabled and started
-      loop:
-        - certhub-cert-expiry@tls-server.example.com.path
-        - certhub-cert-reload@tls-server.example.com.path
-      systemd:
-        name: "{{ item }}"
-        enabled: true
-        state: started
+      - name: Service reload configuration
+        copy:
+          dest: /etc/certhub/tls-server.example.com.services-reload.txt
+          owner: root
+          group: root
+          mode: 0644
+          content: |
+            nginx.service
+
+      - name: Certificate export and service reload path units enabled and started
+        notify: Certificate exported
+        loop:
+          - certhub-cert-export@tls-server.example.com.path
+          - certhub-cert-reload@tls-server.example.com.path
+        systemd:
+          name: "{{ item }}"
+          enabled: true
+          state: started
+
+    handlers:
+      - name: Certificate exported
+        systemd:
+          name: certhub-cert-export@tls-server.example.com.service
+          state: started

@@ -19,7 +19,7 @@ Navigate to the releases page and pick the latest `certhub-dist.tar.gz`
 tarball. Copy it to the target machine and unpack it there.
 
     $ scp dist/certhub-dist.tar.gz me@example.com:~
-    $ ssh me@example.com sudo tar -C /usr/local -xzf ~:certhub-dist.tar.gz
+    $ ssh me@example.com sudo tar -C /usr/local -xzf ~/certhub-dist.tar.gz
 
 ## BUILD
 
