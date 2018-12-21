@@ -11,3 +11,10 @@ Man Pages
    certhub-cert-expiry.1
    certhub-message-format.1
    certhub-status-file.1
+   certhub-certbot-run@.service.8
+   certhub-dehydrated-run@.service.8
+   certhub-lego-run@.service.8
+   certhub-cert-expiry@.service.8
+   certhub-cert-export@.service.8
+   certhub-cert-reload@.service.8
+   certhub-repo-push@.service.8
