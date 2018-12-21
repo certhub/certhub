@@ -38,7 +38,6 @@ Environment
 
 .. envvar:: CERTHUB_DEHYDRATED_ARGS
 
-   Additional Arguments for :program:`dehydrated certonly` run. Defaults to:
    Additional Arguments for :program:`dehydrated --signcsr` run. Empty by
    default.
 

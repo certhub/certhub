@@ -12,9 +12,9 @@ Description
 
 A service which pushes the certhub repository to another host.
 
-The instance name (systemd instance string specifier ``%i``) is used as the URL
-for the remote repository. Note that the instance name likely needs to be
-escaped using :program:`systemd-escape --template`.
+The unescaped instance name (systemd unescaped instance string specifier
+``%I``) is used as the URL for the remote repository. Note that the instance
+name likely needs to be escaped using :program:`systemd-escape --template`.
 
 
 Environment
