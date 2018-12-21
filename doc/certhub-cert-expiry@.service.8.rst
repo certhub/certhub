@@ -6,6 +6,10 @@ Synopsis
 
 **certhub-cert-expiry@.service**
 
+**certhub-cert-expiry@.path**
+
+**certhub-cert-expiry@.timer**
+
 
 Description
 -----------
@@ -13,6 +17,11 @@ Description
 A service which checks validity of a certificate read from the repository.
 Formats a message and writes it to a status file if the respective certificate
 is about to expire.
+
+A path unit which runs the service unit whenever the master branch of the
+local certhub repository is updated.
+
+A timer unit which runs the service twice daily.
 
 The instance name (systemd instance string specifier ``%i``) is used as the
 basename of the certificate file and the resulting status message.

@@ -6,11 +6,16 @@ Synopsis
 
 **certhub-repo-push@.service**
 
+**certhub-repo-push@.path**
+
 
 Description
 -----------
 
 A service which pushes the certhub repository to another host.
+
+A path unit which runs the service unit whenever the master branch of the
+local certhub repository is updated.
 
 The unescaped instance name (systemd unescaped instance string specifier
 ``%I``) is used as the URL for the remote repository. Note that the instance

@@ -6,12 +6,16 @@ Synopsis
 
 **certhub-cert-reload@.service**
 
+**certhub-cert-reload@.path**
+
 
 Description
 -----------
 
-A service which reloads tls servers after a certificate has changed on the
-filesystem.
+A service which reloads specified tls servers.
+
+A path unit which runs the service unit whenever the exported certificate has
+changed on the filesystem.
 
 The instance name (systemd instance string specifier ``%i``) is used as the
 basename of the configuration and the certificate file.

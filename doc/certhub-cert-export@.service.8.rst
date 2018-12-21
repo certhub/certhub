@@ -6,12 +6,17 @@ Synopsis
 
 **certhub-cert-export@.service**
 
+**certhub-cert-export@.path**
+
 
 Description
 -----------
 
 A service which copies a certificate from the repository to the local
 filesystem.
+
+A path unit which runs the service unit whenever the master branch of the
+local certhub repository is updated.
 
 The instance name (systemd instance string specifier ``%i``) is used as the
 basename of the configuration and the resulting certificate file.
