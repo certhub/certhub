@@ -49,7 +49,7 @@ Environment
    Message written to the status file if certificate is about to expire. Defaults to
    ``Certificate will expire within 30 days``
 
-.. envvar:: CERTHUB_CERT_EXPIRY_STATUSFILE:
+.. envvar:: CERTHUB_CERT_EXPIRY_STATUSFILE
 
    Location of status file written if a certificate is about to expire. Defaults to:
    ``/var/lib/certhub/status/%i.expiry.status``
