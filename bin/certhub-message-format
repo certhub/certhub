@@ -33,10 +33,10 @@ certhub_message_format() {
     SUBJECT=$(certhub_message_subject "${3}")
     case "$PEM_TYPE" in
         x509)
-            TEXTOPTS="${CERTHUB_CERT_TEXTOPTS:--noout -text -certopt no_pubkey,no_sigdump,no_extensions -sha256 -fingerprint}"
+            TEXTOPTS="${CERTHUB_MESSAGE_CERT_TEXTOPTS:--noout -text -certopt no_pubkey,no_sigdump,no_extensions -sha256 -fingerprint}"
             ;;
         req)
-            TEXTOPTS="${CERTHUB_CSR_TEXTOPTS:--noout -text -reqopt no_pubkey,no_sigdump}"
+            TEXTOPTS="${CERTHUB_MESSAGE_CSR_TEXTOPTS:--noout -text -reqopt no_pubkey,no_sigdump}"
             ;;
         *)
             TEXTOPTS=""
