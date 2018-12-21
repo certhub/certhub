@@ -28,8 +28,10 @@ endif
 
 all: bin test doc
 
-manpages := $(patsubst doc/%.1.rst,doc/_build/man/%.1,$(wildcard doc/*.1.rst))
-manpages_installed := $(patsubst doc/_build/man/%,$(DESTDIR)$(mandir)/man1/%,$(manpages))
+man1 := $(patsubst doc/%.1.rst,doc/_build/man/%.1,$(wildcard doc/*.1.rst))
+man1_installed := $(patsubst doc/_build/man/%,$(DESTDIR)$(mandir)/man1/%,$(man1))
+man8 := $(patsubst doc/%.8.rst,doc/_build/man/%.8,$(wildcard doc/*.8.rst))
+man8_installed := $(patsubst doc/_build/man/%,$(DESTDIR)$(mandir)/man8/%,$(man8))
 
 scriptdirs := bin $(wildcard lib/*hooks)
 scripts := $(foreach dir,$(scriptdirs),$(wildcard $(dir)/*))
@@ -55,7 +57,7 @@ dropins := $(foreach dir,$(dropindirs),$(wildcard $(dir)/*.conf))
 dropins_installed := \
     $(patsubst lib/systemd/%,$(DESTDIR)$(systemdsystemdir)/%,$(dropins))
 
-doc/_build/man/%.1 : doc/%.1.rst
+doc/_build/man/% : doc/%.rst
 	${MAKE} -C doc man
 
 bin: $(scripts)
@@ -67,7 +69,7 @@ lint: bin
 test: bin
 	PATH="$(shell pwd)/bin:${PATH}" $(python) -m test
 
-doc: $(manpages)
+doc: $(man1) $(man8)
 
 clean:
 	${MAKE} -C doc clean
@@ -90,7 +92,19 @@ $(DESTDIR)$(systemdsystemdir)/%: lib/systemd/%
 $(DESTDIR)$(mandir)/man1/% : doc/_build/man/%
 	install -m 0644 -D $< $@
 
-install-doc: doc $(manpages_installed)
+# Install rule for manpages
+$(DESTDIR)$(mandir)/man8/% : doc/_build/man/%
+	install -m 0644 -D $< $@
+
+install-doc: doc $(man1_installed) $(man8_installed)
+	ln -s -f certhub-certbot-run@.service.8 $(DESTDIR)$(mandir)/man8/certhub-certbot-run@.path.8
+	ln -s -f certhub-lego-run@.service.8 $(DESTDIR)$(mandir)/man8/certhub-lego-run@.path.8
+	ln -s -f certhub-dehydrated-run@.service.8 $(DESTDIR)$(mandir)/man8/certhub-dehydrated-run@.path.8
+	ln -s -f certhub-cert-expiry@.service.8 $(DESTDIR)$(mandir)/man8/certhub-cert-expiry@.path.8
+	ln -s -f certhub-cert-expiry@.service.8 $(DESTDIR)$(mandir)/man8/certhub-cert-expiry@.timer.8
+	ln -s -f certhub-cert-export@.service.8 $(DESTDIR)$(mandir)/man8/certhub-cert-export@.path.8
+	ln -s -f certhub-cert-reload@.service.8 $(DESTDIR)$(mandir)/man8/certhub-cert-reload@.path.8
+	ln -s -f certhub-repo-push@.service.8 $(DESTDIR)$(mandir)/man8/certhub-repo-push@.path.8
 
 install-bin: bin $(scripts_installed) $(units_installed) $(dropins_installed)
 	ln -s -f lexicon-auth $(DESTDIR)$(libdir)/certhub/certbot-hooks/lexicon-cleanup
@@ -99,11 +113,20 @@ install-bin: bin $(scripts_installed) $(units_installed) $(dropins_installed)
 install: install-bin install-doc
 
 uninstall:
-	-rm -f $(manpages_installed)
+	-rm -f $(man1_installed)
+	-rm -f $(man8_installed)
 	-rm -f $(scripts_installed)
 	-rm -f $(units_installed)
 	-rm -f $(dropins_installed)
 	-rmdir $(dropindirs_installed)
+	-rm -f $(DESTDIR)$(mandir)/man8/certhub-cert-expiry@.path.8
+	-rm -f $(DESTDIR)$(mandir)/man8/certhub-cert-expiry@.timer.8
+	-rm -f $(DESTDIR)$(mandir)/man8/certhub-cert-export@.path.8
+	-rm -f $(DESTDIR)$(mandir)/man8/certhub-cert-reload@.path.8
+	-rm -f $(DESTDIR)$(mandir)/man8/certhub-certbot-run@.path.8
+	-rm -f $(DESTDIR)$(mandir)/man8/certhub-dehydrated-run@.path.8
+	-rm -f $(DESTDIR)$(mandir)/man8/certhub-lego-run@.path.8
+	-rm -f $(DESTDIR)$(mandir)/man8/certhub-repo-push@.path.8
 	-rm -f $(DESTDIR)$(libdir)/certhub/certbot-hooks/lexicon-cleanup
 	-rm -f $(DESTDIR)$(libdir)/certhub/certbot-hooks/nsupdate-cleanup
 	-rmdir $(DESTDIR)$(libdir)/certhub/dehydrated-hooks
