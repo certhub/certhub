@@ -38,12 +38,12 @@ Environment
    Message action name when automated subject generation is enabled.
    Defaults to basename of executed command.
 
-.. envvar:: CERTHUB_REQ_TEXTOPTS
+.. envvar:: CERTHUB_MESSAGE_CSR_TEXTOPTS
 
    Output options as understood by :program:`openssl req`. Defaults to:
    ``--noout -text -reqopt no_pubkey,no_sigdump``
 
-.. envvar:: CERTHUB_CERT_TEXTOPTS
+.. envvar:: CERTHUB_MESSAGE_CERT_TEXTOPTS
 
     Output options as understood by :program:`openssl x509`. Defaults to:
     ``--noout -text -certopt no_pubkey,no_sigdump,no_extensions -sha256
