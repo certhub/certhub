@@ -1,3 +1,0 @@
-[Service]
-Environment="CERTHUB_LEGO_CHALLENGE_ARGS=--dns digitalocean"
-Environment="DO_AUTH_TOKEN=${LEXICON_DIGITALOCEAN_TOKEN}"

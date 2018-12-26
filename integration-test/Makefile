@@ -130,7 +130,7 @@ controller/context: node/context
 	cp -r src/$(testenv)/etc controller/context/etc
 	envsubst < controller/context/etc/certbot-test.certbot.ini.in > controller/context/etc/certbot-test.certbot.ini
 	envsubst < controller/context/etc/dehydrated-test.dehydrated.conf.in > controller/context/etc/dehydrated-test.dehydrated.conf
-	envsubst < controller/context/etc/lego-test.lego.args.in > controller/context/etc/lego-test.lego.args
+	envsubst < controller/context/etc/certhub-lego-run.env.in > controller/context/etc/certhub-lego-run.env
 	envsubst < controller/context/etc/certbot-test.csr.cnf.in > controller/context/etc/certbot-test.csr.cnf
 	openssl req -new \
 	    -config controller/context/etc/certbot-test.csr.cnf \
@@ -150,7 +150,6 @@ controller/context: node/context
 	cp -r src/$(testenv)/system controller/context/system
 	envsubst < controller/context/system/certhub-certbot-run@.service.d/hook-lexicon-auth.conf.in > controller/context/system/certhub-certbot-run@.service.d/hook-lexicon-auth.conf
 	envsubst < controller/context/system/certhub-dehydrated-run@.service.d/hook-lexicon-auth.conf.in > controller/context/system/certhub-dehydrated-run@.service.d/hook-lexicon-auth.conf
-	envsubst < controller/context/system/certhub-lego-run@.service.d/lego-challenge.conf.in > controller/context/system/certhub-lego-run@.service.d/lego-challenge.conf
 
 controller: base controller/context
 	docker build -t certhub-integration-controller --build-arg=WITH_TOR=$(with_tor) controller
