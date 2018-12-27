@@ -266,8 +266,14 @@ hooks need to be configured via the
 and `hook-lexicon-auth.conf <https://github.com/znerol/certhub/blob/master/lib/systemd/dropins/hook-lexicon-auth.conf>`__
 unit drop-ins shipped with certhub.
 
-There is a separate `lego-challenge.conf <https://github.com/znerol/certhub/blob/master/lib/systemd/dropins/lego-challenge.conf>`__
-drop-in for lego.
+In the case of lego the challenge method is selected using command line
+arguments to the lego binary, authentication tokens are passed in via
+environment variables. All configuration is passed in via an environment file
+normally located in :envfile:`/etc/certhub/%i.certhub-lego-run.env`. An
+`example <https://github.com/znerol/certhub/tree/master/integration-test/src/travis/etc/certhub-lego-run.env.in>`__
+configuration is part of the integration test suite. See the manpage
+:doc:`certhub-lego-run@.service.8` for more detailed information about the
+involved environment variables.
 
 Note that it is not recommended to specify secrets like API tokens in
 environment variables or command line flags. Regrettably most of today's
@@ -365,8 +371,8 @@ ACME Client Configuration
 Add additional configuration for the ACME client to one of the following files:
 ``/etc/certhub/${DOMAIN}.certbot.ini``,
 ``/etc/certhub/${DOMAIN}.dehydrated.conf`` or
-``/etc/certhub/${DOMAIN}.lego.args``. Working examples for testing purposes
-are part of certhub
+``/etc/certhub/${DOMAIN}.certhub-lego-run.env``. Working examples for testing
+purposes are part of certhub
 `integration tests <https://github.com/znerol/certhub/tree/master/integration-test/src/travis/etc>`__
 
 

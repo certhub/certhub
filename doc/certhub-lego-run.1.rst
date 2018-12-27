@@ -28,10 +28,9 @@ fullchain certificate is committed to the repository.
     git gau-exec /var/lib/certhub/certs.git \
     git gau-ac \
     git gau-xargs -I{} \
-    xargs -a /etc/certhub/example.com.lego.args
     certhub-message-format {}/example.com.fullchain.pem x509 \
     certhub-lego-run {}/example.com.fullchain.pem /etc/certhub/example.com.csr.pem /var/lib/certhub/private/lego \
-    lego
+    lego --accept-tos --email hello@example.com
 
 
 See Also

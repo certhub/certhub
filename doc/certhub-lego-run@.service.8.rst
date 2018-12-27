@@ -51,11 +51,6 @@ Environment
    default. Lego will fall back to HTTP-01 challenge if this variable is not
    set.
 
-.. envvar:: CERTHUB_LEGO_CONFIG
-
-   Path to a file with additional lego cli arguments. Defaults to:
-   ``/etc/certhub/%i.lego.args``
-
 .. envvar:: CERTHUB_LEGO_DIR
 
    The path to the directory where lego stores accound data and issued
