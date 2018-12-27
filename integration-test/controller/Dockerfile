@@ -21,6 +21,3 @@ COPY --chown=certhub:certhub context/home /var/lib/certhub/
 
 # Add config directory
 COPY context/etc /etc/certhub
-
-# Add systemd drop-ins
-COPY context/system /etc/systemd/system/

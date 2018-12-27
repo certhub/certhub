@@ -130,8 +130,10 @@ controller/context: node/context
 	cp -r src/$(testenv)/etc controller/context/etc
 	envsubst < controller/context/etc/certbot-test.certbot.ini.in > controller/context/etc/certbot-test.certbot.ini
 	envsubst < controller/context/etc/dehydrated-test.dehydrated.conf.in > controller/context/etc/dehydrated-test.dehydrated.conf
-	envsubst < controller/context/etc/certhub-lego-run.env.in > controller/context/etc/certhub-lego-run.env
 	envsubst < controller/context/etc/certbot-test.csr.cnf.in > controller/context/etc/certbot-test.csr.cnf
+	envsubst < controller/context/etc/certhub-certbot-run.env.in > controller/context/etc/certhub-certbot-run.env
+	envsubst < controller/context/etc/certhub-dehydrated-run.env.in > controller/context/etc/certhub-dehydrated-run.env
+	envsubst < controller/context/etc/certhub-lego-run.env.in > controller/context/etc/certhub-lego-run.env
 	openssl req -new \
 	    -config controller/context/etc/certbot-test.csr.cnf \
 	    -key node/context/key.pem \
@@ -146,10 +148,6 @@ controller/context: node/context
 	    -config controller/context/etc/lego-test.csr.cnf \
 	    -key node/context/key.pem \
 	    -out controller/context/etc/lego-test.csr.pem
-	# etc/system/systemd
-	cp -r src/$(testenv)/system controller/context/system
-	envsubst < controller/context/system/certhub-certbot-run@.service.d/hook-lexicon-auth.conf.in > controller/context/system/certhub-certbot-run@.service.d/hook-lexicon-auth.conf
-	envsubst < controller/context/system/certhub-dehydrated-run@.service.d/hook-lexicon-auth.conf.in > controller/context/system/certhub-dehydrated-run@.service.d/hook-lexicon-auth.conf
 
 controller: base controller/context
 	docker build -t certhub-integration-controller --build-arg=WITH_TOR=$(with_tor) controller
