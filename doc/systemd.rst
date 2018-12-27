@@ -261,10 +261,15 @@ only method which is supported out-of-the box by certhub and which is covered
 by integration tests.
 
 Certhub ships with DNS-01 challenge hooks for ``nsupdate`` and Lexicon_. The
-hooks need to be configured via the
-`hook-nsupdate-auth.conf <https://github.com/znerol/certhub/blob/master/lib/systemd/dropins/hook-nsupdate-auth.conf>`__
-and `hook-lexicon-auth.conf <https://github.com/znerol/certhub/blob/master/lib/systemd/dropins/hook-lexicon-auth.conf>`__
-unit drop-ins shipped with certhub.
+hooks need to be configured using an environment file normally located in
+:envfile:`/etc/certhub/%i.certhub-certbot-run.env` and
+:envfile:`/etc/certhub/%i.certhub-dehydrated-run.env`.  An example for
+`certbot <https://github.com/znerol/certhub/tree/master/integration-test/src/travis/etc/certhub-certbot-run.env.in>`__
+and
+`dehydrated <https://github.com/znerol/certhub/tree/master/integration-test/src/travis/etc/certhub-dehydrated-run.env.in>`__
+configuration is part of the integration test suite. See the manpages
+:doc:`certhub-hook-lexicon-auth.8` and :doc:`certhub-hook-nsupdate-auth.8` for
+more detailed information about the involved environment variables.
 
 In the case of lego the challenge method is selected using command line
 arguments to the lego binary, authentication tokens are passed in via

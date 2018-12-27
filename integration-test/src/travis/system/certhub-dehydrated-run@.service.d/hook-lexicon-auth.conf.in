@@ -1,4 +1,0 @@
-[Service]
-Environment="CERTHUB_LEXICON_GLOBAL_ARGS=--delegated ci.certhub.io"
-Environment="CERTHUB_LEXICON_PROVIDER=digitalocean"
-Environment="LEXICON_DIGITALOCEAN_TOKEN=${LEXICON_DIGITALOCEAN_TOKEN}"
