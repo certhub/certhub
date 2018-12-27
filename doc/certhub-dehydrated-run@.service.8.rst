@@ -52,6 +52,27 @@ Environment
    ``/etc/certhub/%i.dehydrated.conf``
 
 
+Files
+-----
+
+.. envfile:: /etc/certhub/env
+
+   Optional environment file shared by all instances and certhub services.
+
+.. envfile:: /etc/certhub/%i.env
+
+   Optional per-instance environment file shared by all certhub services.
+
+.. envfile:: /etc/certhub/certhub-dehydrated-run.env
+
+   Optional per-service environment file shared by all certhub service
+   instances.
+
+.. envfile:: /etc/certhub/%i.certhub-dehydrated-run.env
+
+   Optional per-instance and per-service environment file.
+
+
 See Also
 --------
 
