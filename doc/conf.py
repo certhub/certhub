@@ -157,6 +157,8 @@ man_pages = [
     ('certhub-cert-export@.service.8', 'certhub-cert-export@.service', 'Certhub Documentation', [author], 8),
     ('certhub-cert-reload@.service.8', 'certhub-cert-reload@.service', 'Certhub Documentation', [author], 8),
     ('certhub-repo-push@.service.8', 'certhub-repo-push@.service', 'Certhub Documentation', [author], 8),
+    ('certhub-hook-lexicon-auth.8', 'certhub-hook-lexicon-auth', 'Certhub Documentation', [author], 8),
+    ('certhub-hook-nsupdate-auth.8', 'certhub-hook-nsupdate-auth', 'Certhub Documentation', [author], 8),
 ]
 
 
