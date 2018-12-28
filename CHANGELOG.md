@@ -8,6 +8,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - ...
 
+## [1.0.0-beta3] - 2018-12-28
+### Added
+- Added users guide and publish it on https://certhub.readthedocs.org/
+- Added man pages for systemd units (#16)
+- Added man pages for lexicon and nsupdate hooks (#18 and #23)
+
+### Changed
+- Normalized environment variable names (#15 and #17)
+- Add optional environment files (#19)
+- Use per-service environment files for certbot / dehydrated configuration (#21)
+
+### Removed
+- Remove %i.lego.args file and `CERTHUB_LEGO_CONFIG` variable (#20)
+
 ## [1.0.0-beta2] - 2018-12-18
 ### Added
 - Fix automatic releases.
@@ -16,5 +30,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release.
 
-[Unreleased]: https://github.com/znerol/certhub/compare/v1.0.0-beta2...HEAD
+[Unreleased]: https://github.com/znerol/certhub/compare/v1.0.0-beta3...HEAD
+[1.0.0-beta3]: https://github.com/znerol/certhub/compare/v1.0.0-beta2...v1.0.0-beta3
 [1.0.0-beta2]: https://github.com/znerol/certhub/compare/v1.0.0-beta1...v1.0.0-beta2
