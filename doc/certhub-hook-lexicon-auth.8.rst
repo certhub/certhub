@@ -40,6 +40,21 @@ Environment
    Optional additional lexicon provider arguments (e.g. logging): see
    :manpage:`lexicon(1)` for more information.
 
+.. envvar:: CERTHUB_LEXICON_DOMAIN
+
+   Domain name passed to lexicon to use for the challenge. Defaults to
+   ${domain-to-be-validated}. Customizing this setting makes sense, e.g. when
+   using ``CNAME`` records to redirect _acme-challenge names from the real
+   domain to a separate zone purpose built for challange validation.
+
+.. envvar:: CERTHUB_LEXICON_NAME
+
+   Record name to use for the challenge. Defaults to
+   ``_acme-challenge.${CERTHUB_LEXICON_DOMAIN}``. Customizing this setting
+   makes sense, e.g. when using ``CNAME`` records to redirect _acme-challenge
+   names from the real domain to a separate zone purpose built for challange
+   validation.
+
 
 See Also
 --------
