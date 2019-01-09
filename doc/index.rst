@@ -6,6 +6,7 @@ Welcome to Certhub's documentation!
    :caption: Contents:
 
    intro
+   overview
    installation
    systemd
    man
