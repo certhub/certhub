@@ -197,7 +197,3 @@ epub_exclude_files = ['search.html']
 
 def setup(app):
     app.add_object_type('envfile', 'envfile', indextemplate='environment file; %s')
-
-# -- PlantUML configuration --------------------------------------------------
-
-plantuml = '/usr/bin/java -Djava.awt.headless=true -jar /usr/share/plantuml/plantuml.jar'
