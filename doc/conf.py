@@ -41,6 +41,7 @@ release = ''
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'sphinxcontrib.plantuml',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -196,3 +197,7 @@ epub_exclude_files = ['search.html']
 
 def setup(app):
     app.add_object_type('envfile', 'envfile', indextemplate='environment file; %s')
+
+# -- PlantUML configuration --------------------------------------------------
+
+plantuml = '/usr/bin/java -Djava.awt.headless=true -jar /usr/share/plantuml/plantuml.jar'

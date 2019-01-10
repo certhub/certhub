@@ -40,6 +40,7 @@ jobs:
           packages:
             - python3-sphinx
             - python3-sphinx-rtd-theme
+            - python3-sphinxcontrib.plantuml
       before_script:
         - make dist
         - make -C integration-test images
