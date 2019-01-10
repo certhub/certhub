@@ -65,6 +65,54 @@ services* exclusively.
    }
 
 
+Certhub ships with a considerable number of systemd units. All of those are
+designed as templates. Units used for replication to other nodes use the
+destination for the template instance string, all other units take a certificate
+basename as their instance string. The following diagram depicts a typical
+setup featuring automatic renewal, replication, certificate export and TLS
+service reload.
+
+.. uml::
+
+   node "Controller" {
+      [Expiry Path Unit] #palegreen
+      [Expiry Timer Unit] #palegreen
+      [Expiry Service Unit] #palegreen
+      [ACME Client Path Unit] #palegreen
+      [ACME Client Service Unit] #palegreen
+
+      [Principal Git Repository] <.. [Expiry Path Unit] : observe
+      [Expiry Path Unit] --> [Expiry Service Unit] : run
+      [Expiry Timer Unit] --> [Expiry Service Unit] : run
+      [Expiry Service Unit] --> [Expiry Status File] : create\ndelete
+      [Expiry Status File] <.. [ACME Client Path Unit] : observe
+      [ACME Client Path Unit] --> [ACME Client Service Unit] : run
+      [Principal Git Repository] <-- [ACME Client Service Unit] : commit
+
+      [Push Path Unit] #lavender
+      [Push Service Unit] #lavender
+
+      [Principal Git Repository] <.. [Push Path Unit] : observe
+      [Push Path Unit] --> [Push Service Unit] : run
+      [Principal Git Repository] <-- [Push Service Unit] : push
+   }
+
+   node "TLS Server" {
+      [Export Path Unit] #palegreen
+      [Export Service Unit] #palegreen
+      [Reload Path Unit] #palegreen
+      [Reload Service Unit] #palegreen
+
+      [Local Git Repository] <.. [Export Path Unit] : observe
+      [Export Path Unit] --> [Export Service Unit] : run
+      [Export Service Unit] --> [Local Certificate Directory] : update cert
+      [Local Certificate Directory] <.. [Reload Path Unit] : observe cert
+      [Reload Path Unit] --> [Reload Service Unit] : run
+   }
+
+   [Principal Git Repository] -> [Local Git Repository]
+
+
 Controller node setup process
 -----------------------------
 
@@ -149,7 +197,7 @@ On the *Controller* node:
 1. Add the newly generated *CSR* along with *ACME Client* specific
    configuration to the certhub config directory.
 2. Setup systemd units responsible for checking certificate expiry and
-   automated renewal.
+   automatic renewal.
 
 .. uml::
 
