@@ -1,0 +1,35 @@
+For each machine perform the following steps to setup certhub:
+* On Any Machine: Steps to setup certhub
+    - Add certhub group / user / home / config / status directories
+    - Configure git
+    - Create local git repository
+
+For each controller perform the following steps to setup ACME client:
+* On Controller: Steps to setup acme client on a controller
+    - Install acme client and dependencies
+    - Add certhub private directory
+    - Add acme account
+
+For each tls server perform the following steps to setup push replication:
+* On TLS Server: Steps to setup push replication on a tls server
+    - Set shell to /usr/bin/git-shell for certhub user
+    - Add controller ssh key to authorized_keys of certhub user
+* On Controller: Steps to setup push replication on a controller
+    - Add tls server fingerprint to known_hosts
+    - Run git-repo-push service once to verify configuration
+    - Setup git-repo-push path and service units
+
+For each certificate perform the following steps:
+* On TLS Server: Steps to setup new certificate on tls server
+    - Generate key
+    - Generate csr
+    - Specify services to reload in config file
+    - Setup certhub-cert-export path and service units
+    - Setup certhub-cert-reload path and service units
+
+* On Controller: Steps to setup new certificate on controller
+    - Add config for acme client to config directory
+    - Add csr to config directory
+    - Setup certhub-cert-expiry path, timer and service units
+    - Setup certhub-${ACME_CLIENT}-run path and service units
+    - Run certhub-${ACME_CLIENT}-run once
