@@ -47,7 +47,7 @@ step can be skipped by using the `install-bin` target.
 
 [Certbot]: https://certbot.eff.org/
 [Dehydrated]: https://dehydrated.io/
-[Lego]: https://github.com/xenolf/lego
+[Lego]: https://github.com/go-acme/lego
 [Lexicon]: https://github.com/AnalogJ/lexicon
 [git-gau]: https://github.com/znerol/git-gau
 [Sphinx]: https://www.sphinx-doc.org/
