@@ -36,6 +36,6 @@ tarball into `/usr/local`. Note that git-gau_ can be installed in the same way.
 .. _releases: https://github.com/znerol/certhub/releases/
 .. _Certbot: https://certbot.eff.org/
 .. _Dehydrated: https://dehydrated.io/
-.. _Lego: https://github.com/xenolf/lego
+.. _Lego: https://github.com/go-acme/lego
 .. _Lexicon: https://github.com/AnalogJ/lexicon
 .. _git-gau: https://github.com/znerol/git-gau

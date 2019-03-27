@@ -106,7 +106,7 @@ base/context:
 	mkdir -m 0700 base/context/.ssh
 	cp ../dist/certhub-dist.tar.gz base/context/certhub-dist.tar.gz
 	curl -L -o base/context/git-gau-dist.tar.gz 'https://github.com/znerol/git-gau/releases/download/v1.0.0/git-gau-dist.tar.gz'
-	curl -L -o base/context/lego_v1.2.1_linux_amd64.tar.gz 'https://github.com/xenolf/lego/releases/download/v1.2.1/lego_v1.2.1_linux_amd64.tar.gz'
+	curl -L -o base/context/lego_v2.4.0_linux_amd64.tar.gz 'https://github.com/go-acme/lego/releases/download/v2.4.0/lego_v2.4.0_linux_amd64.tar.gz'
 	ssh-keygen -b 1024 -t rsa -f base/context/.ssh/id_rsa -q -N "" -C "Bogus key for CI only. Never use in production"
 	cp base/context/.ssh/id_rsa.pub base/context/.ssh/authorized_keys
 
