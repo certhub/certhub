@@ -6,12 +6,13 @@ set -e
 set -u
 
 # Required binaries
+BASENAME=/usr/bin/basename
 ECHO=/bin/echo
+MKDIR=/bin/mkdir
 MKTEMP=/bin/mktemp
 MV=/bin/mv
 RM=/bin/rm
 XARGS=/usr/bin/xargs
-BASENAME=/usr/bin/basename
 
 # Print usage message and exit.
 usage() {
@@ -25,6 +26,7 @@ certhub_lego_run() {
 
     # Setup temp dir inside lego directory for new certificate.
     LEGO_DIR="${3}"
+    ${MKDIR} -p "${LEGO_DIR}/certificates"
     WORKDIR=$(${MKTEMP} -d -p "${LEGO_DIR}/certificates")
     cleanup() {
         ${RM} -rf "${WORKDIR}"
