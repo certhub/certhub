@@ -39,6 +39,11 @@ scripts_installed := \
     $(patsubst bin/%,$(DESTDIR)$(bindir)/%,$(filter bin/%,$(scripts))) \
     $(patsubst lib/%,$(DESTDIR)$(libdir)/certhub/%,$(filter lib/%,$(scripts)))
 
+entrypointdirs := lib/docker-entry.d
+entrypoints := $(foreach dir,$(entrypointdirs),$(wildcard $(dir)/*))
+entrypoints_installed := \
+    $(patsubst lib/%,$(DESTDIR)$(libdir)/git-gau/%,$(entrypoints))
+
 units := \
     $(wildcard lib/systemd/*.service) \
     $(wildcard lib/systemd/*.path) \
@@ -60,11 +65,11 @@ dropins_installed := \
 doc/_build/man/% : doc/%.rst
 	${MAKE} -C doc man
 
-bin: $(scripts)
+bin: $(scripts) $(entrypoints)
 	# empty for now
 
 lint: bin
-	shellcheck $(scripts)
+	shellcheck $(scripts) $(entrypoints)
 
 test: bin
 	PATH="$(shell pwd)/bin:${PATH}" $(python) -m test
@@ -82,6 +87,10 @@ $(DESTDIR)$(bindir)/% : bin/%
 
 # Install rule for hook scripts
 $(DESTDIR)$(libdir)/certhub/% : lib/%
+	install -m 0755 -D $< $@
+
+# Install rule for entrypoint scripts
+$(DESTDIR)$(libdir)/git-gau/docker-entry.d/% : lib/docker-entry.d/%
 	install -m 0755 -D $< $@
 
 # Install rule for systemd units and dropins
@@ -106,7 +115,7 @@ install-doc: doc $(man1_installed) $(man8_installed)
 	ln -s -f certhub-cert-reload@.service.8 $(DESTDIR)$(mandir)/man8/certhub-cert-reload@.path.8
 	ln -s -f certhub-repo-push@.service.8 $(DESTDIR)$(mandir)/man8/certhub-repo-push@.path.8
 
-install-bin: bin $(scripts_installed) $(units_installed) $(dropins_installed)
+install-bin: bin $(scripts_installed) $(entrypoints_installed) $(units_installed) $(dropins_installed)
 	ln -s -f lexicon-auth $(DESTDIR)$(libdir)/certhub/certbot-hooks/lexicon-cleanup
 	ln -s -f nsupdate-auth $(DESTDIR)$(libdir)/certhub/certbot-hooks/nsupdate-cleanup
 
@@ -116,6 +125,7 @@ uninstall:
 	-rm -f $(man1_installed)
 	-rm -f $(man8_installed)
 	-rm -f $(scripts_installed)
+	-rm -f $(entrypoints_installed)
 	-rm -f $(units_installed)
 	-rm -f $(dropins_installed)
 	-rmdir $(dropindirs_installed)

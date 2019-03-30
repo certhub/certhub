@@ -1,0 +1,54 @@
+#!/bin/sh
+
+set -e
+set -u
+
+ECHO=/bin/echo
+MKDIR=/bin/mkdir
+OPENSSL=/usr/bin/openssl
+SED=/bin/sed
+TR=/usr/bin/tr
+
+# Encode data as url-safe formatted base64
+urlbase64() {
+  # urlbase64: base64 encoded string with '+' replaced with '-' and '/' replaced with '_'
+  ${OPENSSL} base64 -e | ${TR} -d '\n\r' | ${SED} -r -e 's:=*$::g' -e 'y:+/:-_:'
+}
+
+# Expected arg: Server URL
+#
+# see:
+# * https://github.com/lukas2511/dehydrated/blob/v0.6.2/dehydrated#L229
+dehydrated_account_dirname() {
+    ${ECHO} "${1}" | urlbase64
+}
+
+# Setup common environment variables.
+dehydrated_account_prepare() {
+    CERTHUB_DEHYDRATED_CONFIG_DIR="${CERTHUB_DEHYDRATED_CONFIG_DIR:-/etc/dehydrated}"
+    CERTHUB_DEHYDRATED_ACCOUNT_SERVER="${CERTHUB_DEHYDRATED_ACCOUNT_SERVER:-https://acme-v02.api.letsencrypt.org/directory}"
+    CERTHUB_DEHYDRATED_ACCOUNT_DIRNAME=$(dehydrated_account_dirname "${CERTHUB_DEHYDRATED_ACCOUNT_SERVER}")
+    CERTHUB_DEHYDRATED_ACCOUNT_DIR="${CERTHUB_DEHYDRATED_ACCOUNT_DIR:-${CERTHUB_DEHYDRATED_CONFIG_DIR}/accounts/${CERTHUB_DEHYDRATED_ACCOUNT_DIRNAME}}"
+}
+
+# Optionally write dehydrated acme private key file.
+if [ -n "${CERTHUB_DEHYDRATED_ACCOUNT_KEY:-}" ]; then
+    dehydrated_account_prepare
+    CERTHUB_DEHYDRATED_ACCOUNT_KEY_FILE="${CERTHUB_DEHYDRATED_ACCOUNT_KEY_FILE:-${CERTHUB_DEHYDRATED_ACCOUNT_DIR}/account_key.pem}"
+
+    ${MKDIR} -m 0700 -p "${CERTHUB_DEHYDRATED_ACCOUNT_DIR}"
+    if [ ! -e "${CERTHUB_DEHYDRATED_ACCOUNT_KEY_FILE}" ]; then
+        (umask 077 && ${ECHO} "${CERTHUB_DEHYDRATED_ACCOUNT_KEY}" > "${CERTHUB_DEHYDRATED_ACCOUNT_KEY_FILE}")
+    fi
+fi
+
+# Optionally write account regr file.
+if [ -n "${CERTHUB_DEHYDRATED_ACCOUNT_REGR:-}" ]; then
+    dehydrated_account_prepare
+    CERTHUB_DEHYDRATED_ACCOUNT_REGR_FILE="${CERTHUB_DEHYDRATED_ACCOUNT_REGR_FILE:-${CERTHUB_DEHYDRATED_ACCOUNT_DIR}/registration_info.json}"
+
+    ${MKDIR} -m 0700 -p "${CERTHUB_DEHYDRATED_ACCOUNT_DIR}"
+    if [ ! -e "${CERTHUB_DEHYDRATED_ACCOUNT_REGR_FILE}" ]; then
+        (umask 077 && ${ECHO} "${CERTHUB_DEHYDRATED_ACCOUNT_REGR}" > "${CERTHUB_DEHYDRATED_ACCOUNT_REGR_FILE}")
+    fi
+fi
