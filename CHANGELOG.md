@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - ...
 
+## [1.0.0-beta5] - 2019-04-01
+### Changed
+- Add missing package to github release stage #30
+
 ## [1.0.0-beta4] - 2019-04-01
 ### Added
 - Add docker support via git-gau (#28)
@@ -40,7 +44,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release.
 
-[Unreleased]: https://github.com/znerol/certhub/compare/v1.0.0-beta4...HEAD
+[Unreleased]: https://github.com/znerol/certhub/compare/v1.0.0-beta5...HEAD
+[1.0.0-beta5]: https://github.com/znerol/certhub/compare/v1.0.0-beta4...v1.0.0-beta5
 [1.0.0-beta4]: https://github.com/znerol/certhub/compare/v1.0.0-beta3...v1.0.0-beta4
 [1.0.0-beta3]: https://github.com/znerol/certhub/compare/v1.0.0-beta2...v1.0.0-beta3
 [1.0.0-beta2]: https://github.com/znerol/certhub/compare/v1.0.0-beta1...v1.0.0-beta2
