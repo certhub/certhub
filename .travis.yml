@@ -53,6 +53,7 @@ jobs:
           packages:
             - python3-sphinx
             - python3-sphinx-rtd-theme
+            - python3-sphinxcontrib.plantuml
       script:
         - make dist
       deploy:
