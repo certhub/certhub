@@ -1,0 +1,58 @@
+#!/bin/sh
+
+set -e
+set -u
+
+ECHO=/bin/echo
+MKDIR=/bin/mkdir
+
+# see:
+# https://github.com/go-acme/lego/blob/master/cmd/accounts_storage.go
+lego_account_dirname() {
+    URL="${1}"
+    # Remove protocol.
+    HOSTPATH="${URL#*://}"
+    # Remove directory.
+    HOSTPORT="${HOSTPATH%%/*}"
+    # Parse port.
+    IFS=':' read -r HOST PORT <<-EOF
+$HOSTPORT
+EOF
+
+    ${ECHO} -n "$HOST"
+    if [ -n "$PORT" ]; then
+        ${ECHO} -n "_$PORT"
+    fi
+    ${ECHO}
+}
+
+# Setup common environment variables.
+lego_account_prepare() {
+    CERTHUB_LEGO_DIR="${CERTHUB_LEGO_DIR:-${HOME}/.lego}"
+    CERTHUB_LEGO_ACCOUNT_SERVER="${CERTHUB_LEGO_ACCOUNT_SERVER:-https://acme-v02.api.letsencrypt.org/directory}"
+    CERTHUB_LEGO_ACCOUNT_DIRNAME=$(lego_account_dirname "${CERTHUB_LEGO_ACCOUNT_SERVER}")
+    CERTHUB_LEGO_ACCOUNT_DIR="${CERTHUB_LEGO_ACCOUNT_DIR:-${CERTHUB_LEGO_DIR}/accounts/${CERTHUB_LEGO_ACCOUNT_DIRNAME}/${CERTHUB_LEGO_ACCOUNT_EMAIL}}"
+}
+
+# Optionally write lego acme private key file.
+if [ -n "${CERTHUB_LEGO_ACCOUNT_KEY:-}" ]; then
+    lego_account_prepare
+    CERTHUB_LEGO_ACCOUNT_KEY_DIR="${CERTHUB_LEGO_ACCOUNT_KEY_DIR:-${CERTHUB_LEGO_ACCOUNT_DIR}/keys}"
+    CERTHUB_LEGO_ACCOUNT_KEY_FILE="${CERTHUB_LEGO_ACCOUNT_KEY_FILE:-${CERTHUB_LEGO_ACCOUNT_KEY_DIR}/${CERTHUB_LEGO_ACCOUNT_EMAIL}.key}"
+
+    ${MKDIR} -m 0700 -p "${CERTHUB_LEGO_ACCOUNT_KEY_DIR}"
+    if [ ! -e "${CERTHUB_LEGO_ACCOUNT_KEY_FILE}" ]; then
+        (umask 077 && ${ECHO} "${CERTHUB_LEGO_ACCOUNT_KEY}" > "${CERTHUB_LEGO_ACCOUNT_KEY_FILE}")
+    fi
+fi
+
+# Optionally write account conf file.
+if [ -n "${CERTHUB_LEGO_ACCOUNT_CONF:-}" ]; then
+    lego_account_prepare
+    CERTHUB_LEGO_ACCOUNT_CONF_FILE="${CERTHUB_LEGO_ACCOUNT_CONF_FILE:-${CERTHUB_LEGO_ACCOUNT_DIR}/account.json}"
+
+    ${MKDIR} -m 0700 -p "${CERTHUB_LEGO_ACCOUNT_DIR}"
+    if [ ! -e "${CERTHUB_LEGO_ACCOUNT_CONF_FILE}" ]; then
+        (umask 077 && ${ECHO} "${CERTHUB_LEGO_ACCOUNT_CONF}" > "${CERTHUB_LEGO_ACCOUNT_CONF_FILE}")
+    fi
+fi

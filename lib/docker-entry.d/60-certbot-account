@@ -1,0 +1,62 @@
+#!/bin/sh
+
+set -e
+set -u
+
+ECHO=/bin/echo
+MKDIR=/bin/mkdir
+
+# Two argumens expected:
+# - Server URL
+# - Account ID (md5 fingerprint of account public key)
+#
+# see:
+# * https://github.com/certbot/certbot/blob/v0.32.0/certbot/configuration.py#L61
+# * https://github.com/certbot/certbot/blob/v0.32.0/certbot/account.py#L62
+certbot_account_dirname() {
+    echo "${1#*://}/${2}"
+}
+
+# Setup common environment variables.
+certbot_account_prepare() {
+    CERTHUB_CERTBOT_CONFIG_DIR="${CERTHUB_CERTBOT_CONFIG_DIR:-/etc/letsencrypt}"
+    CERTHUB_CERTBOT_ACCOUNT_SERVER="${CERTHUB_CERTBOT_ACCOUNT_SERVER:-https://acme-v02.api.letsencrypt.org/directory}"
+
+    if [ -n "${CERTHUB_CERTBOT_ACCOUNT_ID:-}" ]; then
+        CERTHUB_CERTBOT_ACCOUNT_DIRNAME=$(certbot_account_dirname "${CERTHUB_CERTBOT_ACCOUNT_SERVER}" "${CERTHUB_CERTBOT_ACCOUNT_ID}")
+        CERTHUB_CERTBOT_ACCOUNT_DIR="${CERTHUB_CERTBOT_ACCOUNT_DIR:-${CERTHUB_CERTBOT_CONFIG_DIR}/accounts/${CERTHUB_CERTBOT_ACCOUNT_DIRNAME}}"
+    fi
+}
+
+# Optionally write certbot acme private key file.
+if [ -n "${CERTHUB_CERTBOT_ACCOUNT_KEY:-}" ]; then
+    certbot_account_prepare
+    CERTHUB_CERTBOT_ACCOUNT_KEY_FILE="${CERTHUB_CERTBOT_ACCOUNT_KEY_FILE:-${CERTHUB_CERTBOT_ACCOUNT_DIR}/private_key.json}"
+
+    ${MKDIR} -m 0700 -p "${CERTHUB_CERTBOT_ACCOUNT_DIR}"
+    if [ ! -e "${CERTHUB_CERTBOT_ACCOUNT_KEY_FILE}" ]; then
+        (umask 077 && ${ECHO} "${CERTHUB_CERTBOT_ACCOUNT_KEY}" > "${CERTHUB_CERTBOT_ACCOUNT_KEY_FILE}")
+    fi
+fi
+
+# Optionally write account regr file.
+if [ -n "${CERTHUB_CERTBOT_ACCOUNT_REGR:-}" ]; then
+    certbot_account_prepare
+    CERTHUB_CERTBOT_ACCOUNT_REGR_FILE="${CERTHUB_CERTBOT_ACCOUNT_REGR_FILE:-${CERTHUB_CERTBOT_ACCOUNT_DIR}/regr.json}"
+
+    ${MKDIR} -m 0700 -p "${CERTHUB_CERTBOT_ACCOUNT_DIR}"
+    if [ ! -e "${CERTHUB_CERTBOT_ACCOUNT_REGR_FILE}" ]; then
+        (umask 077 && ${ECHO} "${CERTHUB_CERTBOT_ACCOUNT_REGR}" > "${CERTHUB_CERTBOT_ACCOUNT_REGR_FILE}")
+    fi
+fi
+
+# Optionally write account meta file.
+if [ -n "${CERTHUB_CERTBOT_ACCOUNT_META:-}" ]; then
+    certbot_account_prepare
+    CERTHUB_CERTBOT_ACCOUNT_META_FILE="${CERTHUB_CERTBOT_ACCOUNT_META_FILE:-${CERTHUB_CERTBOT_ACCOUNT_DIR}/meta.json}"
+
+    ${MKDIR} -m 0700 -p "${CERTHUB_CERTBOT_ACCOUNT_DIR}"
+    if [ ! -e "${CERTHUB_CERTBOT_ACCOUNT_META_FILE}" ]; then
+        (umask 077 && ${ECHO} "${CERTHUB_CERTBOT_ACCOUNT_META}" > "${CERTHUB_CERTBOT_ACCOUNT_META_FILE}")
+    fi
+fi
