@@ -264,9 +264,9 @@ Certhub ships with DNS-01 challenge hooks for ``nsupdate`` and Lexicon_. The
 hooks need to be configured using an environment file normally located in
 :envfile:`/etc/certhub/%i.certhub-certbot-run.env` and
 :envfile:`/etc/certhub/%i.certhub-dehydrated-run.env`.  An example for
-`certbot <https://github.com/znerol/certhub/tree/master/integration-test/src/travis/etc/certhub-certbot-run.env.in>`__
+`certbot <https://github.com/certhub/certhub/tree/master/integration-test/src/travis/etc/certhub-certbot-run.env.in>`__
 and
-`dehydrated <https://github.com/znerol/certhub/tree/master/integration-test/src/travis/etc/certhub-dehydrated-run.env.in>`__
+`dehydrated <https://github.com/certhub/certhub/tree/master/integration-test/src/travis/etc/certhub-dehydrated-run.env.in>`__
 configuration is part of the integration test suite. See the manpages
 :doc:`certhub-hook-lexicon-auth.8` and :doc:`certhub-hook-nsupdate-auth.8` for
 more detailed information about the involved environment variables.
@@ -275,7 +275,7 @@ In the case of lego the challenge method is selected using command line
 arguments to the lego binary, authentication tokens are passed in via
 environment variables. All configuration is passed in via an environment file
 normally located in :envfile:`/etc/certhub/%i.certhub-lego-run.env`. An
-`example <https://github.com/znerol/certhub/tree/master/integration-test/src/travis/etc/certhub-lego-run.env.in>`__
+`example <https://github.com/certhub/certhub/tree/master/integration-test/src/travis/etc/certhub-lego-run.env.in>`__
 configuration is part of the integration test suite. See the manpage
 :doc:`certhub-lego-run@.service.8` for more detailed information about the
 involved environment variables.
@@ -303,7 +303,7 @@ services via drop-ins.
 Systemd Unit Customization
 --------------------------
 
-Certhub ships with `systemd units <https://github.com/znerol/certhub/tree/master/lib/systemd>`__
+Certhub ships with `systemd units <https://github.com/certhub/certhub/tree/master/lib/systemd>`__
 which are capable of running one of the supported ACME clients in order to
 issue or renew a certificate and then store it in the certificate repository.
 
@@ -378,7 +378,7 @@ Add additional configuration for the ACME client to one of the following files:
 ``/etc/certhub/${DOMAIN}.dehydrated.conf`` or
 ``/etc/certhub/${DOMAIN}.certhub-lego-run.env``. Working examples for testing
 purposes are part of certhub
-`integration tests <https://github.com/znerol/certhub/tree/master/integration-test/src/travis/etc>`__
+`integration tests <https://github.com/certhub/certhub/tree/master/integration-test/src/travis/etc>`__
 
 
 Initial Certificate
