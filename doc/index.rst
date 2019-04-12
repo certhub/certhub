@@ -9,6 +9,7 @@ Welcome to Certhub's documentation!
    overview
    installation
    systemd
+   gitlabci
    man
 
 
