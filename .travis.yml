@@ -66,5 +66,5 @@ jobs:
         skip_cleanup: true
         draft: true
         on:
-          repo: znerol/certhub
+          repo: certhub/certhub
           tags: true

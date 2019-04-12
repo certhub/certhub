@@ -3,7 +3,7 @@
 A collection of scripts and systemd units which make it easy to setup
 centralized TLS certificate management optionally with git as backend.
 
-[![Build Status](https://travis-ci.org/znerol/certhub.svg?branch=master)](https://travis-ci.org/znerol/certhub)
+[![Build Status](https://travis-ci.org/certhub/certhub.svg?branch=master)](https://travis-ci.org/certhub/certhub)
 
 ## DEPENDENCIES
 

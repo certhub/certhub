@@ -33,7 +33,7 @@ tarball into `/usr/local`. Note that git-gau_ can be installed in the same way.
         src: files/certhub-dist.tar.gz
         dest: /usr/local
 
-.. _releases: https://github.com/znerol/certhub/releases/
+.. _releases: https://github.com/certhub/certhub/releases/
 .. _Certbot: https://certbot.eff.org/
 .. _Dehydrated: https://dehydrated.io/
 .. _Lego: https://github.com/go-acme/lego
