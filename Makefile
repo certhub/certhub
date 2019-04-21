@@ -154,6 +154,9 @@ dist-src:
 	git archive -o dist/certhub-src.tar.gz HEAD
 
 dist: dist-src dist-bin
+	cd dist && md5sum certhub-*.tar.gz > md5sum.txt
+	cd dist && sha1sum certhub-*.tar.gz > sha1sum.txt
+	cd dist && sha256sum certhub-*.tar.gz > sha256sum.txt
 
 integration-test: dist
 	${MAKE} -C integration-test all
