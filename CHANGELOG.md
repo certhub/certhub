@@ -8,9 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - ...
 
+## [1.0.0-beta7] - 2019-05-09
+## Changed
+- Run acme client whenever CSR file changed (#36)
+
+## [1.0.0-beta6] - 2019-04-17
+## Added
+- Docker entry script for acme-dns registration (#34)
+
 ## [1.0.0-beta5] - 2019-04-01
 ### Changed
-- Add missing package to github release stage #30
+- Add missing package to github release stage (#30)
 
 ## [1.0.0-beta4] - 2019-04-01
 ### Added
@@ -44,7 +52,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release.
 
-[Unreleased]: https://github.com/certhub/certhub/compare/v1.0.0-beta5...HEAD
+[Unreleased]: https://github.com/certhub/certhub/compare/v1.0.0-beta7...HEAD
+[1.0.0-beta7]: https://github.com/certhub/certhub/compare/v1.0.0-beta6...v1.0.0-beta7
+[1.0.0-beta6]: https://github.com/certhub/certhub/compare/v1.0.0-beta5...v1.0.0-beta6
 [1.0.0-beta5]: https://github.com/certhub/certhub/compare/v1.0.0-beta4...v1.0.0-beta5
 [1.0.0-beta4]: https://github.com/certhub/certhub/compare/v1.0.0-beta3...v1.0.0-beta4
 [1.0.0-beta3]: https://github.com/certhub/certhub/compare/v1.0.0-beta2...v1.0.0-beta3
