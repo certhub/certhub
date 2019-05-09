@@ -17,7 +17,7 @@ config directory. The resulting fullchain certificate is committed to the
 repository. A commit message is generated automatically.
 
 A path unit which runs the service unit if the expiry status file managed by
-:program:`certhub-cert-expiry@.service` exists.
+:program:`certhub-cert-expiry@.service` exists or if the CSR file changed.
 
 The instance name (systemd instance string specifier ``%i``) is used as the
 basename of the configuration and the resulting certificate file.

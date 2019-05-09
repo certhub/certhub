@@ -85,6 +85,7 @@ service reload.
       [Expiry Path Unit] --> [Expiry Service Unit] : run
       [Expiry Timer Unit] --> [Expiry Service Unit] : run
       [Expiry Service Unit] --> [Expiry Status File] : create\ndelete
+      [CSR File] <.. [ACME Client Path Unit] : observe
       [Expiry Status File] <.. [ACME Client Path Unit] : observe
       [ACME Client Path Unit] --> [ACME Client Service Unit] : run
       [Principal Git Repository] <-- [ACME Client Service Unit] : commit
