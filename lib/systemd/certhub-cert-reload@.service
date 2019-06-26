@@ -6,7 +6,7 @@ Type=oneshot
 
 ExecStart=/usr/bin/env \
     xargs -a ${CERTHUB_CERT_RELOAD_CONFIG} -I{} \
-    systemctl reload {}
+    systemctl ${CERTHUB_CERT_RELOAD_COMMAND} {}
 
 SyslogIdentifier=certhub-cert-reload
 StandardOutput=syslog
