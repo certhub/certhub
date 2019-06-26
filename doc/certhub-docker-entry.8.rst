@@ -106,9 +106,10 @@ remaining variables can be ignored in most situations.
 Environment (Dehydrated)
 ------------------------
 
-It is recommended to specify :envvar:`CERTHUB_DEHYDRATED_ACCOUNT_KEY` and
-:envvar:`CERTHUB_DEHYDRATED_ACCOUNT_REGR` for a production setup. The
-remaining variables can be ignored in most situations.
+It is recommended to specify :envvar:`CERTHUB_DEHYDRATED_ACCOUNT_KEY`,
+:envvar:`CERTHUB_DEHYDRATED_ACCOUNT_REGR` and
+:envvar:`CERTHUB_DEHYDRATED_ACCOUNT_ID` for a production setup. The remaining
+variables can be ignored in most situations.
 
 .. envvar:: CERTHUB_DEHYDRATED_ACCOUNT_KEY
 
@@ -120,10 +121,14 @@ remaining variables can be ignored in most situations.
 
    ACME account registration information in JSON format used by dehydrated. If
    this variable is non-empty, its contents will be written to
-   `registration_info.json` in the respective accounts directory. Note that
-   either :envvar:`CERTHUB_DEHYDRATED_ACCOUNT_ID` or
-   :envvar:`CERTHUB_DEHYDRATED_ACCOUNT_DIR` is required if this variable is
+   `registration_info.json` in the respective accounts directory.
    set.
+
+.. envvar:: CERTHUB_DEHYDRATED_ACCOUNT_ID
+
+   ACME account id information in JSON format used by dehydrated. If this
+   variable is non-empty, its contents will be written to `account_id.json` in
+   the respective accounts directory.
 
 .. envvar:: CERTHUB_DEHYDRATED_ACCOUNT_SERVER
 
