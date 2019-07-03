@@ -5,8 +5,9 @@ RUN yum install -y epel-release
 RUN yum install -y \
     certbot \
     dehydrated \
-    libfaketime \
-    python2-dns-lexicon
+    libfaketime
+
+RUN yum install -y --enablerepo=epel-testing python2-dns-lexicon
 
 ARG WITH_TOR=0
 RUN [ $WITH_TOR -eq 0 ] || yum -y install tor
