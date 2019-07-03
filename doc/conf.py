@@ -150,6 +150,7 @@ man_pages = [
     ('certhub-dehydrated-run.1', 'certhub-dehydrated-run', 'Certhub Documentation', [author], 1),
     ('certhub-lego-run.1', 'certhub-lego-run', 'Certhub Documentation', [author], 1),
     ('certhub-message-format.1', 'certhub-message-format', 'Certhub Documentation', [author], 1),
+    ('certhub-send-file.1', 'certhub-send-file', 'Certhub Documentation', [author], 1),
     ('certhub-status-file.1', 'certhub-status-file', 'Certhub Documentation', [author], 1),
     ('certhub-certbot-run@.service.8', 'certhub-certbot-run@.service', 'Certhub Documentation', [author], 8),
     ('certhub-dehydrated-run@.service.8', 'certhub-dehydrated-run@.service', 'Certhub Documentation', [author], 8),
