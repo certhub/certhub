@@ -1,0 +1,32 @@
+#!/bin/sh
+#
+# certhub-send-file - Pipes the given file to stdin of the specified command.
+
+set -e
+set -u
+
+# Required binaries
+ECHO=/bin/echo
+
+# Print usage message and exit.
+usage() {
+    ${ECHO} "${0}: input-file command [args...]" >&2
+    exit 1
+}
+
+# Pipes the given file to stdin of the specified command.
+#
+# $1: Path to file
+# $@: Command [args...]
+certhub_send() {
+    INPUTFILE="${1}"
+    shift
+
+    "${@}" < "${INPUTFILE}"
+}
+
+if [ "${#}" -gt 1 ] && [ "${1:-}" != "-h" ] && [ "${1:-}" != "--help" ]; then
+    certhub_send "${@}"
+else
+    usage
+fi

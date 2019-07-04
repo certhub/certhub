@@ -10,6 +10,7 @@ Man Pages
    certhub-lego-run.1
    certhub-cert-expiry.1
    certhub-message-format.1
+   certhub-send-file.1
    certhub-status-file.1
    certhub-certbot-run@.service.8
    certhub-dehydrated-run@.service.8
