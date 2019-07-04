@@ -158,6 +158,7 @@ man_pages = [
     ('certhub-cert-expiry@.service.8', 'certhub-cert-expiry@.service', 'Certhub Documentation', [author], 8),
     ('certhub-cert-export@.service.8', 'certhub-cert-export@.service', 'Certhub Documentation', [author], 8),
     ('certhub-cert-reload@.service.8', 'certhub-cert-reload@.service', 'Certhub Documentation', [author], 8),
+    ('certhub-cert-send@.service.8', 'certhub-cert-send@.service', 'Certhub Documentation', [author], 8),
     ('certhub-repo-push@.service.8', 'certhub-repo-push@.service', 'Certhub Documentation', [author], 8),
     ('certhub-docker-entry.8', 'certhub-docker-entry', 'Certhub Documentation', [author], 8),
     ('certhub-hook-lexicon-auth.8', 'certhub-hook-lexicon-auth', 'Certhub Documentation', [author], 8),

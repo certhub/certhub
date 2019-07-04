@@ -32,6 +32,7 @@ all: \
 	test-cert-expiry \
 	test-cert-export \
 	test-cert-reload \
+	test-cert-send\
 	test-repo-push \
 	test-certbot \
 	test-lego \
@@ -63,6 +64,14 @@ test-cert-reload: node
 	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-node /sbin/init))
 	# Run the test
 	docker exec -i $($@_CONTAINER) /bin/sh < test/cert-reload-test.sh
+	# Stop containers
+	docker stop $($@_CONTAINER)
+
+test-cert-send: node
+	# Start containers
+	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-node /sbin/init))
+	# Run the test
+	docker exec -i $($@_CONTAINER) /bin/sh < test/cert-send-test.sh
 	# Stop containers
 	docker stop $($@_CONTAINER)
 
@@ -160,6 +169,7 @@ controller: base controller/context
 	test-cert-expiry \
 	test-cert-export \
 	test-cert-reload \
+	test-cert-send\
 	test-repo-push \
 	test-certbot \
 	test-dehydrated \

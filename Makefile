@@ -113,6 +113,7 @@ install-doc: doc $(man1_installed) $(man8_installed)
 	ln -s -f certhub-cert-expiry@.service.8 $(DESTDIR)$(mandir)/man8/certhub-cert-expiry@.timer.8
 	ln -s -f certhub-cert-export@.service.8 $(DESTDIR)$(mandir)/man8/certhub-cert-export@.path.8
 	ln -s -f certhub-cert-reload@.service.8 $(DESTDIR)$(mandir)/man8/certhub-cert-reload@.path.8
+	ln -s -f certhub-cert-send@.service.8 $(DESTDIR)$(mandir)/man8/certhub-cert-send@.path.8
 	ln -s -f certhub-repo-push@.service.8 $(DESTDIR)$(mandir)/man8/certhub-repo-push@.path.8
 
 install-bin: bin $(scripts_installed) $(entrypoints_installed) $(units_installed) $(dropins_installed)
@@ -133,6 +134,7 @@ uninstall:
 	-rm -f $(DESTDIR)$(mandir)/man8/certhub-cert-expiry@.timer.8
 	-rm -f $(DESTDIR)$(mandir)/man8/certhub-cert-export@.path.8
 	-rm -f $(DESTDIR)$(mandir)/man8/certhub-cert-reload@.path.8
+	-rm -f $(DESTDIR)$(mandir)/man8/certhub-cert-send@.path.8
 	-rm -f $(DESTDIR)$(mandir)/man8/certhub-certbot-run@.path.8
 	-rm -f $(DESTDIR)$(mandir)/man8/certhub-dehydrated-run@.path.8
 	-rm -f $(DESTDIR)$(mandir)/man8/certhub-lego-run@.path.8
