@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - ...
 
+## [1.0.0-beta8] - 2019-07-04
+
+## Added
+- Allow to customize systemctl reload command (#38)
+- Add certhub-send-file command (#43)
+- Add certhub-cert-send service with configurable destinations (#42)
+
 ## [1.0.0-beta7] - 2019-05-09
 ## Changed
 - Run acme client whenever CSR file changed (#36)
@@ -52,7 +59,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release.
 
-[Unreleased]: https://github.com/certhub/certhub/compare/v1.0.0-beta7...HEAD
+[Unreleased]: https://github.com/certhub/certhub/compare/v1.0.0-beta8...HEAD
+[1.0.0-beta7]: https://github.com/certhub/certhub/compare/v1.0.0-beta7...v1.0.0-beta8
 [1.0.0-beta7]: https://github.com/certhub/certhub/compare/v1.0.0-beta6...v1.0.0-beta7
 [1.0.0-beta6]: https://github.com/certhub/certhub/compare/v1.0.0-beta5...v1.0.0-beta6
 [1.0.0-beta5]: https://github.com/certhub/certhub/compare/v1.0.0-beta4...v1.0.0-beta5
