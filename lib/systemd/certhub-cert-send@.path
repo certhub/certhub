@@ -1,0 +1,5 @@
+[Unit]
+Description=Send certificates to predefined destinations when certificate changed
+
+[Install]
+WantedBy=paths.target

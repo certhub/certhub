@@ -18,6 +18,7 @@ Man Pages
    certhub-cert-expiry@.service.8
    certhub-cert-export@.service.8
    certhub-cert-reload@.service.8
+   certhub-cert-send@.service.8
    certhub-repo-push@.service.8
    certhub-docker-entry.8
    certhub-hook-lexicon-auth.8

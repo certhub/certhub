@@ -1,0 +1,13 @@
+[Unit]
+Description=Send certificates to predefined destinations
+
+[Service]
+Type=oneshot
+
+ExecStart=/usr/bin/env \
+    xargs -a ${CERTHUB_CERT_SEND_CONFIG} -I{DESTINATION} \
+    certhub-send-file ${CERTHUB_CERT_SEND_SRC} $CERTHUB_CERT_SEND_COMMAND
+
+SyslogIdentifier=certhub-cert-send
+StandardOutput=syslog
+StandardError=syslog
