@@ -29,6 +29,12 @@ Environment
    Path to a file containing the services to reload. Defaults to:
    ``/etc/certhub/%i.services-reload.txt``
 
+.. envvar:: CERTHUB_CERT_RELOAD_COMMAND
+
+   A systemctl subcommand to execute when a service needs to be reloaded.
+   Useful values include ``reload``, ``restart``, ``try-restart``,
+   ``reload-or-restart``, ``try-reload-or-restart``. Defaults to ``reload``.
+
 
 Files
 -----
