@@ -52,3 +52,14 @@ if [ -n "${CERTHUB_DEHYDRATED_ACCOUNT_REGR:-}" ]; then
         (umask 077 && ${ECHO} "${CERTHUB_DEHYDRATED_ACCOUNT_REGR}" > "${CERTHUB_DEHYDRATED_ACCOUNT_REGR_FILE}")
     fi
 fi
+
+# Optionally write account id file.
+if [ -n "${CERTHUB_DEHYDRATED_ACCOUNT_ID:-}" ]; then
+    dehydrated_account_prepare
+    CERTHUB_DEHYDRATED_ACCOUNT_ID_FILE="${CERTHUB_DEHYDRATED_ACCOUNT_ID_FILE:-${CERTHUB_DEHYDRATED_ACCOUNT_DIR}/account_id.json}"
+
+    ${MKDIR} -m 0700 -p "${CERTHUB_DEHYDRATED_ACCOUNT_DIR}"
+    if [ ! -e "${CERTHUB_DEHYDRATED_ACCOUNT_ID_FILE}" ]; then
+        (umask 077 && ${ECHO} "${CERTHUB_DEHYDRATED_ACCOUNT_ID}" > "${CERTHUB_DEHYDRATED_ACCOUNT_ID_FILE}")
+    fi
+fi
