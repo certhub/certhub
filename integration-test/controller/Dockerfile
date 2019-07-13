@@ -7,7 +7,7 @@ RUN yum install -y \
     dehydrated \
     libfaketime
 
-RUN yum install -y --enablerepo=epel-testing python2-dns-lexicon
+RUN yum install -y https://kojipkgs.fedoraproject.org//packages/python-dns-lexicon/3.2.8/1.el7/noarch/python2-dns-lexicon-3.2.8-1.el7.noarch.rpm
 
 ARG WITH_TOR=0
 RUN [ $WITH_TOR -eq 0 ] || yum -y install tor
