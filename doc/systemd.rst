@@ -551,3 +551,74 @@ Ansible:
         systemd:
           name: "certhub-cert-export@{{ DOMAIN }}.service"
           state: started
+
+
+Sending certificates
+--------------------
+
+Similar to the export/reload scenario described above, it is also possible to
+send exported certificates to another destination/process. Enable and start
+``certhub-cert-export@.path`` and ``certhub-cert-send@.path`` in order to
+automate this process. Both of these units take a certificate configuration
+basename as their instance name.
+
+List all destinations the certificate should be sent to in
+``/etc/certhub/${DOMAIN}.destinations-send.txt``. By default the certificate
+will be sent using the ``mail`` command. This can be changed using the
+:envvar:`CERTHUB_CERT_SEND_COMMAND`. A good place to specify the variable is,
+e.g., :envfile:`/etc/certhub/%i.certhub-cert-send.env`.
+
+Note that the certificate is written to ``stdin`` of the specified command.
+Hence it is quite easy to send it to remote scripts using ``ssh``.
+
+Shell:
+
+.. code-block:: shell
+
+
+    $ export DOMAIN=tls-server.example.com
+    $ sudo -u certhub mkdir /var/lib/certhub/certs
+    $ sudo tee "/etc/certhub/${DOMAIN}.destinations-send.txt" <<EOF
+    audit@example.com
+    EOF
+    $ sudo systemctl enable --now "certhub-cert-export@${DOMAIN}.path"
+    $ sudo systemctl enable --now "certhub-cert-send@${DOMAIN}.path"
+    $ sudo systemctl start "certhub-cert-export@${DOMAIN}.service"
+
+Ansible:
+
+.. code-block:: yaml
+
+    tasks:
+      - name: Certhub certificate directory exists
+        file:
+          path: /var/lib/certhub/certs
+          state: directory
+          owner: certhub
+          group: certhub
+          mode: 0755
+
+      - name: Certificate send configuration
+        copy:
+          dest: "/etc/certhub/{{ DOMAIN }}.destinations-send.txt"
+          owner: root
+          group: root
+          mode: 0644
+          content: |
+            audit@example.com
+
+      - name: Certificate export and send path units enabled and started
+        notify: Certificate exported
+        loop:
+          - "certhub-cert-export@{{ DOMAIN }}.path"
+          - "certhub-cert-send@{{ DOMAIN }}.path"
+        systemd:
+          name: "{{ item }}"
+          enabled: true
+          state: started
+
+    handlers:
+      - name: Certificate exported
+        systemd:
+          name: "certhub-cert-export@{{ DOMAIN }}.service"
+          state: started
