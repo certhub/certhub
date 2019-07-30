@@ -5,9 +5,8 @@ RUN yum install -y epel-release
 RUN yum install -y \
     certbot \
     dehydrated \
-    libfaketime
-
-RUN yum install -y https://kojipkgs.fedoraproject.org//packages/python-dns-lexicon/3.2.8/1.el7/noarch/python2-dns-lexicon-3.2.8-1.el7.noarch.rpm
+    libfaketime \
+    python-dns-lexicon
 
 ARG WITH_TOR=0
 RUN [ $WITH_TOR -eq 0 ] || yum -y install tor
