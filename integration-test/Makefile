@@ -36,7 +36,7 @@ all: \
 	test-repo-push \
 	test-certbot \
 	test-lego \
-#	test-dehydrated
+	test-dehydrated
 
 images: \
 	base \
@@ -102,13 +102,13 @@ test-lego: controller
 	# Stop containers
 	docker stop $($@_CONTAINER)
 
-#test-dehydrated: controller
-#	# Start container
-#	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-controller /sbin/init))
-#	# Run the test
-#	docker exec -i $($@_CONTAINER) /bin/sh < test/test-dehydrated.sh
-#	# Stop containers
-#	docker stop $($@_CONTAINER)
+test-dehydrated: controller
+	# Start container
+	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-controller /sbin/init))
+	# Run the test
+	docker exec -i $($@_CONTAINER) /bin/sh < test/test-dehydrated.sh
+	# Stop containers
+	docker stop $($@_CONTAINER)
 
 base/context:
 	mkdir base/context
