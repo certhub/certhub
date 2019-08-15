@@ -1,6 +1,6 @@
 language: shell
 
-dist: xenial
+dist: bionic
 sudo: false
 
 stages:
