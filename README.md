@@ -1,7 +1,7 @@
 # certhub - Centralized certificate management the unix way
 
-A collection of scripts and systemd units which make it easy to setup
-centralized TLS certificate management optionally with git as backend.
+A collection of scripts, systemd units and docker images which make it easy to
+setup centralized TLS certificate management with git as a backend.
 
 [![Build Status](https://travis-ci.org/certhub/certhub.svg?branch=master)](https://travis-ci.org/certhub/certhub)
 
@@ -16,6 +16,10 @@ In order to use the systemd units, `git` and [git-gau] is required.
 ## DOCS AND MANPAGES
 
 * https://certhub.readthedocs.io/
+
+## DOCKER IMAGES
+
+* https://hub.docker.com/r/certhub/certhub
 
 ## INSTALL
 

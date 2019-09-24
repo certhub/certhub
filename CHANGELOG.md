@@ -4,9 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.0.0] - 2019-09-24
+
 ### Changed
-- ...
+- Various docs and CI updates, no functional changes
 
 ## [1.0.0-beta9] - 2019-07-13
 
@@ -64,7 +65,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release.
 
-[Unreleased]: https://github.com/certhub/certhub/compare/v1.0.0-beta9...HEAD
+[Unreleased]: https://github.com/certhub/certhub/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/certhub/certhub/compare/v1.0.0-beta9...v1.0.0
 [1.0.0-beta9]: https://github.com/certhub/certhub/compare/v1.0.0-beta8...v1.0.0-beta9
 [1.0.0-beta8]: https://github.com/certhub/certhub/compare/v1.0.0-beta7...v1.0.0-beta8
 [1.0.0-beta7]: https://github.com/certhub/certhub/compare/v1.0.0-beta6...v1.0.0-beta7
