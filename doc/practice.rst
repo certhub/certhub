@@ -6,3 +6,4 @@ Best Practice
    :caption: Contents:
 
    practice/dns
+   practice/internal
