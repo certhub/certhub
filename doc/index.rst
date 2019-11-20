@@ -11,6 +11,7 @@ Welcome to Certhub's documentation!
    systemd
    gitlabci
    man
+   practice
 
 
 
