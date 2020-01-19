@@ -5,5 +5,6 @@ Best Practice
    :maxdepth: 2
    :caption: Contents:
 
+   practice/keygen
    practice/dns
    practice/internal
