@@ -124,7 +124,7 @@ In order to setup a new *Controller* node, the following steps are required.
 For production deployments it is recommended to use a configuration management
 system.
 
-On the *TLS Server* node:
+On the *Controller* node:
 
 1. Install required software including certhub and its dependencies. Also
    install one of the supported *ACME client*.
