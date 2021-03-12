@@ -1,7 +1,7 @@
+---
+os: linux
+dist: focal
 language: shell
-
-dist: bionic
-sudo: false
 
 stages:
   - "Lint"
