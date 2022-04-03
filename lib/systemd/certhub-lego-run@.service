@@ -14,7 +14,5 @@ ExecStart=/usr/bin/env \
     lego $CERTHUB_LEGO_CHALLENGE_ARGS $CERTHUB_LEGO_ARGS
 
 SyslogIdentifier=certhub-lego-run
-StandardOutput=syslog
-StandardError=syslog
 
 PrivateTmp=true

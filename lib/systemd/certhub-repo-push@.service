@@ -9,7 +9,5 @@ ExecStart=/usr/bin/env \
     git --git-dir=${CERTHUB_REPO} push $CERTHUB_REPO_PUSH_ARGS ${CERTHUB_REPO_PUSH_REMOTE} $CERTHUB_REPO_PUSH_REFSPEC
 
 SyslogIdentifier=certhub-repo-push
-StandardOutput=syslog
-StandardError=syslog
 
 PrivateTmp=true

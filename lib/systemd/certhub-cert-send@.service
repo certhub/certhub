@@ -9,5 +9,3 @@ ExecStart=/usr/bin/env \
     certhub-send-file ${CERTHUB_CERT_SEND_SRC} $CERTHUB_CERT_SEND_COMMAND
 
 SyslogIdentifier=certhub-cert-send
-StandardOutput=syslog
-StandardError=syslog

@@ -10,7 +10,5 @@ ExecStart=/usr/bin/env \
     rsync $CERTHUB_CERT_EXPORT_RSYNC_ARGS ${CERTHUB_CERT_EXPORT_SRC} ${CERTHUB_CERT_EXPORT_DEST}
 
 SyslogIdentifier=certhub-cert-export
-StandardOutput=syslog
-StandardError=syslog
 
 PrivateTmp=true

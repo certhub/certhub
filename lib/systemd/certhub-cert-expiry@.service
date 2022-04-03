@@ -14,7 +14,5 @@ ExecStart=/usr/bin/env \
     echo ${CERTHUB_CERT_EXPIRY_MESSAGE}
 
 SyslogIdentifier=certhub-cert-expiry
-StandardOutput=syslog
-StandardError=syslog
 
 PrivateTmp=true
