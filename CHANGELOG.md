@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2022-04-03
+
+## Added
+- feat(lego): Add option to specify preferred chain (#64)
+
+## Changed
+- fix(systemd): Remove superflous systemd directive (#67)
+- feat(bin): Replace xargs by command shell built-in (#68)
+- chore(ci): Update lego to 4.6.0 (#66)
+- fix(ci): Install python cryptography from apt sources, use focal (#65)
+- chore(docs): Correct mistake in overview.rst. (#58)
+- feat(ci): Update go-acem/lego (3.3.0) (#56)
+- chore(docs): More details on TLS keys and CSR (#57)
+- chore(docs): Wildcard certificates for internal purposes (#55)
+- chore(docs): Add DNS-01 best practice section (#54)
+
 ## [1.0.0] - 2019-09-24
 
 ### Changed
@@ -65,7 +81,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release.
 
-[Unreleased]: https://github.com/certhub/certhub/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/certhub/certhub/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/certhub/certhub/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/certhub/certhub/compare/v1.0.0-beta9...v1.0.0
 [1.0.0-beta9]: https://github.com/certhub/certhub/compare/v1.0.0-beta8...v1.0.0-beta9
 [1.0.0-beta8]: https://github.com/certhub/certhub/compare/v1.0.0-beta7...v1.0.0-beta8
