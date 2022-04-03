@@ -1,6 +1,6 @@
 language: shell
 
-dist: bionic
+dist: focal
 sudo: false
 
 stages:
@@ -25,6 +25,7 @@ jobs:
             - python3-pip
             - python3-setuptools
             - python3-wheel
+            - python3-cryptography
       before_script:
         - pip3 install --user -r test/requirements.txt
       script:
