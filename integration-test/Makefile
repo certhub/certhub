@@ -36,6 +36,7 @@ all: \
 	test-repo-push \
 	test-certbot \
 	test-lego \
+	test-lego-alternate-chain \
 	test-dehydrated
 
 images: \
@@ -102,6 +103,14 @@ test-lego: controller
 	# Stop containers
 	docker stop $($@_CONTAINER)
 
+test-lego-alternate-chain: controller
+	# Start containers
+	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-controller /sbin/init))
+	# Run the test
+	docker exec -i $($@_CONTAINER) /bin/sh < test/test-lego-alternate-chain.sh
+	# Stop containers
+	docker stop $($@_CONTAINER)
+
 test-dehydrated: controller
 	# Start container
 	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-controller /sbin/init))
@@ -142,7 +151,8 @@ controller/context: node/context
 	envsubst < controller/context/etc/certbot-test.csr.cnf.in > controller/context/etc/certbot-test.csr.cnf
 	envsubst < controller/context/etc/certhub-certbot-run.env.in > controller/context/etc/certhub-certbot-run.env
 	envsubst < controller/context/etc/certhub-dehydrated-run.env.in > controller/context/etc/certhub-dehydrated-run.env
-	envsubst < controller/context/etc/certhub-lego-run.env.in > controller/context/etc/certhub-lego-run.env
+	envsubst < controller/context/etc/lego-test.certhub-lego-run.env.in > controller/context/etc/lego-test.certhub-lego-run.env
+	envsubst < controller/context/etc/lego-test-alternate-chain.certhub-lego-run.env.in > controller/context/etc/lego-test-alternate-chain.certhub-lego-run.env
 	openssl req -new \
 	    -config controller/context/etc/certbot-test.csr.cnf \
 	    -key node/context/key.pem \
@@ -157,6 +167,11 @@ controller/context: node/context
 	    -config controller/context/etc/lego-test.csr.cnf \
 	    -key node/context/key.pem \
 	    -out controller/context/etc/lego-test.csr.pem
+	envsubst < controller/context/etc/lego-test-alternate-chain.csr.cnf.in > controller/context/etc/lego-test-alternate-chain.csr.cnf
+	openssl req -new \
+	    -config controller/context/etc/lego-test-alternate-chain.csr.cnf \
+	    -key node/context/key.pem \
+	    -out controller/context/etc/lego-test-alternate-chain.csr.pem
 
 controller: base controller/context
 	docker build -t certhub-integration-controller --build-arg=WITH_TOR=$(with_tor) controller
@@ -173,4 +188,5 @@ controller: base controller/context
 	test-repo-push \
 	test-certbot \
 	test-dehydrated \
-	test-lego
+	test-lego \
+	test-lego-alternate-chain
