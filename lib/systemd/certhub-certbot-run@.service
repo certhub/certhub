@@ -15,7 +15,5 @@ ExecStart=/usr/bin/env \
     certbot $CERTHUB_CERTBOT_ARGS --config $CERTHUB_CERTBOT_CONFIG
 
 SyslogIdentifier=certhub-certbot-run
-StandardOutput=syslog
-StandardError=syslog
 
 PrivateTmp=true

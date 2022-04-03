@@ -9,5 +9,3 @@ ExecStart=/usr/bin/env \
     systemctl ${CERTHUB_CERT_RELOAD_COMMAND} {}
 
 SyslogIdentifier=certhub-cert-reload
-StandardOutput=syslog
-StandardError=syslog

@@ -15,7 +15,5 @@ ExecStart=/usr/bin/env \
     dehydrated $CERTHUB_DEHYDRATED_ARGS --config $CERTHUB_DEHYDRATED_CONFIG
 
 SyslogIdentifier=certhub-dehydrated-run
-StandardOutput=syslog
-StandardError=syslog
 
 PrivateTmp=true
