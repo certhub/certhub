@@ -45,6 +45,16 @@ Environment
 
    Additional Arguments for :program:`lego --csr` run. Empty by default.
 
+.. envvar:: CERTHUB_LEGO_PREFERRED_CHAIN
+
+   Set the preferred certificate chain. If the CA offers multiple certificate
+   chains, prefer the chain whose topmost certificate was issued from this
+   Subject Common Name. If no match, the default offered chain will be used.
+   Empty by default.
+
+   Specify ``CERTHUB_LEGO_PREFERRED_CHAIN=ISRG Root X1`` in one of the envfiles
+   listed in the next section to use the alternate/short Let's Encrypt chain.
+
 .. envvar:: CERTHUB_LEGO_CHALLENGE_ARGS
 
    Use this environment variable to select a challenge method. Empty by

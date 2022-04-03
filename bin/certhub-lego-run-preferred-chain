@@ -1,0 +1,54 @@
+#!/bin/sh
+#
+# certhub-lego-run - Runs lego command once
+
+set -e
+set -u
+
+# Required binaries
+BASENAME=/usr/bin/basename
+ECHO=/bin/echo
+MKDIR=/bin/mkdir
+MKTEMP=/bin/mktemp
+MV=/bin/mv
+RM=/bin/rm
+
+# Print usage message and exit.
+usage() {
+    ${ECHO} "${0}: preferred-chain cert-output-file csr-input-file lego-dir lego [lego run args...]"
+    return 1
+}
+
+certhub_lego_run_preferred_chain() {
+    PREFERRED_CHAIN="${1}"
+    FC_PATH="${2}"
+    CSR_PATH="${3}"
+
+    # Setup temp dir inside lego directory for new certificate.
+    LEGO_DIR="${4}"
+    ${MKDIR} -p "${LEGO_DIR}/certificates"
+    WORKDIR=$(${MKTEMP} -d -p "${LEGO_DIR}/certificates")
+    cleanup() {
+        ${RM} -rf "${WORKDIR}"
+    }
+    trap cleanup EXIT
+
+    OUTFILEABS="${WORKDIR}/fullchain.crt"
+    OUTFILEBASE=$(${BASENAME} "${WORKDIR}")/fullchain
+    shift 4
+
+    command "${@}" \
+        --csr "${CSR_PATH}" \
+        --filename "${OUTFILEBASE}" \
+        --path "${LEGO_DIR}" \
+        run \
+        --preferred-chain "${PREFERRED_CHAIN}"
+
+    ${MV} "${OUTFILEABS}" "${FC_PATH}"
+}
+
+if [ "${#}" -gt 4 ] && [ "${1:-}" != "-h" ] && [ "${1:-}" != "--help" ]; then
+    certhub_lego_run_preferred_chain "${@}"
+else
+    usage
+fi
