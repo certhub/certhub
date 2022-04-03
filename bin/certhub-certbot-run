@@ -10,7 +10,6 @@ ECHO=/bin/echo
 MKTEMP=/bin/mktemp
 MV=/bin/mv
 RM=/bin/rm
-XARGS=/usr/bin/xargs
 
 # Print usage message and exit.
 usage() {
@@ -24,11 +23,11 @@ certhub_certbot_run() {
     CSR_PATH="${3}"
     shift 3
 
-    ${ECHO} certonly \
+    command "${@}" certonly \
         --csr "${CSR_PATH}" \
         --cert-path "${WORKDIR}/cert.pem" \
         --chain-path "${WORKDIR}/chain.pem" \
-        --fullchain-path "${WORKDIR}/fullchain.pem" | ${XARGS} "${@}"
+        --fullchain-path "${WORKDIR}/fullchain.pem"
 
     ${MV} "${WORKDIR}/fullchain.pem" "${FC_PATH}"
 }

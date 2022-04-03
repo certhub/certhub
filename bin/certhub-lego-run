@@ -12,7 +12,6 @@ MKDIR=/bin/mkdir
 MKTEMP=/bin/mktemp
 MV=/bin/mv
 RM=/bin/rm
-XARGS=/usr/bin/xargs
 
 # Print usage message and exit.
 usage() {
@@ -37,11 +36,11 @@ certhub_lego_run() {
     OUTFILEBASE=$(${BASENAME} "${WORKDIR}")/fullchain
     shift 3
 
-    ${ECHO} \
+    command "${@}" \
         --csr "${CSR_PATH}" \
         --filename "${OUTFILEBASE}" \
         --path "${LEGO_DIR}" \
-        run | ${XARGS} "${@}"
+        run
 
     ${MV} "${OUTFILEABS}" "${FC_PATH}"
 }
