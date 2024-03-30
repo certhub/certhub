@@ -1,16 +1,16 @@
 FROM certhub-integration-base
 
-RUN yum install -y epel-release
+RUN dnf install -y epel-release
 
-RUN yum install -y \
+RUN dnf install -y \
     certbot \
     libfaketime \
     python-dns-lexicon
 
-RUN yum install -y --enablerepo=epel-testing dehydrated
+RUN dnf install -y --enablerepo=epel-testing dehydrated
 
 ARG WITH_TOR=0
-RUN [ $WITH_TOR -eq 0 ] || yum -y install tor
+RUN [ $WITH_TOR -eq 0 ] || dnf -y install tor
 RUN [ $WITH_TOR -eq 0 ] || systemctl enable tor
 
 # Note: tor fails to start up if any of the directories specified in its

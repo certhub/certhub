@@ -1,0 +1,17 @@
+---
+name: Run Tests (Pull Request)
+
+# yamllint disable-line rule:truthy
+on:
+  pull_request:
+
+jobs:
+  lint:
+    uses: ./.github/workflows/do-lint.yml
+
+  unit-test:
+    uses: ./.github/workflows/do-unit-test.yml
+
+  integration-test:
+    uses: ./.github/workflows/do-integration-test.yml
+    secrets: inherit

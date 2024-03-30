@@ -1,0 +1,43 @@
+---
+name: Run integration tests
+
+# yamllint disable-line rule:truthy
+on:
+  workflow_call:
+    secrets:
+      LEXICON_DIGITALOCEAN_TOKEN:
+        required: true
+
+jobs:
+  integration-test:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install python3-sphinx python3-sphinx-rtd-theme python3-sphinxcontrib.plantuml
+
+      - name: Workaround https://github.com/actions/runner-images/issues/7753
+        shell: bash
+        run: |
+          curl -O http://archive.ubuntu.com/ubuntu/pool/universe/g/golang-github-containernetworking-plugins/containernetworking-plugins_1.1.1+ds1-3_amd64.deb
+          sudo dpkg -i containernetworking-plugins_1.1.1+ds1-3_amd64.deb
+          rm --force containernetworking-plugins_1.1.1+ds1-3_amd64.deb
+
+      - name: Build dist tarball
+        run: |
+          make dist
+
+      - name: Run integration tests
+        env:
+          LEXICON_DIGITALOCEAN_TOKEN: "${{ secrets.LEXICON_DIGITALOCEAN_TOKEN }}"
+        run: |
+          make -C integration-test images
+          make -C integration-test all

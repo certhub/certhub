@@ -7,7 +7,10 @@ set -x
 STATUS=1
 
 # Scan peer fingerprints.
-ssh-keyscan node > /etc/ssh/ssh_known_hosts
+for delay in 1 2 3 4 5; do
+    ssh-keyscan node > /etc/ssh/ssh_known_hosts && break
+    sleep $delay
+done
 
 cat <<EOF | /bin/su -s /bin/sh - certhub
 /usr/bin/env \

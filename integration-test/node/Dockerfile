@@ -1,6 +1,6 @@
 FROM certhub-integration-base
 
-RUN yum install -y httpd
+RUN dnf install -y httpd
 RUN systemctl enable httpd
 
 RUN mkdir -p /var/lib/certhub/certs && \
