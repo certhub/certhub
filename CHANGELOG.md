@@ -4,12 +4,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.0] - 2022-04-03
+## [1.2.0] - 2024-03-30
 
 ## Added
-- feat(lego): Add option to specify preferred chain (#64)
+- fix(systemd): Remove certhub-cert-expiry@.path unit (#75)
+- fix(systemd): Cleanup expiry status after renew (#73)
 
 ## Changed
+- chore(docs): Ensure that plantuml is available (#80)
+- chore(ci): Update outdated github action (#79)
+- chore(docs): Correct year and rtd theme (#78)
+- chore(docs): Correct paths in rtd config (#77)
+- chore(docs): Migrate config to rtd v2 (#76)
+- chore(ci):  Migrate ci to gh actions (#74)
+
+## [1.1.0] - 2022-04-03
+
+### Added
+- feat(lego): Add option to specify preferred chain (#64)
+
+### Changed
 - fix(systemd): Remove superflous systemd directive (#67)
 - feat(bin): Replace xargs by command shell built-in (#68)
 - chore(ci): Update lego to 4.6.0 (#66)
@@ -81,7 +95,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release.
 
-[Unreleased]: https://github.com/certhub/certhub/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/certhub/certhub/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/certhub/certhub/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/certhub/certhub/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/certhub/certhub/compare/v1.0.0-beta9...v1.0.0
 [1.0.0-beta9]: https://github.com/certhub/certhub/compare/v1.0.0-beta8...v1.0.0-beta9
