@@ -4,6 +4,8 @@ name: Run Tests (Push)
 # yamllint disable-line rule:truthy
 on:
   push:
+    branches:
+      - main
 
 jobs:
   lint:
