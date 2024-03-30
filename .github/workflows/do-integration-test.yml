@@ -37,4 +37,6 @@ jobs:
           make -C integration-test images
 
       - name: Run integration tests
+        env:
+          LEXICON_DIGITALOCEAN_TOKEN: "${{ secrets.LEXICON_DIGITALOCEAN_TOKEN }}"
         run: make -C integration-test all
