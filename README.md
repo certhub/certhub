@@ -3,7 +3,7 @@
 A collection of scripts, systemd units and docker images which make it easy to
 setup centralized TLS certificate management with git as a backend.
 
-[![Build Status](https://travis-ci.org/certhub/certhub.svg?branch=master)](https://travis-ci.org/certhub/certhub)
+[![Build Status](https://github.com/certhub/certhub/actions/workflows/on-push.yml/badge.svg)](https://github.com/certhub/certhub/actions/workflows/on-push.yml)
 
 ## DEPENDENCIES
 
