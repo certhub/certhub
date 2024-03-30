@@ -1,18 +1,18 @@
-FROM centos:7
+FROM quay.io/centos/centos:stream9
 
 ENV container docker
 
 # Install git, openssl and ssh (yes, really. This is an integration test not a
 # production container).
-RUN yum install -y git openssl openssh-server
+RUN dnf install -y diffutils git openssl openssh-server rsync
 RUN systemctl enable sshd
 
 # Install git-gau and certhub
-COPY context/git-gau-dist.tar.gz context/certhub-dist.tar.gz context/lego_v4.6.0_linux_amd64.tar.gz /root/
+COPY context/git-gau-dist.tar.gz context/certhub-dist.tar.gz context/lego_v4.16.1_linux_amd64.tar.gz /root/
 RUN \
     tar -C /usr/local -xf /root/git-gau-dist.tar.gz && \
     tar -C /usr/local -xf /root/certhub-dist.tar.gz && \
-    tar -C /usr/local/bin -xf /root/lego_v4.6.0_linux_amd64.tar.gz lego && \
+    tar -C /usr/local/bin -xf /root/lego_v4.16.1_linux_amd64.tar.gz lego && \
     chmod +x /usr/local/bin/lego
 
 # Setup configuration directory

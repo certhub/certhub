@@ -47,90 +47,93 @@ images: \
 
 test-cert-expiry: controller
 	# Start containers
-	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-controller /sbin/init))
+	$(eval $@_CONTAINER := $(shell podman run $(dockerargs) -d certhub-integration-controller /sbin/init))
 	# Run the test
-	docker exec -i $($@_CONTAINER) /bin/sh < test/cert-expiry-test.sh
+	podman exec -i $($@_CONTAINER) /bin/sh < test/cert-expiry-test.sh
 	# Stop containers
-	docker stop $($@_CONTAINER)
+	podman stop $($@_CONTAINER)
 
 test-cert-export: node
 	# Start containers
-	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-node /sbin/init))
+	$(eval $@_CONTAINER := $(shell podman run $(dockerargs) -d certhub-integration-node /sbin/init))
 	# Run the test
-	docker exec -i $($@_CONTAINER) /bin/sh < test/cert-export-test.sh
+	podman exec -i $($@_CONTAINER) /bin/sh < test/cert-export-test.sh
 	# Stop containers
-	docker stop $($@_CONTAINER)
+	podman stop $($@_CONTAINER)
 
 test-cert-reload: node
 	# Start containers
-	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-node /sbin/init))
+	$(eval $@_CONTAINER := $(shell podman run $(dockerargs) -d certhub-integration-node /sbin/init))
 	# Run the test
-	docker exec -i $($@_CONTAINER) /bin/sh < test/cert-reload-test.sh
+	podman exec -i $($@_CONTAINER) /bin/sh < test/cert-reload-test.sh
 	# Stop containers
-	docker stop $($@_CONTAINER)
+	podman stop $($@_CONTAINER)
 
 test-cert-send: node
 	# Start containers
-	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-node /sbin/init))
+	$(eval $@_CONTAINER := $(shell podman run $(dockerargs) -d certhub-integration-node /sbin/init))
 	# Run the test
-	docker exec -i $($@_CONTAINER) /bin/sh < test/cert-send-test.sh
+	podman exec -i $($@_CONTAINER) /bin/sh < test/cert-send-test.sh
 	# Stop containers
-	docker stop $($@_CONTAINER)
+	podman stop $($@_CONTAINER)
 
 test-repo-push: controller node
+	# Create network
+	$(eval $@_IGNORED := $(shell podman network create test-repo-push-$(hostsfx)))
 	# Start containers
-	$(eval $@_NODE := $(shell docker run $(dockerargs) -d certhub-integration-node /sbin/init))
-	$(eval $@_CONTROLLER := $(shell docker run $(dockerargs) --link=$($@_NODE):node -d certhub-integration-controller /sbin/init))
+	$(eval $@_NODE := $(shell podman run $(dockerargs) --net test-repo-push-$(hostsfx) --name node -d certhub-integration-node /sbin/init))
+	$(eval $@_CONTROLLER := $(shell podman run $(dockerargs) --net test-repo-push-$(hostsfx) -d certhub-integration-controller /sbin/init))
 	# Run the test
-	docker exec -i $($@_CONTROLLER) /bin/sh < test/repo-push-test.sh
-	docker exec -i $($@_NODE) /bin/sh < test/repo-push-verify.sh
+	podman exec -i $($@_CONTROLLER) /bin/sh < test/repo-push-test.sh
+	podman exec -i $($@_NODE) /bin/sh < test/repo-push-verify.sh
 	# Stop containers
-	docker stop $($@_CONTROLLER)
-	docker stop $($@_NODE)
+	podman stop $($@_CONTROLLER)
+	podman stop $($@_NODE)
+	podman network rm test-repo-push-$(hostsfx)
 
 test-certbot: controller
 	# Start containers
-	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-controller /sbin/init))
+	$(eval $@_CONTAINER := $(shell podman run $(dockerargs) -d certhub-integration-controller /sbin/init))
 	# Run the test
-	docker exec -i $($@_CONTAINER) /bin/sh < test/test-certbot.sh
+	podman exec -i $($@_CONTAINER) /bin/sh < test/test-certbot.sh
 	# Stop containers
-	docker stop $($@_CONTAINER)
+	podman stop $($@_CONTAINER)
 
 test-lego: controller
 	# Start containers
-	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-controller /sbin/init))
+	$(eval $@_CONTAINER := $(shell podman run $(dockerargs) -d certhub-integration-controller /sbin/init))
 	# Run the test
-	docker exec -i $($@_CONTAINER) /bin/sh < test/test-lego.sh
+	podman exec -i $($@_CONTAINER) /bin/sh < test/test-lego.sh
 	# Stop containers
-	docker stop $($@_CONTAINER)
+	podman stop $($@_CONTAINER)
 
 test-lego-alternate-chain: controller
 	# Start containers
-	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-controller /sbin/init))
+	$(eval $@_CONTAINER := $(shell podman run $(dockerargs) -d certhub-integration-controller /sbin/init))
 	# Run the test
-	docker exec -i $($@_CONTAINER) /bin/sh < test/test-lego-alternate-chain.sh
+	podman exec -i $($@_CONTAINER) /bin/sh < test/test-lego-alternate-chain.sh
 	# Stop containers
-	docker stop $($@_CONTAINER)
+	podman stop $($@_CONTAINER)
 
 test-dehydrated: controller
 	# Start container
-	$(eval $@_CONTAINER := $(shell docker run $(dockerargs) -d certhub-integration-controller /sbin/init))
+	$(eval $@_CONTAINER := $(shell podman run $(dockerargs) -d certhub-integration-controller /sbin/init))
 	# Run the test
-	docker exec -i $($@_CONTAINER) /bin/sh < test/test-dehydrated.sh
+	podman exec -i $($@_CONTAINER) /bin/sh < test/test-dehydrated.sh
 	# Stop containers
-	docker stop $($@_CONTAINER)
+	podman stop $($@_CONTAINER)
 
 base/context:
 	mkdir base/context
 	mkdir -m 0700 base/context/.ssh
 	cp ../dist/certhub-dist.tar.gz base/context/certhub-dist.tar.gz
 	curl -f -L -o base/context/git-gau-dist.tar.gz 'https://github.com/znerol/git-gau/releases/download/v1.1.0/git-gau-dist.tar.gz'
-	curl -f -L -o base/context/lego_v4.6.0_linux_amd64.tar.gz 'https://github.com/go-acme/lego/releases/download/v4.6.0/lego_v4.6.0_linux_amd64.tar.gz'
-	ssh-keygen -b 1024 -t rsa -f base/context/.ssh/id_rsa -q -N "" -C "Bogus key for CI only. Never use in production"
-	cp base/context/.ssh/id_rsa.pub base/context/.ssh/authorized_keys
+	curl -f -L -o base/context/lego_v4.16.1_linux_amd64.tar.gz 'https://github.com/go-acme/lego/releases/download/v4.16.1/lego_v4.16.1_linux_amd64.tar.gz'
+	ssh-keygen -t ed25519 -f base/context/.ssh/id_ed25519 -q -N "" -C "Bogus key for CI only. Never use in production"
+	cp base/context/.ssh/id_ed25519.pub base/context/.ssh/authorized_keys
 
 base: base/context
-	docker build -t certhub-integration-base base
+	podman build -t certhub-integration-base base
 
 node/context:
 	mkdir node/context
@@ -139,7 +142,7 @@ node/context:
 	    -out node/context/key.pem
 
 node: base node/context
-	docker build -t certhub-integration-node node
+	podman build -t certhub-integration-node node
 
 controller/context: node/context
 	# home
@@ -175,7 +178,7 @@ controller/context: node/context
 	    -out controller/context/etc/lego-test-alternate-chain.csr.pem
 
 controller: base controller/context
-	docker build -t certhub-integration-controller --build-arg=WITH_TOR=$(with_tor) controller
+	podman build -t certhub-integration-controller --build-arg=WITH_TOR=$(with_tor) controller
 
 .PHONY: \
 	all \
