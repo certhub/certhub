@@ -415,7 +415,6 @@ Shell:
 .. code-block:: shell
 
     $ export DOMAIN=tls-server.example.com
-    $ sudo systemctl enable --now "certhub-cert-expiry@${DOMAIN}.path"
     $ sudo systemctl enable --now "certhub-cert-expiry@${DOMAIN}.timer"
     $ sudo systemctl enable --now "certhub-certbot-run@${DOMAIN}.path"
 
@@ -425,7 +424,6 @@ Ansible:
 
     - name: Path and timer units enabled and started
       loop:
-        - "certhub-cert-expiry@{{ DOMAIN }}.path"
         - "certhub-cert-expiry@{{ DOMAIN }}.timer"
         - "certhub-certbot-run@{{ DOMAIN }}.path"
       systemd:
