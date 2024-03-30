@@ -1,5 +1,5 @@
 ---
-name: Publish Rolling Image (Push develop)
+name: Run Tests (Push)
 
 # yamllint disable-line rule:truthy
 on:
@@ -11,3 +11,7 @@ jobs:
 
   unit-test:
     uses: ./.github/workflows/do-unit-test.yml
+
+  integration-test:
+    uses: ./.github/workflows/do-integration-test.yml
+    secrets: inherit

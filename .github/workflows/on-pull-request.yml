@@ -1,5 +1,5 @@
 ---
-name: Integration Tests (Pull Request)
+name: Run Tests (Pull Request)
 
 # yamllint disable-line rule:truthy
 on:
@@ -11,3 +11,7 @@ jobs:
 
   unit-test:
     uses: ./.github/workflows/do-unit-test.yml
+
+  integration-test:
+    uses: ./.github/workflows/do-integration-test.yml
+    secrets: inherit

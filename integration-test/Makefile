@@ -8,20 +8,21 @@ endif
 export hostsfx
 
 ifeq ($(testenv),)
-    ifeq ($(TRAVIS),)
+    ifeq ($(CI),)
         testenv := local
     else
-        testenv := travis
+        testenv := github
     endif
 endif
 
-ifeq ($(with_tor),)
-    ifeq ($(TRAVIS),)
-        with_tor := 0
-    else
-        with_tor := 1
-    endif
-endif
+# ifeq ($(with_tor),)
+#     ifeq ($(CI),)
+#         with_tor := 0
+#     else
+#         with_tor := 1
+#     endif
+# endif
+with_tor := 0
 
 ifneq ($(with_tor),0)
     export DEHYDRATED_CURL_OPTS=-x socks5h://127.0.0.1:9050/ --retry 3 --connect-timeout 180

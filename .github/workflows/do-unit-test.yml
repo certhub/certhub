@@ -6,7 +6,7 @@ on:
   workflow_call:
 
 jobs:
-  integration-test:
+  unit-test:
     runs-on: ubuntu-latest
 
     permissions:
