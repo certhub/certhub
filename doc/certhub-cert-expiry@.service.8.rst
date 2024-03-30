@@ -6,8 +6,6 @@ Synopsis
 
 **certhub-cert-expiry@.service**
 
-**certhub-cert-expiry@.path**
-
 **certhub-cert-expiry@.timer**
 
 
@@ -17,9 +15,6 @@ Description
 A service which checks validity of a certificate read from the repository.
 Formats a message and writes it to a status file if the respective certificate
 is about to expire.
-
-A path unit which runs the service unit whenever the master branch of the
-local certhub repository is updated.
 
 A timer unit which runs the service twice daily.
 

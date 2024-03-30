@@ -1,5 +1,0 @@
-[Unit]
-Description=Trigger check for certificates which are about to expire when repo changed
-
-[Install]
-WantedBy=paths.target
