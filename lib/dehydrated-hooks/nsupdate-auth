@@ -6,6 +6,7 @@ set -e
 set -u
 
 # Required binaries
+DIG=/usr/bin/dig
 ECHO=/bin/echo
 MKTEMP=/bin/mktemp
 NSUPDATE=/usr/bin/nsupdate
@@ -24,6 +25,18 @@ _nsupdate() {
     ${ECHO} "ttl ${TTL}" >> "${NSUPDATE_SCRIPT}"
 
     DOMAIN=${CERTHUB_NSUPDATE_DOMAIN:-_acme-challenge.${2}}
+
+    # Follow CNAME records.
+    CNAME_DEPTH=${CERTHUB_NSUPDATE_CNAME_MAXDEPTH:-0}
+    while [ "${CNAME_DEPTH}" -gt 0 ]; do
+        CNAME_DEPTH=$((CNAME_DEPTH - 1))
+        CANONICAL=$(${DIG} +short -tCNAME "${DOMAIN}")
+        if [ -n "${CANONICAL}" ]; then
+            DOMAIN=${CANONICAL}
+        else
+            break
+        fi
+    done
 
     ${ECHO} "update ${ACTION} ${DOMAIN} IN TXT \"${4}\"" >> "${NSUPDATE_SCRIPT}"
     ${ECHO} "send" >> "${NSUPDATE_SCRIPT}"
