@@ -37,8 +37,7 @@ all: \
 	test-repo-push \
 	test-certbot \
 	test-lego \
-	test-lego-alternate-chain \
-	test-dehydrated
+	test-lego-alternate-chain
 
 images: \
 	base \
