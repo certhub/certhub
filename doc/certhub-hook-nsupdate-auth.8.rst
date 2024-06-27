@@ -45,6 +45,13 @@ Environment
    _acme-challenge names from the real domain to a separate zone purpose built
    for challange validation.
 
+.. envvar:: CERTHUB_NSUPDATE_CNAME_MAXDEPTH
+
+   Follow ``CNAME`` records at maximum this many times after the domain to use
+   for the challenge is determined. Customizing this setting makes sense, e.g.
+   when using ``CNAME`` records to redirect _acme-challenge names from the real
+   domain to a separate zone purpose built for challange validation. Defaults
+   to 0.
 
 See Also
 --------
