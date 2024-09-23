@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2024-09-23
+
+## Added
+- feat(docs): Deprecate dehydrated integration (#91)
+- feat(hooks) Follow CNAME records in nsupdate hook (#84)
+
+## Changed
+- fix(ci): Remove deprecated certbot option (#87)
+- fix(ci): Remove workaround for buggy CNI plugin (#89)
+- fix(ci): Replace rsa with ec in unit tests (#88)
+- chore(ci): Disable dehydrated tests (#86)
+
 ## [1.2.0] - 2024-03-30
 
 ## Added
@@ -95,7 +107,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release.
 
-[Unreleased]: https://github.com/certhub/certhub/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/certhub/certhub/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/certhub/certhub/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/certhub/certhub/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/certhub/certhub/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/certhub/certhub/compare/v1.0.0-beta9...v1.0.0
