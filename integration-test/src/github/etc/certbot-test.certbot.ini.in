@@ -1,6 +1,5 @@
 server=https://acme-staging-v02.api.letsencrypt.org/directory
 manual=true
-manual-public-ip-logging-ok=true
 manual-auth-hook=/usr/local/lib/certhub/certbot-hooks/lexicon-auth
 manual-cleanup-hook=/usr/local/lib/certhub/certbot-hooks/lexicon-cleanup
 preferred-challenges=dns-01
