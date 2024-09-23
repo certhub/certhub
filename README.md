@@ -8,8 +8,8 @@ setup centralized TLS certificate management with git as a backend.
 ## DEPENDENCIES
 
 The executables provided by certhub only depend on `openssl` and any of the
-following supported ACME clients: [Certbot], [Dehydrated] or [Lego].  Certhub
-includes DNS-01 challenge hooks for `nsupdate` and [Lexicon].
+following supported ACME clients: [Certbot] or [Lego].  Certhub includes DNS-01
+challenge hooks for `nsupdate` and [Lexicon].
 
 In order to use the systemd units, `git` and [git-gau] is required.
 
@@ -50,7 +50,6 @@ variable in order to change the installation prefix to something else than
 step can be skipped by using the `install-bin` target.
 
 [Certbot]: https://certbot.eff.org/
-[Dehydrated]: https://dehydrated.io/
 [Lego]: https://github.com/go-acme/lego
 [Lexicon]: https://github.com/AnalogJ/lexicon
 [git-gau]: https://github.com/znerol/git-gau

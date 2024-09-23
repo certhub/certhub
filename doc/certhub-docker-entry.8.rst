@@ -103,8 +103,11 @@ remaining variables can be ignored in most situations.
    :envvar:`CERTHUB_CERTBOT_ACCOUNT_ID`.
 
 
-Environment (Dehydrated)
-------------------------
+Environment (Dehydrated, DEPRECATED)
+------------------------------------
+
+.. warning::
+   certhub-dehydrated-run is deprecated, please switch to another ACME client.
 
 It is recommended to specify :envvar:`CERTHUB_DEHYDRATED_ACCOUNT_KEY`,
 :envvar:`CERTHUB_DEHYDRATED_ACCOUNT_REGR` and

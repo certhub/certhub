@@ -36,6 +36,8 @@ cleanup() {
 }
 trap cleanup EXIT
 
+echo "WARNING: ${0} is deprecated, please switch to another ACME client" >&2
+
 if [ "${#}" -gt 2 ] && [ "${1:-}" != "-h" ] && [ "${1:-}" != "--help" ]; then
     certhub_dehydrated_run "${WORKDIR}" "${@}"
 else
