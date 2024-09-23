@@ -1,5 +1,5 @@
-certhub-dehydrated-run@.service
-===============================
+certhub-dehydrated-run@.service (DEPRECATED)
+============================================
 
 Synopsis
 --------
@@ -11,6 +11,9 @@ Synopsis
 
 Description
 -----------
+
+.. warning::
+   certhub-dehydrated-run is deprecated, please switch to another ACME client.
 
 A service which runs :program:`certhub-dehydrated-run` with a CSR read from the
 config directory. The resulting fullchain certificate is committed to the

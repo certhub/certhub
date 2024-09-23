@@ -1,5 +1,5 @@
-certhub-dehydrated-run
-======================
+certhub-dehydrated-run (DEPRECATED)
+===================================
 
 Synopsis
 --------
@@ -9,6 +9,9 @@ Synopsis
 
 Description
 -----------
+
+.. warning::
+   certhub-dehydrated-run is deprecated, please switch to another ACME client.
 
 Runs the given :program:`dehydrated` binary with CSR read from
 ``<input-csr-file>`` Writes the resulting certificate to the

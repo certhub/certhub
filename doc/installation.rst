@@ -5,8 +5,8 @@ Dependencies
 ------------
 
 The executables provided by certhub only depend on ``openssl`` and any of the
-following supported ACME clients: Certbot_, Dehydrated_ or Lego_. Certhub
-includes DNS-01 challenge hooks for ``nsupdate`` and Lexicon_.
+following supported ACME clients: Certbot_ or Lego_. Certhub includes DNS-01
+challenge hooks for ``nsupdate`` and Lexicon_.
 
 In order to use the systemd units, ``git`` and git-gau_ is required.
 
@@ -35,7 +35,6 @@ tarball into `/usr/local`. Note that git-gau_ can be installed in the same way.
 
 .. _releases: https://github.com/certhub/certhub/releases/
 .. _Certbot: https://certbot.eff.org/
-.. _Dehydrated: https://dehydrated.io/
 .. _Lego: https://github.com/go-acme/lego
 .. _Lexicon: https://github.com/AnalogJ/lexicon
 .. _git-gau: https://github.com/znerol/git-gau

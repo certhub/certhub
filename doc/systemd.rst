@@ -204,28 +204,6 @@ Ansible:
           logs-dir = /var/lib/certhub/private/certbot/logs
 
 
-Dehydrated Setup
-^^^^^^^^^^^^^^^^
-
-Shell:
-
-.. code-block:: shell
-
-    $ sudo -u certhub mkdir /var/lib/certhub/private/dehydrated
-
-Ansible:
-
-.. code-block:: yaml
-
-    - name: Dehydrated directory present
-      file:
-        path: /var/lib/certhub/private/dehydrated
-        state: directory
-        owner: certhub
-        group: certhub
-        mode: 0755
-
-
 Lego Setup
 ^^^^^^^^^^
 
@@ -262,11 +240,8 @@ by integration tests.
 
 Certhub ships with DNS-01 challenge hooks for ``nsupdate`` and Lexicon_. The
 hooks need to be configured using an environment file normally located in
-:envfile:`/etc/certhub/%i.certhub-certbot-run.env` and
-:envfile:`/etc/certhub/%i.certhub-dehydrated-run.env`.  An example for
+:envfile:`/etc/certhub/%i.certhub-certbot-run.env`.  An example for
 `certbot <https://github.com/certhub/certhub/tree/main/integration-test/src/github/etc/certhub-certbot-run.env.in>`__
-and
-`dehydrated <https://github.com/certhub/certhub/tree/main/integration-test/src/github/etc/certhub-dehydrated-run.env.in>`__
 configuration is part of the integration test suite. See the manpages
 :doc:`certhub-hook-lexicon-auth.8` and :doc:`certhub-hook-nsupdate-auth.8` for
 more detailed information about the involved environment variables.
@@ -374,8 +349,7 @@ ACME Client Configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Add additional configuration for the ACME client to one of the following files:
-``/etc/certhub/${DOMAIN}.certbot.ini``,
-``/etc/certhub/${DOMAIN}.dehydrated.conf`` or
+``/etc/certhub/${DOMAIN}.certbot.ini`` or
 ``/etc/certhub/${DOMAIN}.certhub-lego-run.env``. Working examples for testing
 purposes are part of certhub
 `integration tests <https://github.com/certhub/certhub/tree/main/integration-test/src/github/etc>`__

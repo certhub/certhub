@@ -6,9 +6,9 @@ System architecture
 -------------------
 
 A typical certhub deployment consists of one *Controller* node hosting the
-*ACME Client* (i.e., ``Certbot``, ``Dehydrated`` or ``Lego``) along with the
-*Principal Git Repository*. Multiple *TLS Server* nodes are used to host *TLS
-Services* such as web servers, mail servers, databases and application servers.
+*ACME Client* (i.e., ``Certbot`` or ``Lego``) along with the *Principal Git
+Repository*. Multiple *TLS Server* nodes are used to host *TLS Services* such as
+web servers, mail servers, databases and application servers.
 
 The *ACME Client* stores certificates optained from the *Certificate Authority*
 in the *Principal Git Repository*. Changes to that repo are replicated to the

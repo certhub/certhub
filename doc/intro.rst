@@ -70,8 +70,8 @@ certificates.
 Some ACME clients support an operation mode where access to the TLS private key
 is not necessary. A CSR is taken as the input and the resulting certificate is
 written to an output file. This operation can be performed without elevated
-privileges. Certhub currently supports Certbot, Dehydrated and Lego in
-unprivileged CSR mode.
+privileges. Certhub currently supports Certbot and Lego in unprivileged CSR
+mode.
 
 Note that this mode of operation simplifies centralized certificate management
 where the ACME client is only installed on one or few machines separated from

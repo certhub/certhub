@@ -83,9 +83,9 @@ steps:
 CI Pipeline Configuration
 -------------------------
 
-Use one of ``certhub/certhub:certbot`` , ``certhub/certhub:dehydrated`` or
-``certhub/certhub:lego`` as the base image depending on preference and
-integration needs. In order to simplify interaction with DNS providers,
+Use one of ``certhub/certhub:certbot`` or ``certhub/certhub:lego`` as the base
+image depending on preference and integration needs. In order to simplify
+interaction with DNS providers,
 `lexicon <https://pypi.org/project/dns-lexicon/>`__ is packaged with all images
 except for the ``lego``-one.
 
@@ -117,7 +117,6 @@ options via environment variables.
 .. code-block:: yaml
 
    image: certhub/certhub:certbot
-   #image: certhub/certhub:dehydrated
    #image: certhub/certhub:lego
 
    variables:
@@ -190,15 +189,6 @@ This section needs work. Please refer to the
 on gitlab.com and :doc:`certhub-docker-entry.8`.
 
 
-
-CI Pipeline Dehydrated
-----------------------
-
-This section needs work. Please refer to the
-`dehydrated example <https://gitlab.com/certhub-gitlab-demo/dehydrated/blob/master/.gitlab-ci.yml>`__
-on gitlab.com and :doc:`certhub-docker-entry.8`.
-
-
 CI Pipeline Lego
 ----------------
 
@@ -219,7 +209,7 @@ In order to setup a new certificate follow these steps:
    basename, this will be used as the value of the ``CERT_SLUG`` variable in
    subsequent steps.
 3. Add acme client specific configuration files to the repository if necessary,
-   (e.g., ``$CERT_SLUG.certbot.ini`` or ``$CERT_SLUG.dehydrated.conf``).
+   (e.g., ``$CERT_SLUG.certbot.ini``).
 4. Run the CI pipeline once manually, set the variable ``CERT_SLUG`` in the GUI:
 
    .. image:: imgs/gitlabci-41-run-pipeline.png
