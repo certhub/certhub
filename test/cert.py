@@ -9,14 +9,10 @@ from cryptography import x509
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives import serialization
-from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.hazmat.primitives.asymmetric import ec
 
-def genkey(bits=512):
-    return rsa.generate_private_key(
-        public_exponent=65537,
-        key_size=bits,
-        backend=default_backend()
-    )
+def genkey():
+    return ec.generate_private_key(ec.SECP256R1())
 
 def keywrite(key, path):
     with open(path, "wb") as stream:
