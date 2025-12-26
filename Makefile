@@ -16,6 +16,9 @@ endif
 ifeq ($(systemdsystemdir),)
     systemdsystemdir := $(systemddir)/system
 endif
+ifeq ($(systemgeneratordir),)
+    systemgeneratordir := $(systemddir)/system-generator
+endif
 ifeq ($(datarootdir),)
     datarootdir := $(prefix)/share
 endif
@@ -62,14 +65,19 @@ dropins := $(foreach dir,$(dropindirs),$(wildcard $(dir)/*.conf))
 dropins_installed := \
     $(patsubst lib/systemd/system/%,$(DESTDIR)$(systemdsystemdir)/%,$(dropins))
 
+generators := \
+    $(wildcard lib/systemd/system-generator/*)
+generators_installed := \
+    $(patsubst lib/systemd/system-generator/%,$(DESTDIR)$(systemgeneratordir)/%,$(generators))
+
 doc/_build/man/% : doc/%.rst
 	${MAKE} -C doc man
 
-bin: $(scripts) $(entrypoints)
+bin: $(scripts) $(entrypoints) $(generators)
 	# empty for now
 
 lint: bin
-	shellcheck $(scripts) $(entrypoints)
+	shellcheck $(scripts) $(entrypoints) $(generators)
 
 test: bin
 	PATH="$(shell pwd)/bin:${PATH}" $(python) -m test
@@ -97,6 +105,10 @@ $(DESTDIR)$(libdir)/git-gau/docker-entry.d/% : lib/docker-entry.d/%
 $(DESTDIR)$(systemdsystemdir)/%: lib/systemd/system/%
 	install -m 0644 -D $< $@
 
+# Install rule for system generator scripts
+$(DESTDIR)$(systemgeneratordir)/% : lib/systemd/system-generator/%
+	install -m 0755 -D $< $@
+
 # Install rule for manpages
 $(DESTDIR)$(mandir)/man1/% : doc/_build/man/%
 	install -m 0644 -D $< $@
@@ -116,7 +128,7 @@ install-doc: doc $(man1_installed) $(man8_installed)
 	ln -s -f certhub-cert-send@.service.8 $(DESTDIR)$(mandir)/man8/certhub-cert-send@.path.8
 	ln -s -f certhub-repo-push@.service.8 $(DESTDIR)$(mandir)/man8/certhub-repo-push@.path.8
 
-install-bin: bin $(scripts_installed) $(entrypoints_installed) $(units_installed) $(dropins_installed)
+install-bin: bin $(scripts_installed) $(entrypoints_installed) $(units_installed) $(dropins_installed) $(generators_installed)
 	ln -s -f lexicon-auth $(DESTDIR)$(libdir)/certhub/certbot-hooks/lexicon-cleanup
 	ln -s -f nsupdate-auth $(DESTDIR)$(libdir)/certhub/certbot-hooks/nsupdate-cleanup
 
@@ -130,6 +142,7 @@ uninstall:
 	-rm -f $(units_installed)
 	-rm -f $(dropins_installed)
 	-rmdir $(dropindirs_installed)
+	-rm -f $(generators_installed)
 	-rm -f $(DESTDIR)$(mandir)/man1/certhub-lego-run-preferred-chain.1
 	-rm -f $(DESTDIR)$(mandir)/man8/certhub-cert-expiry@.timer.8
 	-rm -f $(DESTDIR)$(mandir)/man8/certhub-cert-export@.path.8
