@@ -45,22 +45,22 @@ entrypoints_installed := \
     $(patsubst lib/%,$(DESTDIR)$(libdir)/git-gau/%,$(entrypoints))
 
 units := \
-    $(wildcard lib/systemd/*.service) \
-    $(wildcard lib/systemd/*.path) \
-    $(wildcard lib/systemd/*.timer)
+    $(wildcard lib/systemd/system/*.service) \
+    $(wildcard lib/systemd/system/*.path) \
+    $(wildcard lib/systemd/system/*.timer)
 units_installed := \
-    $(patsubst lib/systemd/%,$(DESTDIR)$(systemdsystemdir)/%,$(units))
+    $(patsubst lib/systemd/system/%,$(DESTDIR)$(systemdsystemdir)/%,$(units))
 
 dropindirs := \
-    $(wildcard lib/systemd/*.service.d) \
-    $(wildcard lib/systemd/*.path.d) \
-    $(wildcard lib/systemd/*.timer.d)
+    $(wildcard lib/systemd/system/*.service.d) \
+    $(wildcard lib/systemd/system/*.path.d) \
+    $(wildcard lib/systemd/system/*.timer.d)
 dropindirs_installed := \
-    $(patsubst lib/systemd/%,$(DESTDIR)$(systemdsystemdir)/%,$(dropindirs))
+    $(patsubst lib/systemd/system/%,$(DESTDIR)$(systemdsystemdir)/%,$(dropindirs))
 
 dropins := $(foreach dir,$(dropindirs),$(wildcard $(dir)/*.conf))
 dropins_installed := \
-    $(patsubst lib/systemd/%,$(DESTDIR)$(systemdsystemdir)/%,$(dropins))
+    $(patsubst lib/systemd/system/%,$(DESTDIR)$(systemdsystemdir)/%,$(dropins))
 
 doc/_build/man/% : doc/%.rst
 	${MAKE} -C doc man
@@ -94,7 +94,7 @@ $(DESTDIR)$(libdir)/git-gau/docker-entry.d/% : lib/docker-entry.d/%
 	install -m 0755 -D $< $@
 
 # Install rule for systemd units and dropins
-$(DESTDIR)$(systemdsystemdir)/%: lib/systemd/%
+$(DESTDIR)$(systemdsystemdir)/%: lib/systemd/system/%
 	install -m 0644 -D $< $@
 
 # Install rule for manpages
