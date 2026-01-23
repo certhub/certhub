@@ -36,8 +36,9 @@ certhub_cert_generator() {
 }
 
 if [ "${#}" -gt 0 ] && [ "${1:-}" != "-h" ] && [ "${1:-}" != "--help" ]; then
+    SOURCE_UNIT_DIR="${CERTHUB_UNIT_DIR:-/etc/certhub/systemd}"
     SYSTEM_UNIT_DIR="$(${READLINK} -f "$(${DIRNAME} "$0")"/../system)"
-    certhub_cert_generator "/etc/certhub/systemd" "${SYSTEM_UNIT_DIR}" "${1}"
+    certhub_cert_generator "${SOURCE_UNIT_DIR}" "${SYSTEM_UNIT_DIR}" "${1}"
 else
     usage
 fi

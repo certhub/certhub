@@ -33,6 +33,8 @@ all: bin test doc
 
 man1 := $(patsubst doc/%.1.rst,doc/_build/man/%.1,$(wildcard doc/*.1.rst))
 man1_installed := $(patsubst doc/_build/man/%,$(DESTDIR)$(mandir)/man1/%,$(man1))
+man5 := $(patsubst doc/%.5.rst,doc/_build/man/%.5,$(wildcard doc/*.5.rst))
+man5_installed := $(patsubst doc/_build/man/%,$(DESTDIR)$(mandir)/man5/%,$(man5))
 man8 := $(patsubst doc/%.8.rst,doc/_build/man/%.8,$(wildcard doc/*.8.rst))
 man8_installed := $(patsubst doc/_build/man/%,$(DESTDIR)$(mandir)/man8/%,$(man8))
 
@@ -80,9 +82,9 @@ lint: bin
 	shellcheck $(scripts) $(entrypoints) $(generators)
 
 test: bin
-	PATH="$(shell pwd)/bin:${PATH}" $(python) -m test
+	PATH="$(shell pwd)/bin:$(shell pwd)/lib/systemd/system-generator:${PATH}" $(python) -m test
 
-doc: $(man1) $(man8)
+doc: $(man1) $(man5) $(man8)
 
 clean:
 	${MAKE} -C doc clean
@@ -114,10 +116,14 @@ $(DESTDIR)$(mandir)/man1/% : doc/_build/man/%
 	install -m 0644 -D $< $@
 
 # Install rule for manpages
+$(DESTDIR)$(mandir)/man5/% : doc/_build/man/%
+	install -m 0644 -D $< $@
+
+# Install rule for manpages
 $(DESTDIR)$(mandir)/man8/% : doc/_build/man/%
 	install -m 0644 -D $< $@
 
-install-doc: doc $(man1_installed) $(man8_installed)
+install-doc: doc $(man1_installed) $(man5_installed) $(man8_installed)
 	ln -s -f certhub-lego-run.1 $(DESTDIR)$(mandir)/man1/certhub-lego-run-preferred-chain.1
 	ln -s -f certhub-certbot-run@.service.8 $(DESTDIR)$(mandir)/man8/certhub-certbot-run@.path.8
 	ln -s -f certhub-lego-run@.service.8 $(DESTDIR)$(mandir)/man8/certhub-lego-run@.path.8
@@ -136,6 +142,7 @@ install: install-bin install-doc
 
 uninstall:
 	-rm -f $(man1_installed)
+	-rm -f $(man5_installed)
 	-rm -f $(man8_installed)
 	-rm -f $(scripts_installed)
 	-rm -f $(entrypoints_installed)

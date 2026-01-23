@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # certhub-acme-generator - Systemd generator for certhub .acme units.
 
@@ -39,10 +39,11 @@ certhub_acme_generator() {
 }
 
 if [ "${#}" -gt 0 ] && [ "${1:-}" != "-h" ] && [ "${1:-}" != "--help" ]; then
+    SOURCE_UNIT_DIR="${CERTHUB_UNIT_DIR:-/etc/certhub/systemd}"
     SYSTEM_UNIT_DIR="$(${READLINK} -f "$(${DIRNAME} "$0")"/../system)"
-    certhub_acme_generator "/etc/certhub/systemd" certbot "${SYSTEM_UNIT_DIR}" "${1}"
-    certhub_acme_generator "/etc/certhub/systemd" lego "${SYSTEM_UNIT_DIR}" "${1}"
-    certhub_acme_generator "/etc/certhub/systemd" dehydrated "${SYSTEM_UNIT_DIR}" "${1}"
+    certhub_acme_generator "${SOURCE_UNIT_DIR}" certbot "${SYSTEM_UNIT_DIR}" "${1}"
+    certhub_acme_generator "${SOURCE_UNIT_DIR}" lego "${SYSTEM_UNIT_DIR}" "${1}"
+    certhub_acme_generator "${SOURCE_UNIT_DIR}" dehydrated "${SYSTEM_UNIT_DIR}" "${1}"
 else
     usage
 fi
