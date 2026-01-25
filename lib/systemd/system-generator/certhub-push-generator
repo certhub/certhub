@@ -1,0 +1,44 @@
+#!/bin/sh
+#
+# certhub-push-generator - Systemd generator for certhub .push units.
+
+set -e
+set -u
+
+# Required binaries
+BASENAME=/usr/bin/basename
+DIRNAME=/usr/bin/dirname
+READLINK=/usr/bin/readlink
+ECHO=/bin/echo
+LN=/bin/ln
+MKDIR=/bin/mkdir
+
+
+# Print usage message and exit.
+usage() {
+    ${ECHO} "${0}: normal-dir [early-dir] [late-dir]"
+    return 1
+}
+
+certhub_cert_generator() {
+    SOURCE_UNIT_DIR="${1}"
+    SYSTEM_UNIT_DIR="${2}"
+    DEST_UNIT_DIR="${3}"
+    shift 3
+
+    for UNIT_FILE in "${SOURCE_UNIT_DIR}"/*".push"; do
+        if stat "${UNIT_FILE}" >/dev/null 2>&1; then
+            CERTHUB_DESTINATION="$(${BASENAME} "${UNIT_FILE}" ".push")"
+            ${MKDIR} -p "${DEST_UNIT_DIR}/paths.target.wants"
+            ${LN} -s "${SYSTEM_UNIT_DIR}/certhub-repo-push@.path" "${DEST_UNIT_DIR}/paths.target.wants/certhub-repo-push@${CERTHUB_DESTINATION}.path"
+        fi
+    done
+}
+
+if [ "${#}" -gt 0 ] && [ "${1:-}" != "-h" ] && [ "${1:-}" != "--help" ]; then
+    SOURCE_UNIT_DIR="${CERTHUB_UNIT_DIR:-/etc/certhub/systemd}"
+    SYSTEM_UNIT_DIR="$(${READLINK} -f "$(${DIRNAME} "$0")"/../system)"
+    certhub_cert_generator "${SOURCE_UNIT_DIR}" "${SYSTEM_UNIT_DIR}" "${1}"
+else
+    usage
+fi

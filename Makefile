@@ -16,6 +16,9 @@ endif
 ifeq ($(systemdsystemdir),)
     systemdsystemdir := $(systemddir)/system
 endif
+ifeq ($(systemgeneratordir),)
+    systemgeneratordir := $(systemddir)/system-generator
+endif
 ifeq ($(datarootdir),)
     datarootdir := $(prefix)/share
 endif
@@ -30,6 +33,8 @@ all: bin test doc
 
 man1 := $(patsubst doc/%.1.rst,doc/_build/man/%.1,$(wildcard doc/*.1.rst))
 man1_installed := $(patsubst doc/_build/man/%,$(DESTDIR)$(mandir)/man1/%,$(man1))
+man5 := $(patsubst doc/%.5.rst,doc/_build/man/%.5,$(wildcard doc/*.5.rst))
+man5_installed := $(patsubst doc/_build/man/%,$(DESTDIR)$(mandir)/man5/%,$(man5))
 man8 := $(patsubst doc/%.8.rst,doc/_build/man/%.8,$(wildcard doc/*.8.rst))
 man8_installed := $(patsubst doc/_build/man/%,$(DESTDIR)$(mandir)/man8/%,$(man8))
 
@@ -45,36 +50,41 @@ entrypoints_installed := \
     $(patsubst lib/%,$(DESTDIR)$(libdir)/git-gau/%,$(entrypoints))
 
 units := \
-    $(wildcard lib/systemd/*.service) \
-    $(wildcard lib/systemd/*.path) \
-    $(wildcard lib/systemd/*.timer)
+    $(wildcard lib/systemd/system/*.service) \
+    $(wildcard lib/systemd/system/*.path) \
+    $(wildcard lib/systemd/system/*.timer)
 units_installed := \
-    $(patsubst lib/systemd/%,$(DESTDIR)$(systemdsystemdir)/%,$(units))
+    $(patsubst lib/systemd/system/%,$(DESTDIR)$(systemdsystemdir)/%,$(units))
 
 dropindirs := \
-    $(wildcard lib/systemd/*.service.d) \
-    $(wildcard lib/systemd/*.path.d) \
-    $(wildcard lib/systemd/*.timer.d)
+    $(wildcard lib/systemd/system/*.service.d) \
+    $(wildcard lib/systemd/system/*.path.d) \
+    $(wildcard lib/systemd/system/*.timer.d)
 dropindirs_installed := \
-    $(patsubst lib/systemd/%,$(DESTDIR)$(systemdsystemdir)/%,$(dropindirs))
+    $(patsubst lib/systemd/system/%,$(DESTDIR)$(systemdsystemdir)/%,$(dropindirs))
 
 dropins := $(foreach dir,$(dropindirs),$(wildcard $(dir)/*.conf))
 dropins_installed := \
-    $(patsubst lib/systemd/%,$(DESTDIR)$(systemdsystemdir)/%,$(dropins))
+    $(patsubst lib/systemd/system/%,$(DESTDIR)$(systemdsystemdir)/%,$(dropins))
+
+generators := \
+    $(wildcard lib/systemd/system-generator/*)
+generators_installed := \
+    $(patsubst lib/systemd/system-generator/%,$(DESTDIR)$(systemgeneratordir)/%,$(generators))
 
 doc/_build/man/% : doc/%.rst
 	${MAKE} -C doc man
 
-bin: $(scripts) $(entrypoints)
+bin: $(scripts) $(entrypoints) $(generators)
 	# empty for now
 
 lint: bin
-	shellcheck $(scripts) $(entrypoints)
+	shellcheck $(scripts) $(entrypoints) $(generators)
 
 test: bin
-	PATH="$(shell pwd)/bin:${PATH}" $(python) -m test
+	PATH="$(shell pwd)/bin:$(shell pwd)/lib/systemd/system-generator:${PATH}" $(python) -m test
 
-doc: $(man1) $(man8)
+doc: $(man1) $(man5) $(man8)
 
 clean:
 	${MAKE} -C doc clean
@@ -94,18 +104,26 @@ $(DESTDIR)$(libdir)/git-gau/docker-entry.d/% : lib/docker-entry.d/%
 	install -m 0755 -D $< $@
 
 # Install rule for systemd units and dropins
-$(DESTDIR)$(systemdsystemdir)/%: lib/systemd/%
+$(DESTDIR)$(systemdsystemdir)/%: lib/systemd/system/%
 	install -m 0644 -D $< $@
+
+# Install rule for system generator scripts
+$(DESTDIR)$(systemgeneratordir)/% : lib/systemd/system-generator/%
+	install -m 0755 -D $< $@
 
 # Install rule for manpages
 $(DESTDIR)$(mandir)/man1/% : doc/_build/man/%
 	install -m 0644 -D $< $@
 
 # Install rule for manpages
+$(DESTDIR)$(mandir)/man5/% : doc/_build/man/%
+	install -m 0644 -D $< $@
+
+# Install rule for manpages
 $(DESTDIR)$(mandir)/man8/% : doc/_build/man/%
 	install -m 0644 -D $< $@
 
-install-doc: doc $(man1_installed) $(man8_installed)
+install-doc: doc $(man1_installed) $(man5_installed) $(man8_installed)
 	ln -s -f certhub-lego-run.1 $(DESTDIR)$(mandir)/man1/certhub-lego-run-preferred-chain.1
 	ln -s -f certhub-certbot-run@.service.8 $(DESTDIR)$(mandir)/man8/certhub-certbot-run@.path.8
 	ln -s -f certhub-lego-run@.service.8 $(DESTDIR)$(mandir)/man8/certhub-lego-run@.path.8
@@ -116,7 +134,7 @@ install-doc: doc $(man1_installed) $(man8_installed)
 	ln -s -f certhub-cert-send@.service.8 $(DESTDIR)$(mandir)/man8/certhub-cert-send@.path.8
 	ln -s -f certhub-repo-push@.service.8 $(DESTDIR)$(mandir)/man8/certhub-repo-push@.path.8
 
-install-bin: bin $(scripts_installed) $(entrypoints_installed) $(units_installed) $(dropins_installed)
+install-bin: bin $(scripts_installed) $(entrypoints_installed) $(units_installed) $(dropins_installed) $(generators_installed)
 	ln -s -f lexicon-auth $(DESTDIR)$(libdir)/certhub/certbot-hooks/lexicon-cleanup
 	ln -s -f nsupdate-auth $(DESTDIR)$(libdir)/certhub/certbot-hooks/nsupdate-cleanup
 
@@ -124,12 +142,14 @@ install: install-bin install-doc
 
 uninstall:
 	-rm -f $(man1_installed)
+	-rm -f $(man5_installed)
 	-rm -f $(man8_installed)
 	-rm -f $(scripts_installed)
 	-rm -f $(entrypoints_installed)
 	-rm -f $(units_installed)
 	-rm -f $(dropins_installed)
 	-rmdir $(dropindirs_installed)
+	-rm -f $(generators_installed)
 	-rm -f $(DESTDIR)$(mandir)/man1/certhub-lego-run-preferred-chain.1
 	-rm -f $(DESTDIR)$(mandir)/man8/certhub-cert-expiry@.timer.8
 	-rm -f $(DESTDIR)$(mandir)/man8/certhub-cert-export@.path.8
