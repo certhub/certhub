@@ -33,8 +33,7 @@ all: \
 	test-cert-expiry \
 	test-cert-export \
 	test-cert-reload \
-	test-cert-send\
-	test-repo-push \
+	test-cert-send \
 	test-certbot \
 	test-lego \
 	test-lego-alternate-chain
@@ -187,7 +186,7 @@ controller: base controller/context
 	test-cert-expiry \
 	test-cert-export \
 	test-cert-reload \
-	test-cert-send\
+	test-cert-send \
 	test-repo-push \
 	test-certbot \
 	test-dehydrated \
