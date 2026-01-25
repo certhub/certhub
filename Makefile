@@ -17,7 +17,7 @@ ifeq ($(systemdsystemdir),)
     systemdsystemdir := $(systemddir)/system
 endif
 ifeq ($(systemgeneratordir),)
-    systemgeneratordir := $(systemddir)/system-generator
+    systemgeneratordir := $(systemddir)/system-generators
 endif
 ifeq ($(datarootdir),)
     datarootdir := $(prefix)/share
@@ -68,9 +68,9 @@ dropins_installed := \
     $(patsubst lib/systemd/system/%,$(DESTDIR)$(systemdsystemdir)/%,$(dropins))
 
 generators := \
-    $(wildcard lib/systemd/system-generator/*)
+    $(wildcard lib/systemd/system-generators/*)
 generators_installed := \
-    $(patsubst lib/systemd/system-generator/%,$(DESTDIR)$(systemgeneratordir)/%,$(generators))
+    $(patsubst lib/systemd/system-generators/%,$(DESTDIR)$(systemgeneratordir)/%,$(generators))
 
 doc/_build/man/% : doc/%.rst
 	${MAKE} -C doc man
@@ -82,7 +82,7 @@ lint: bin
 	shellcheck $(scripts) $(entrypoints) $(generators)
 
 test: bin
-	PATH="$(shell pwd)/bin:$(shell pwd)/lib/systemd/system-generator:${PATH}" $(python) -m test
+	PATH="$(shell pwd)/bin:$(shell pwd)/lib/systemd/system-generators:${PATH}" $(python) -m test
 
 doc: $(man1) $(man5) $(man8)
 
@@ -108,7 +108,7 @@ $(DESTDIR)$(systemdsystemdir)/%: lib/systemd/system/%
 	install -m 0644 -D $< $@
 
 # Install rule for system generator scripts
-$(DESTDIR)$(systemgeneratordir)/% : lib/systemd/system-generator/%
+$(DESTDIR)$(systemgeneratordir)/% : lib/systemd/system-generators/%
 	install -m 0755 -D $< $@
 
 # Install rule for manpages

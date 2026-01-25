@@ -8,7 +8,7 @@ set -u
 # Required binaries
 BASENAME=/usr/bin/basename
 DIRNAME=/usr/bin/dirname
-READLINK=/usr/bin/readlink
+READLINK=/bin/readlink
 ECHO=/bin/echo
 LN=/bin/ln
 MKDIR=/bin/mkdir
