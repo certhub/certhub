@@ -2,9 +2,10 @@
 Description=Check for certificates which are about to expire twice daily
 
 [Timer]
+OnBootSec=10
 OnCalendar=*-*-* 00,12:00:00
-RandomizedDelaySec=3600
-Persistent=true
+AccuracySec=1us
+RandomizedDelaySec=120
 
 [Install]
 WantedBy=timers.target
