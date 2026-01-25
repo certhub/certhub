@@ -42,6 +42,14 @@ class ExpiryTestCase(unittest.TestCase):
 
         self.assertEqual(b"Certificate will expire within 10 days\n", output)
 
+    def testMissingInputFile(self):
+        certpath = os.path.join(self.workdir, "cert.pem")
+
+        output = self._cmd("certhub-cert-expiry", certpath, str(10 * DAY),
+                           "/bin/echo", "Certificate will expire within 10 days")
+
+        self.assertEqual(b"Certificate will expire within 10 days\n", output)
+
     def testPropagatesStatus(self):
         certpath = os.path.join(self.workdir, "cert.pem")
         certwrite(gencert(genkey(), days=1), certpath)
@@ -55,13 +63,6 @@ class ExpiryTestCase(unittest.TestCase):
         # for behavior when command is given an invalid file.
         certpath = os.path.join(self.workdir, "cert.pem")
         keywrite(genkey(), certpath)
-
-        self.assertRaises(subprocess.CalledProcessError, self._cmd,
-                          "certhub-cert-expiry", certpath, str(10 * DAY),
-                          "/bin/echo", "Certificate will expire within 10 days")
-
-    def testFailsOnMissingInputFile(self):
-        certpath = os.path.join(self.workdir, "cert.pem")
 
         self.assertRaises(subprocess.CalledProcessError, self._cmd,
                           "certhub-cert-expiry", certpath, str(10 * DAY),
