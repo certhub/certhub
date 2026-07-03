@@ -1,6 +1,8 @@
 [Unit]
 Description=Push certhub repo to another host
 Documentation=man:git-push(1)
+Wants=network-online.target
+After=network-online.target
 
 [Service]
 Type=oneshot
